@@ -144,6 +144,7 @@ export class AsuraComicScraper {
     });
     await _page.goto(url);
     const content = await _page.$("body");
+    // TODO: use children api of jquery
     const title = extractBeforeTag(await content!.$eval(".post-title > h1:nth-child(1)", (el) => el.innerHTML));
     const path = url.substring(`${this.baseUrl}`.length);
     const author = (await content!.$eval(".author-content", (el) => el.textContent))?.trim();

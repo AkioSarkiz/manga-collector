@@ -1,17 +1,18 @@
 import axios from "axios";
 import * as cheerio from "cheerio";
-import {
-  AbstractMangaFactory,
-  chapter,
-  genre,
-  image_chapter,
-  ResponseChapter,
-  ResponseDetailManga,
-  ResponseListManga,
-} from "./types/type";
 import { useGetDataItemsManga } from "./hooks/getListLatest";
-import { Browser } from "puppeteer";
-import { ScrapedChapter, ScrapedDetailedManga, ScrapedGenre, ScrapedMangaStatus, Scraper } from "../types/index.js";
+import {
+  ScrapedChapter,
+  ScrapedDetailedChapter,
+  ScrapedDetailedChapterFrame,
+  ScrapedDetailedManga,
+  ScrapedGenre,
+  ScrapedListOfManga,
+  ScrapedListOfMangaItem,
+  ScrapedMangaStatus,
+  Scraper,
+} from "../types/index.js";
+import dayjs from "dayjs";
 
 export class ToonilyScraper implements Scraper {
   private readonly baseUrl: string = "https://toonily.com/";
@@ -34,7 +35,13 @@ export class ToonilyScraper implements Scraper {
     }
   }
 
-  async getListLatestUpdate(page?: number | undefined): Promise<ResponseListManga> {
+  private extractChapterIndex(title: string): number | undefined {
+    const match = title.match(/Chapter (\d+)/);
+
+    return match ? parseInt(match[1], 10) : undefined;
+  }
+
+  async getListLatestUpdate(page?: number | undefined): Promise<ScrapedListOfManga> {
     const axios_get = await axios.get(`${this.baseUrl}${page !== undefined && page > 1 ? `/page/${page}` : ``}`);
     const $ = cheerio.load(axios_get.data);
 
@@ -79,16 +86,27 @@ export class ToonilyScraper implements Scraper {
     const genres: ScrapedGenre[] = [];
     const chapters: ScrapedChapter[] = [];
     const siteContent = $("div.site-content");
-    const author = siteContent.find("div.summary-content > div.author-content > a").text();
-    const title = siteContent.find("div.post-content > div.post-title > h1").text().trim();
+    const author = {
+      name: siteContent.find("div.summary-content > div.author-content > a").text()?.trim(),
+      url: siteContent.find("div.summary-content > div.author-content > a").attr("href")?.trim(),
+    };
     const status = this.formatStatus($(".post-status .post-content_item:nth-child(2) .summary-content").text().trim());
     const description = $(".summary__content").text().trim();
     const views: number = this.convertToNumber($(".manga-rate-view-comment .item:nth-child(2)").text().trim());
-    const rate = Number($(".manga-rate-view-comment .item:nth-child(1) #averagerate").text());
-    const rateNumber = Number(siteContent.find("#countrate").text());
+    const rate = Number($(".manga-rate-view-comment .item:nth-child(1) #averagerate").text().trim());
+    const rateNumber = Number(siteContent.find("#countrate").text().trim());
+
+    const title = siteContent
+      .find("div.post-content > div.post-title > h1")
+      .clone()
+      .children()
+      .remove()
+      .end()
+      .text()
+      .trim();
 
     let followsUsers = undefined;
-    let followsUsersUnformatted = $(".add-bookmark .action_detail").text();
+    let followsUsersUnformatted = $(".add-bookmark .action_detail").text().trim();
 
     if (followsUsersUnformatted) {
       followsUsers = followsUsersUnformatted.match(/\d+/g)?.map(Number)[0];
@@ -96,16 +114,18 @@ export class ToonilyScraper implements Scraper {
 
     siteContent.find("ul.main.version-chap.no-volumn > li.wp-manga-chapter").each((i, e) => {
       chapters.push({
+        _id: i,
         url: $(e).find("a").attr("href")!,
-        parent_href: url,
         title: $(e).find("a").text().trim(),
+        lastUpdate: dayjs($(e).find(".chapter-release-date").text().trim(), "MMM D, YY").toDate(),
+        index: this.extractChapterIndex($(e).find("a").text().trim()),
       });
     });
 
     $("div.genres-content > a").each((_i, e) => {
       genres.push({
         url: $(e).attr("href")!,
-        name: $(e).text(),
+        name: $(e).text().trim(),
       });
     });
 
@@ -117,9 +137,7 @@ export class ToonilyScraper implements Scraper {
 
       description,
 
-      author: {
-        name: author,
-      },
+      author,
 
       genres,
       rate,
@@ -144,83 +162,50 @@ export class ToonilyScraper implements Scraper {
     }
   }
 
-  async getDataChapter(
-    url_chapter: string,
-    url?: string | undefined,
-    path?: string | undefined,
-    prev_chapter?: chapter | undefined,
-    next_chapter?: chapter | undefined
-  ): Promise<ResponseChapter> {
-    const $ = cheerio.load((await axios.get(url_chapter)).data);
+  public async getDetailedChapter(chapterUrl: string): Promise<ScrapedDetailedChapter> {
+    const response = await axios.get(chapterUrl);
+    const $ = cheerio.load(response.data);
+    const siteContent = $("div.main-col-inner");
+    const title = siteContent.find("ol.breadcrumb > li:nth-child(3)").text().trim();
 
-    const site_content = $("div.main-col-inner");
-    const title = site_content.find("ol.breadcrumb > li:nth-child(3)").text().trim();
+    const frames: ScrapedDetailedChapterFrame[] = [];
 
-    const chapter_data: image_chapter[] = [] as image_chapter[];
-    site_content.find("div.entry-content div.reading-content > div.page-break > img").each((i, e) => {
-      chapter_data.push({
+    siteContent.find("div.entry-content div.reading-content > div.page-break > img").each((i, e) => {
+      frames.push({
         _id: i,
-        src_origin: $(e).attr("data-src")!.trim(),
-        alt: $(e).attr("alt")!,
+        originSrc: $(e).attr("data-src")!.trim(),
+        alt: $(e).attr("alt")?.trim(),
       });
     });
 
-    const parent_href = site_content.find("ol.breadcrumb > li:nth-child(3) > a").attr("href")!;
-
-    const next_chapter_data: chapter | null = site_content.find("div.nav-links > div.nav-next > a").length
-      ? {
-          url: site_content.find("div.nav-links > div.nav-next > a").attr("href")!,
-          path: site_content.find("div.nav-links > div.nav-next > a").attr("href")!.substring(this.baseUrl.length),
-          parent_href: parent_href,
-          title,
-        }
-      : null;
-
-    const prev_chapter_data: chapter | null = site_content.find("div.nav-links > div.nav-previous > a").length
-      ? {
-          url: site_content.find("div.nav-links > div.nav-previous > a").attr("href")!,
-          path: site_content.find("div.nav-links > div.nav-previous > a").attr("href")!.substring(this.baseUrl.length),
-          parent_href: parent_href,
-          title,
-        }
-      : null;
-
     return {
-      url: url_chapter,
-      path: url_chapter.substring(this.baseUrl.length),
+      url: chapterUrl,
       title,
-      chapter_data,
-      prev_chapter: prev_chapter !== undefined ? null : prev_chapter_data,
-      next_chapter: next_chapter !== undefined ? null : next_chapter_data,
+      frames,
     };
   }
 
-  async search(keyword: string, page?: number | undefined): Promise<ResponseListManga> {
-    keyword = keyword.replace(/\s/g, "-");
-    const axios_get = await axios.get(
-      `${this.baseUrl}/search/${keyword}${page !== undefined && page > 1 ? `/page/${page}` : ``}`
-    );
-    const $ = cheerio.load(axios_get.data);
-    const wrap_items = $("div.page-listing-item > div.row.row-eq-height > div > div");
+  async search(query: string, page?: number | undefined): Promise<ScrapedListOfManga> {
+    const formattedQuery = query.replace(/\s/g, "-");
+    const url = `${this.baseUrl}/search/${formattedQuery}${page !== undefined && page > 1 ? `/page/${page}` : ``}`;
+    const response = await axios.get(url);
+    const $ = cheerio.load(response.data);
+    const wrapItems = $("div.page-listing-item > div.row.row-eq-height > div > div");
 
-    const data: {
-      _id: number;
-      title: string;
-      image_thumbnail: string;
-      href: string;
-    }[] = [];
-    wrap_items.each((i, e) => {
+    const data: ScrapedListOfMangaItem[] = [];
+
+    wrapItems.each((i, e) => {
       data.push({
         _id: i,
         title: $(e).find("div.item-summary > div.post-title.font-title > h3 > a").text(),
-        image_thumbnail: $(e).find("div.item-thumb.c-image-hover > a > img").attr("data-src")!,
+        imageThumbnail: $(e).find("div.item-thumb.c-image-hover > a > img").attr("data-src")!,
         href: $(e).find("div.item-summary > div.post-title.font-title > h3 > a").attr("href")!,
       });
     });
 
     const last_page = $("div.wp-pagenavi").find("a.last").attr("href")!;
 
-    const totalPage = Number(
+    const totalPages = Number(
       last_page !== undefined
         ? last_page
             .substring(0, last_page.length - 1)
@@ -234,9 +219,9 @@ export class ToonilyScraper implements Scraper {
     return {
       data,
       totalData: data.length,
-      totalPage,
+      totalPages,
       currentPage: page !== undefined ? page : 1,
-      canNext: page !== undefined ? page < totalPage : 1 < totalPage,
+      canNext: page !== undefined ? page < totalPages : 1 < totalPages,
       canPrev: page !== undefined ? page > 1 : false,
     };
   }

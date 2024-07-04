@@ -8,9 +8,10 @@ export interface ScrapedGenre {
 }
 
 export interface ScrapedChapter {
+  _id?: number;
   url: string;
-  parent_href: string;
 
+  index?: number;
   title?: string;
   lastUpdate?: Date;
   views?: number;
@@ -46,27 +47,34 @@ export interface ScrapedDetailedManga {
   genres: ScrapedGenre[];
 }
 
+export interface ScrapedDetailedChapterFrame {
+  _id: number;
+  originSrc: string;
+  cdnSrc?: string;
+  alt?: string;
+}
+
 export interface ScrapedDetailedChapter {
   url: string;
   title: string;
-  frames: string[];
-  nextChapterUrl?: string;
-  previousChapterUrl?: string;
+  frames: ScrapedDetailedChapterFrame[];
 }
+
+export type ScrapedListOfMangaItem = {
+  _id: number;
+  imageThumbnail: string;
+  title: string;
+  href: string;
+};
 
 export type ScrapedListOfManga = {
   totalData: number;
   currentPage: number;
-  prevPage?: number;
-  nextPage?: number;
+  canPrev?: boolean;
+  canNext?: boolean;
   totalPages?: number;
 
-  data: {
-    _id: number;
-    imageThumbnail: string;
-    title: string;
-    href: string;
-  }[];
+  data: ScrapedListOfMangaItem[];
 };
 
 export interface Scraper {

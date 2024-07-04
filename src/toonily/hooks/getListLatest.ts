@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { CheerioAPI } from 'cheerio';
-import { not_null } from '../utils/validate.js';
+import { not_null } from '../utils/validate';
 import { Page } from 'puppeteer';
 
 interface MangaDataParams {
