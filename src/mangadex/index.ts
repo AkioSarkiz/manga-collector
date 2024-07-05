@@ -162,8 +162,6 @@ export class MangadexScraper implements Scraper {
     const url = `https://api.mangadex.org/manga?limit=${limit}&offset=${offset}&includes[]=cover_art&includes[]=artist&includes[]=author&contentRating[]=safe&contentRating[]=suggestive&contentRating[]=erotica&title=${query}&order[relevance]=desc`;
     const response = await axios.get(url);
 
-    console.log({ url });
-
     response.data.data.map((e: any, i: number) => {
       data.push({
         _id: i,
