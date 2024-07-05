@@ -5,7 +5,7 @@ import { ResponseChapter, ResponseDetailManga, ResponseListManga } from "../src/
 import { ToonilyScraper } from "../src/toonily/index.js";
 import { ScrapedDetailedManga } from "../src/index.js";
 
-const URLS_TO_DETAILED_SCRAPE_MANGA = [
+const MANGA_DATA_TO_DETAILED_SCRAPE = [
   {
     url: "https://toonily.com/webtoon/mookhyang-the-origin/",
     expected: {
@@ -404,7 +404,7 @@ describe("test asuracomic", async () => {
   });
 });
 
-describe.each(URLS_TO_DETAILED_SCRAPE_MANGA)("scrape $url", async ({ url, expected }) => {
+describe.each(MANGA_DATA_TO_DETAILED_SCRAPE)("scrape $url", async ({ url, expected }) => {
   const scraper = (await MangaScraperFactory.make(MangaSource.TOONILY)) as ToonilyScraper;
 
   test("scrape", async () => {

@@ -13,33 +13,10 @@ import {
   Scraper,
 } from "../types/index.js";
 import dayjs from "dayjs";
+import { convertToNumber, extractChapterIndex } from "../utils/index.js";
 
 export class ToonilyScraper implements Scraper {
   private readonly baseUrl: string = "https://toonily.com/";
-
-  private convertToNumber(numberString: string): number {
-    const suffixes: { [key: string]: number } = {
-      K: 1000,
-      M: 1000000,
-      B: 1000000000,
-      T: 1000000000000,
-    };
-
-    const suffix = numberString.slice(-1).toUpperCase();
-    const number = parseFloat(numberString.slice(0, -1));
-
-    if (suffixes[suffix] !== undefined) {
-      return number * suffixes[suffix];
-    } else {
-      return parseFloat(numberString);
-    }
-  }
-
-  private extractChapterIndex(title: string): number | undefined {
-    const match = title.match(/Chapter (\d+)/);
-
-    return match ? parseInt(match[1], 10) : undefined;
-  }
 
   async getListLatestUpdate(page?: number | undefined): Promise<ScrapedListOfManga> {
     const axios_get = await axios.get(`${this.baseUrl}${page !== undefined && page > 1 ? `/page/${page}` : ``}`);
@@ -92,7 +69,7 @@ export class ToonilyScraper implements Scraper {
     };
     const status = this.formatStatus($(".post-status .post-content_item:nth-child(2) .summary-content").text().trim());
     const description = $(".summary__content").text().trim();
-    const views: number = this.convertToNumber($(".manga-rate-view-comment .item:nth-child(2)").text().trim());
+    const views: number = convertToNumber($(".manga-rate-view-comment .item:nth-child(2)").text().trim());
     const rate = Number($(".manga-rate-view-comment .item:nth-child(1) #averagerate").text().trim());
     const rateNumber = Number(siteContent.find("#countrate").text().trim());
 
@@ -118,7 +95,7 @@ export class ToonilyScraper implements Scraper {
         url: $(e).find("a").attr("href")!,
         title: $(e).find("a").text().trim(),
         lastUpdate: dayjs($(e).find(".chapter-release-date").text().trim(), "MMM D, YY").toDate(),
-        index: this.extractChapterIndex($(e).find("a").text().trim()),
+        index: extractChapterIndex($(e).find("a").text().trim()),
       });
     });
 

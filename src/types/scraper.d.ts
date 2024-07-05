@@ -8,7 +8,7 @@ export interface ScrapedGenre {
 }
 
 export interface ScrapedChapter {
-  _id?: number;
+  _id: number;
   url: string;
 
   index?: number;
@@ -34,10 +34,10 @@ export interface ScrapedDetailedManga {
   title: string;
   status: ScrapedMangaStatus;
   description: string;
-  type: ScrapedMangaType;
-
-  author?: ScrapedAuthor;
-  artist?: ScrapedArtist;
+  
+  type?: ScrapedMangaType;
+  author?: ScrapedAuthor[];
+  artist?: ScrapedArtist[];
   views?: number;
   rate?: number;
   rateVoters?: number;
@@ -64,7 +64,7 @@ export type ScrapedListOfMangaItem = {
   _id: number;
   imageThumbnail: string;
   title: string;
-  href: string;
+  url: string;
 };
 
 export type ScrapedListOfManga = {

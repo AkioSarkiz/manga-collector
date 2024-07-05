@@ -1,9 +1,18 @@
 import parse, { HTMLElement } from "node-html-parser";
 import { axios } from "../axios.js";
-import { SearchManga } from "../types/search.js";
 import { DashboardManga, ParseDashboardPageProps } from "../types/list.js";
-import { Author, Chapter, DetailedManga, Genre, Scraper } from "../types/index.js";
+import {
+  Author,
+  Genre,
+  ScrapedChapter,
+  ScrapedDetailedManga,
+  ScrapedListOfManga,
+  ScrapedListOfMangaItem,
+  Scraper,
+} from "../types/index.js";
 import { decode } from "html-entities";
+import { convertToNumber, extractChapterIndex } from "../utils/index.js";
+import dayjs from "dayjs";
 
 export const BASE_URL = "https://manganato.com";
 
@@ -59,46 +68,43 @@ const getBaseUrl = (path: string = ""): string => {
 };
 
 export class ManganatoScraper implements Scraper {
-  public async search(query: string, page: number = 1): Promise<SearchManga[]> {
-    const mangaList: SearchManga[] = [];
+  public async search(query: string, page: number = 1): Promise<ScrapedListOfManga> {
+    const items: ScrapedListOfMangaItem[] = [];
     const formattedQuery = query.replaceAll(" ", "_");
     const url = getBaseUrl(`search/story/${formattedQuery}?${page ? page : ""}`);
 
     const response = await axios.get(url);
 
     if (response.status !== 200) {
-      return [];
+      throw new Error("Failed to fetch manga list");
     }
 
     const document = parse(response.data);
     const panel = document.querySelector(".panel-search-story");
 
     if (!panel) {
-      return [];
+      throw new Error("Failed to fetch manga list");
     }
 
     const mangaCards = panel?.querySelectorAll(".search-story-item");
 
     for (let i = 0; i < mangaCards.length; i++) {
       const mangaCard = mangaCards[i];
-      const title = mangaCard.querySelector("h3")?.innerText;
-      const link = mangaCard.querySelector(".item-img")?.getAttribute("href") as string;
-      const cover = mangaCard.querySelector(".img-loading")?.getAttribute("src") as string;
-      const rating = mangaCard.querySelector(".item-rate")?.innerText;
-      const views = mangaCard.querySelectorAll(".item-time")[1]?.innerText;
+      const title = mangaCard.querySelector("h3")?.innerText?.trim();
+      const url = mangaCard.querySelector(".item-img")?.getAttribute("href") as string;
+      const imageThumbnail = mangaCard.querySelector(".img-loading")?.getAttribute("src") as string;
 
-      if (title && link && cover && rating && views) {
-        mangaList.push({
-          title: title.trim(),
-          link,
-          cover,
-          rating,
-          views,
-        });
+      if (title && url && imageThumbnail) {
+        items.push({ _id: i, title, url, imageThumbnail });
+      } else {
+        throw new Error("Failed to fetch manga list");
       }
     }
 
-    return mangaList;
+    return {
+      currentPage: page,
+      totalData: 0,
+    } as ScrapedListOfManga;
   }
 
   public async getLatestMangaList(page: number = 1): Promise<DashboardManga[]> {
@@ -119,7 +125,7 @@ export class ManganatoScraper implements Scraper {
     return parseDashboardPage({ url, page });
   }
 
-  public async getMangaDetails(url: string): Promise<DetailedManga | null> {
+  public async getDetailedManga(url: string): Promise<ScrapedDetailedManga> {
     interface ParsedTableRow {
       header: HTMLElement;
       value: HTMLElement;
@@ -145,22 +151,23 @@ export class ManganatoScraper implements Scraper {
     const response = await axios.get(url);
 
     if (response.status !== 200) {
-      return null;
+      throw new Error("Failed to get detailed manga");
     }
 
     const document = parse(response.data);
     const storyRightInfo = document.querySelector(".story-info-right");
     const chapterContainer = document.querySelector(".row-content-chapter");
+    const title = String(storyRightInfo?.querySelector("h1")?.innerText);
 
     if (!storyRightInfo || !chapterContainer) {
-      return null;
+      throw new Error("Failed to get detailed manga");
     }
 
     const chapterLis = Array.from(chapterContainer.querySelectorAll("li"));
     const tableInfo = storyRightInfo.querySelector(".variations-tableInfo");
 
     if (!tableInfo) {
-      return null;
+      throw new Error("Failed to get detailed manga");
     }
 
     const parsedTableInfo = parseTable(tableInfo);
@@ -197,25 +204,25 @@ export class ManganatoScraper implements Scraper {
           } as Genre)
       );
 
-    const chapters: Chapter[] | undefined = chapterLis
-      .map((value): Chapter | null => {
-        const uploaded_at = value.querySelector(".chapter-time")?.innerText;
-        const views = value.querySelector(".chapter-view")?.innerText;
-        const name = value.querySelector("a")?.innerText.replace(/Vol\.\d+\s+Chapter\s+\d+:"/i, "");
-        const link = value.querySelector("a")?.getAttribute("href");
+    const chapters: ScrapedChapter[] = chapterLis.map((value, index): ScrapedChapter => {
+      const lastUpdate = value.querySelector(".chapter-time")?.innerText?.trim();
+      const views = value.querySelector(".chapter-view")?.innerText?.trim();
+      const title = value.querySelector("a")?.innerText.replace(/Vol\.\d+\s+Chapter\s+\d+:"/i, "");
+      const url = value.querySelector("a")?.getAttribute("href");
 
-        if (!uploaded_at || !views || !name || !link) {
-          return null;
-        }
+      if (!lastUpdate || !views || !title || !url) {
+        throw Error(`Failed to parse chapter ${url}, index: ${index}`);
+      }
 
-        return {
-          uploaded_at,
-          views,
-          name,
-          link,
-        };
-      })
-      .filter(Boolean) as Chapter[];
+      return {
+        _id: index,
+        url,
+        title,
+        index: extractChapterIndex(title),
+        views: convertToNumber(views),
+        lastUpdate: dayjs(lastUpdate, "MMM D, YY").toDate(),
+      } as ScrapedChapter;
+    });
 
     const description = document.querySelector("#panel-story-info-description")?.childNodes[2].textContent.trim();
 
@@ -228,18 +235,17 @@ export class ManganatoScraper implements Scraper {
       !genres ||
       !chapters
     ) {
-      return null;
+      throw new Error("Failed to get detailed manga");
     }
 
     return {
-      title: String(storyRightInfo.querySelector("h1")?.innerText),
-      alt_titles: altTitles,
-      status: status as "ongoing" | "completed",
-      authors,
+      url,
+      title,
+      status,
       description,
-      genres,
+
       chapters,
-    };
+    } as ScrapedDetailedManga;
   }
 
   public async init() {

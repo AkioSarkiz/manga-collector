@@ -1,14 +1,15 @@
 import { MangaScraperFactory } from "../src";
 import { describe, test, expect, expectTypeOf, assert } from "vitest";
-import { DashboardManga, DetailedManga, SearchManga } from "../src/types";
+import { DashboardManga, ScrapedDetailedManga, SearchManga } from "../src/types";
 import { MangaSource } from "../src/constants.js";
 import { ManganatoScraper } from "../src/manganato/index.js";
 
-const mangasUrls = [
-  { label: "isekai walking", link: "https://manganato.com/manga-qi993717" },
-  { label: "Class no Daikirai na Joshi to Kekkon suru Koto ni Natta", link: "https://manganato.com/manga-pn992596" },
-  { label: "Solo Leveling", link: "https://chapmanganato.to/manga-dr980474" },
-  { label: "Versatile Mage", link: "https://chapmanganato.to/manga-bf979214" },
+const MANGA_DATA_TO_DETAILED_SCRAPE = [
+  { link: "https://manganato.com/manga-qi993717" },
+  { link: "https://manganato.com/manga-pn992596" },
+  { link: "https://chapmanganato.to/manga-dr980474" },
+  { link: "https://chapmanganato.to/manga-bf979214" },
+  { link: "https://chapmanganato.to/manga-fy982633" },
 ];
 
 describe("should load latest manga", async () => {
@@ -76,16 +77,16 @@ describe("should find manga", async () => {
   });
 });
 
-describe.each(mangasUrls)("details of $label", async ({ label, link }) => {
+describe.each(MANGA_DATA_TO_DETAILED_SCRAPE)("scrape of $url", async ({ link }) => {
   const scraper = (await MangaScraperFactory.make(MangaSource.MANGANATO)) as ManganatoScraper;
 
   test("response", async () => {
-    const result = await scraper.getMangaDetails(link);
+    const result = await scraper.getDetailedManga(link);
 
     if (!result) {
       assert.fail("parse failed");
     }
 
-    expectTypeOf(result).toEqualTypeOf<DetailedManga>();
+    expectTypeOf(result).toEqualTypeOf<ScrapedDetailedManga>();
   });
 });
