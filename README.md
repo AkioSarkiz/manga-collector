@@ -31,7 +31,7 @@ npm install mangalib
 
 ### How to use
 
-This package contains example of code that you can use and modify. They are located in `examples` folder.
+This package contains examples of code that you can use and modify. They are located in `examples` folder.
 
 Here is simple example how you can use that package
 
