@@ -1,7 +1,7 @@
 import { MangaScraperFactory } from "../src";
 import { describe, test, expect, expectTypeOf, assert } from "vitest";
 import { DashboardManga, ScrapedDetailedManga, ScrapedListOfManga, SearchManga } from "../src/types";
-import { MangaSource } from "../src/constants.js";
+import { MangaSource } from "../src/index.js";
 import { ManganatoScraper } from "../src/manganato/index.js";
 
 const MANGA_DATA_TO_DETAILED_SCRAPE = [

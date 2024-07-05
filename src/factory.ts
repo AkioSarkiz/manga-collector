@@ -1,5 +1,5 @@
 import { AsuraComicScraper } from "./asuracomic/index.js";
-import { MangaSource } from "./constants.js";
+import { MangaSource } from "./index.js";
 import { MangadexScraper } from "./mangadex/index.js";
 import { ManganatoScraper } from "./manganato/index.js";
 import { ToonilyScraper } from "./toonily/index.js";

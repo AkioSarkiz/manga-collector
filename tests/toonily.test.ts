@@ -1,5 +1,5 @@
 import { describe, expect, expectTypeOf, test } from "vitest";
-import { MangaSource } from "../src/constants.js";
+import { MangaSource } from "../src/index.js";
 import { MangaScraperFactory } from "../src/factory.js";
 import { ToonilyScraper } from "../src/toonily/index.js";
 import { ScrapedDetailedChapter, ScrapedDetailedManga, ScrapedListOfManga } from "../src/index.js";

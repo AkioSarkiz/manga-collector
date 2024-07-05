@@ -1,5 +1,5 @@
 import { describe, expect, expectTypeOf, test } from "vitest";
-import { MangaSource } from "../src/constants.js";
+import { MangaSource } from "../src/index.js";
 import { MangaScraperFactory } from "../src/factory.js";
 import { AsuraComicScraper } from "../src/asuracomic/index.js";
 import { ResponseChapter, ResponseDetailManga, ResponseListManga } from "../src/asuracomic/types/type.js";
