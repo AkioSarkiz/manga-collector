@@ -1,6 +1,15 @@
 import axios from "axios";
 import { chapter, genre, image_chapter, ResponseChapter, ResponseDetailManga, ResponseListManga } from "./types/type";
-import { ScrapedListOfManga, ScrapedListOfMangaItem, Scraper } from "../types/index.js";
+import {
+  ScrapedArtist,
+  ScrapedAuthor,
+  ScrapedChapter,
+  ScrapedDetailedManga,
+  ScrapedGenre,
+  ScrapedListOfManga,
+  ScrapedListOfMangaItem,
+  Scraper,
+} from "../types/index.js";
 
 export class MangadexScraper implements Scraper {
   private readonly baseUrl: string = "https://mangadex.org";
@@ -46,60 +55,69 @@ export class MangadexScraper implements Scraper {
     };
   }
 
-  public async getDetailManga(url: string): Promise<ResponseDetailManga> {
-    const sourceId = url;
-    let author = "null";
-    let title = "null";
-    let status = "null";
-    const genres: genre[] = [] as genre[];
+  public async getDetailedManga(url: string): Promise<ScrapedDetailedManga> {
+    const urlObj = new URL(url);
+    const mangaId = urlObj.pathname.split("/")[2];
+
+    const authors: ScrapedAuthor[] = [];
+    const artists: ScrapedArtist[] = [];
+    const genres: ScrapedGenre[] = [];
+
     //Get info Manga like (title, author, tag)
-    await axios
-      .get(`https://api.mangadex.org/manga/${sourceId}?includes[]=artist&includes[]=author&includes[]=cover_art`)
-      .then(function (response) {
-        const infoData = response.data.data;
-        author = infoData.relationships[0].attributes.name;
-        title = infoData.attributes.title.en;
-        status = infoData.attributes.status;
-        infoData.attributes.tags.map((e: any) => {
-          genres.push({
-            url: `https://mangadex.org/tag/` + e.id,
-            name: e.attributes.name.en,
-            path: "/tag/" + e.id,
-          });
-        });
-      })
-      .catch(function (error) {
-        console.log(error);
+    const infoMangaUrl = `https://api.mangadex.org/manga/${mangaId}?includes[]=artist&includes[]=author&includes[]=cover_art`;
+    const response = await axios.get(infoMangaUrl);
+    const mangaData = response.data.data;
+
+    mangaData.relationships
+      .filter((relationship: any) => relationship.type === "author")
+      .map((relationship: any) => {
+        authors.push({
+          name: relationship.attributes.name,
+          url: `https://mangadex.org/author/${relationship.id}`,
+        } as ScrapedAuthor);
       });
+
+    mangaData.relationships
+      .filter((relationship: any) => relationship.type === "artist")
+      .map((relationship: any) => {
+        artists.push({
+          name: relationship.attributes.name,
+          url: `https://mangadex.org/author/${relationship.id}`,
+        } as ScrapedAuthor);
+      });
+
+    mangaData.attributes.tags.map((e: any) => {
+      genres.push({
+        url: `https://mangadex.org/tag/${e.id}`,
+        name: e.attributes.name.en,
+      });
+    });
+
     //Get info Manga Chapter
-    const chapters: chapter[] = [] as chapter[];
-    await axios
-      .get(
-        `https://api.mangadex.org/manga/${sourceId}/feed?translatedLanguage[]=en&includes[]=scanlation_group&&includes[]=user&order[volume]=desc&order[chapter]=desc&offset=0&contentRating[]=safe&contentRating[]=suggestive&contentRating[]=erotica&contentRating[]=pornographic`
-      )
-      .then(function (response) {
-        const chapterData = response.data.data;
-        chapterData.map((e: any) => {
-          chapters.push({
-            path: "/" + e.id,
-            url: `https://mangadex.org/chapter/${e.id}`,
-            parent_href: "/chapter/" + e.id,
-            title: e.attributes.title,
-          });
-        });
-      })
-      .catch(function (error) {
-        console.log(error);
+    const chapters: ScrapedChapter[] = [];
+    const chapterMangaUrl = `https://api.mangadex.org/manga/${mangaId}/feed?translatedLanguage[]=en&includes[]=scanlation_group&&includes[]=user&order[volume]=desc&order[chapter]=desc&offset=0&contentRating[]=safe&contentRating[]=suggestive&contentRating[]=erotica&contentRating[]=pornographic`;
+    const chaptersResponse = await axios.get(chapterMangaUrl);
+
+    chaptersResponse.data.data.map((e: any, i: number) => {
+      chapters.push({
+        _id: i,
+        url: `https://mangadex.org/chapter/${e.id}`,
+        title: e.attributes.title,
+        index: e.attributes.chapter,
+        lastUpdate: e.attributes.updatedAt ? new Date(e.attributes.updatedAt) : undefined,
       });
+    });
+
     return {
-      path: this.baseUrl + `/title/${sourceId}`,
       url,
-      author,
+      description: mangaData.attributes.description.en,
+      authors,
+      artists,
       genres,
-      title,
-      status,
+      title: mangaData.attributes.title.en,
+      status: mangaData.attributes.status,
       chapters,
-    };
+    } as ScrapedDetailedManga;
   }
 
   public async getDataChapter(
@@ -163,11 +181,13 @@ export class MangadexScraper implements Scraper {
     const response = await axios.get(url);
 
     response.data.data.map((e: any, i: number) => {
+      const coverRelationship = e.relationships.find((r: any) => r.type === "cover_art");
+
       data.push({
         _id: i,
         title: e.attributes.title.en,
-        url: e.id,
-        imageThumbnail: "not implemented",
+        url: `https://mangadex.org/title/${e.id}`,
+        imageThumbnail: `https://mangadex.org/covers/${e.id}/${coverRelationship.attributes.fileName}`,
       } as ScrapedListOfMangaItem);
     });
 
