@@ -12,6 +12,8 @@ The mangalib is a library designed to easily scrape manga content from various w
 
 ## Supported websites
 
+The mangalib currently supports the following manga websites (updating):
+
 |        **Website**        |                                                                                           **Status**                                                                                           |
 | :-----------------------: | :--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------: |
 |         Manganato         | [![Test scrape manganato](https://github.com/AkioSarkiz/mangalib/actions/workflows/manganato-test.yml/badge.svg)](https://github.com/AkioSarkiz/mangalib/actions/workflows/manganato-test.yml) |
@@ -69,16 +71,6 @@ console.log(
 | getDetailedManga   | Get details of the manga   |
 | getDetailedChapter | Get details of the chapter |
 | search             | Find the mangas by query   |
-
-## Supported Websites
-
-The manga-lib currently supports the following manga websites (updating):
-
-- nettruyen
-- toonily
-- blogtruyen
-- asurascans
-- mangadex
 
 ## Contributing
 
