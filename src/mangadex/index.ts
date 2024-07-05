@@ -4,6 +4,8 @@ import {
   ScrapedArtist,
   ScrapedAuthor,
   ScrapedChapter,
+  ScrapedDetailedChapter,
+  ScrapedDetailedChapterFrame,
   ScrapedDetailedManga,
   ScrapedGenre,
   ScrapedListOfManga,
@@ -120,56 +122,35 @@ export class MangadexScraper implements Scraper {
     } as ScrapedDetailedManga;
   }
 
-  public async getDataChapter(
-    url_chapter: string,
-    url?: string | undefined,
-    path?: string | undefined,
-    prev_chapter?: chapter | undefined,
-    next_chapter?: chapter | undefined
-  ): Promise<ResponseChapter> {
-    const sourceId = url_chapter;
-    const chapter_data: image_chapter[] = [] as image_chapter[];
-    let title = "null";
-    // get info data
-    await axios
-      .get(`https://api.mangadex.org/chapter/${sourceId}?includes[]=scanlation_group&includes[]=manga&includes[]=user`)
-      .then(function (response) {
-        const infoData = response.data.data;
-        let mangaId = 0;
-        for (let i = 0; i < infoData.relationships.length; i++)
-          if (infoData.relationships[i].type == "manga") {
-            mangaId = i;
-            break;
-          }
-        title = `${infoData.relationships[mangaId].attributes.title.en} chap ${infoData.attributes.chapter} [${infoData.attributes.title}]`;
-      })
-      .catch(function (error) {
-        console.log(error);
+  public async getDetailedChapter(url: string): Promise<ScrapedDetailedChapter> {
+    const urlObj = new URL(url);
+    const mangaId = urlObj.pathname.split("/")[2];
+    const frames: ScrapedDetailedChapterFrame[] = [];
+
+    const mangaUrl = `https://api.mangadex.org/chapter/${mangaId}?includes[]=scanlation_group&includes[]=manga&includes[]=user`;
+    const responseManga = await axios.get(mangaUrl);
+
+    for (const relationship of responseManga.data.data.relationships) {
+      if (relationship.type === "manga") {
+        break;
+      }
+    }
+
+    const responseChapters = await axios.get(`https://api.mangadex.org/at-home/server/${mangaId}?forcePort443=false`);
+    const hash = responseChapters.data.chapter.hash;
+
+    for (let i = 0; i < responseChapters.data.chapter.data.length; i++) {
+      frames.push({
+        _id: i,
+        originSrc: `https://uploads.mangadex.org/data/${hash}/${responseChapters.data.chapter.data[i]}`,
       });
-    //get img data
-    await axios
-      .get(`https://api.mangadex.org/at-home/server/${sourceId}?forcePort443=false`)
-      .then(function (response) {
-        const hash = response.data.chapter.hash;
-        response.data.chapter.data.map((e: any, i: number) => {
-          chapter_data.push({
-            _id: i,
-            src_origin: `https://uploads.mangadex.org/data/${hash}/${response.data.chapter.data[i]}`,
-            alt: title + " id: " + i,
-          });
-        });
-      })
-      .catch(function (error) {
-        console.log(error);
-      });
+    }
+
     return {
-      url: `${this.baseUrl}/chapter/${sourceId}`,
-      path: `/chapter/${sourceId}`,
-      title,
-      chapter_data,
-      prev_chapter: null,
-      next_chapter: null,
-    };
+      url: `${this.baseUrl}/chapter/${mangaId}`,
+      title: responseManga.data.data.attributes.title,
+      frames,
+    } as ScrapedDetailedChapter;
   }
 
   public async search(query: string, page: number = 1): Promise<ScrapedListOfManga> {
