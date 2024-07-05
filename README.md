@@ -10,6 +10,15 @@ The mangalib is a library designed to easily scrape manga content from various w
 - Supports multiple popular manga websites.
 - Provides a simple and intuitive API for easy integration.
 
+## Supported websites
+
+|        **Website**        | **Status** |
+| :-----------------------: | :--------: |
+|         Manganato         | no status  |
+|          Toonily          | no status  |
+|         Mangadex          | no status  |
+| asuracomic (experimental) | no status  |
+
 ## Requirements
 
 - Node version 20.x and above
@@ -23,6 +32,7 @@ npm install mangalib
 ### How to use
 
 TODO: update
+
 ```typescript
 import { getLatestMangaList } from "manganato-scraper";
 

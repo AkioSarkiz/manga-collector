@@ -3,6 +3,13 @@ import { chapter, genre, ResponseChapter, ResponseDetailManga, ResponseListManga
 import { not_null } from "./utils/validate";
 import { useGetDataItemsManga } from "./hooks/getListLatest.js";
 import { useGetDataChapter } from "./hooks/getDataChapter.js";
+import {
+  ScrapedDetailedChapter,
+  ScrapedDetailedManga,
+  ScrapedListOfManga,
+  ScrapedListOfMangaItem,
+  Scraper,
+} from "../types/scraper.js";
 
 function extractBeforeTag(str: string) {
   // Regular expression to match any HTML tag
@@ -23,7 +30,7 @@ function extractBeforeTag(str: string) {
   }
 }
 
-export class AsuraComicScraper {
+export class AsuraComicScraper implements Scraper {
   private readonly baseUrl: string = "https://asuracomic.net/";
   private browser: Promise<Browser>;
 
@@ -33,7 +40,7 @@ export class AsuraComicScraper {
     });
   }
 
-  public async search(query: string, page = 1): Promise<ResponseListManga> {
+  public async search(query: string, page: number = 1): Promise<ScrapedListOfManga> {
     const _page = await (await this.browser).newPage();
     _page.setDefaultNavigationTimeout(0);
     await _page.setRequestInterception(true);
@@ -52,7 +59,7 @@ export class AsuraComicScraper {
       hrefSelector: "a",
     };
 
-    const data = await useGetDataItemsManga(paramsSelector);
+    const data: ScrapedListOfMangaItem[] = await useGetDataItemsManga(paramsSelector);
 
     const canNext = await _page.$eval("div.pagination > a.next.page-numbers", () => true).catch(() => false);
 
@@ -67,7 +74,7 @@ export class AsuraComicScraper {
 
     return {
       totalData: data.length,
-      totalPage,
+      totalPages: totalPage,
       currentPage: page !== undefined ? page : 1,
       canNext,
       canPrev,
@@ -75,13 +82,7 @@ export class AsuraComicScraper {
     };
   }
 
-  public async getDataChapter(
-    url_chapter: string,
-    url?: string,
-    path?: string,
-    prev_chapter?: chapter,
-    next_chapter?: chapter
-  ): Promise<ResponseChapter> {
+  public async getDetailedChapter(url: string): Promise<ScrapedDetailedChapter> {
     const _page = await (await this.browser).newPage();
     _page.setDefaultNavigationTimeout(0);
     await _page.setRequestInterception(true);
@@ -89,7 +90,7 @@ export class AsuraComicScraper {
       if (req.resourceType() !== "document") req.abort();
       else req.continue();
     });
-    await _page.goto(url_chapter);
+    await _page.goto(url);
 
     const paramsSelector = {
       puppeteer: _page,
@@ -100,7 +101,7 @@ export class AsuraComicScraper {
       prevChapterSelector: ".navlef > .npv.r > div.nextprev > a.ch-prev-btn",
       nextChapterSelector: ".navlef > .npv.r > div.nextprev > a.ch-next-btn",
       baseUrl: this.baseUrl,
-      url: url_chapter,
+      url: url,
     };
 
     const data = await useGetDataChapter(paramsSelector);
@@ -134,7 +135,7 @@ export class AsuraComicScraper {
     };
   }
 
-  public async getDetailManga(url: string): Promise<ResponseDetailManga> {
+  public async getDetailedManga(url: string): Promise<ScrapedDetailedManga> {
     const _page = await (await this.browser).newPage();
     _page.setDefaultNavigationTimeout(0);
     await _page.setRequestInterception(true);
