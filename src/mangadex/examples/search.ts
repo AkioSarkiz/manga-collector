@@ -6,10 +6,11 @@ import fs from "fs";
 const main = async () => {
   const scraper = (await MangaScraperFactory.make(MangaSource.MANGADEX)) as MangadexScraper;
   const result = await scraper.search("san");
+  const filename = "search.json";
 
-  await fs.promises.writeFile("search.json", JSON.stringify(result, null, 2));
+  await fs.promises.writeFile(filename, JSON.stringify(result, null, 2));
 
-  console.log("Result has been saved to search.json");
+  console.log(`Result has been saved to ${filename}`);
 
   scraper.shutdown();
 };
