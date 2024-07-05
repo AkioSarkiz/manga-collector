@@ -12,12 +12,12 @@ The mangalib is a library designed to easily scrape manga content from various w
 
 ## Supported websites
 
-|        **Website**        | **Status** |
-| :-----------------------: | :--------: |
-|         Manganato         | no status  |
-|          Toonily          | no status  |
-|         Mangadex          | no status  |
-| asuracomic (experimental) | no status  |
+|        **Website**        |                                                                                           **Status**                                                                                           |
+| :-----------------------: | :--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------: |
+|         Manganato         | [![Test scrape manganato](https://github.com/AkioSarkiz/mangalib/actions/workflows/manganato-test.yml/badge.svg)](https://github.com/AkioSarkiz/mangalib/actions/workflows/manganato-test.yml) |
+|          Toonily          |    [![Test scrape toonily](https://github.com/AkioSarkiz/mangalib/actions/workflows/toonily-test.yml/badge.svg)](https://github.com/AkioSarkiz/mangalib/actions/workflows/toonily-test.yml)    |
+|         Mangadex          |  [![Test scrape mangadex](https://github.com/AkioSarkiz/mangalib/actions/workflows/mangadex-test.yml/badge.svg)](https://github.com/AkioSarkiz/mangalib/actions/workflows/mangadex-test.yml)   |
+| asuracomic (experimental) |                                                                                           no status                                                                                            |
 
 ## Requirements
 
