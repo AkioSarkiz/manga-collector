@@ -33,7 +33,7 @@ npm install mangalib
 
 This package contains examples of code that you can use and modify. They are located in `examples` folder.
 
-Here is simple example how you can use that package
+Here is a simple example how you can use that package
 
 ```typescript
 import { getLatestMangaList } from "manganato-scraper";
