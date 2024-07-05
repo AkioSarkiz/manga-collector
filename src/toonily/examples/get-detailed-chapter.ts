@@ -6,7 +6,7 @@ import fs from "fs";
 const main = async () => {
   const scraper = (await MangaScraperFactory.make(MangaSource.TOONILY)) as ToonilyScraper;
   const result = await scraper.getDetailedChapter("https://toonily.com/webtoon/not-a-lady-anymore/chapter-1/");
-  const filename = "data-chapter.json";
+  const filename = "detailed-chapter.json";
 
   await fs.promises.writeFile(filename, JSON.stringify(result, null, 2));
 

@@ -1,5 +1,4 @@
 import axios from "axios";
-import { chapter, genre, image_chapter, ResponseChapter, ResponseDetailManga, ResponseListManga } from "./types/type";
 import {
   ScrapedArtist,
   ScrapedAuthor,
