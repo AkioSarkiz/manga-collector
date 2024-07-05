@@ -1,9 +1,6 @@
 import parse, { HTMLElement } from "node-html-parser";
-import { axios } from "../axios.js";
 import { DashboardManga, ParseDashboardPageProps } from "../types/list.js";
 import {
-  Author,
-  Genre,
   ScrapedAuthor,
   ScrapedChapter,
   ScrapedDetailedChapter,
@@ -18,6 +15,7 @@ import { decode } from "html-entities";
 import { convertToNumber, extractChapterIndex, extractNumbersFromStrings } from "../utils/index.js";
 import dayjs from "dayjs";
 import * as cheerio from "cheerio";
+import { axios } from "../lib/index.js";
 
 export const BASE_URL = "https://manganato.com";
 

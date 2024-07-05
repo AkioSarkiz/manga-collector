@@ -10,7 +10,7 @@ import {
   ScrapedListOfMangaItem,
   Scraper,
 } from "../types/index.js";
-import { axios } from "../utils/axios.js";
+import { axios } from "../lib/index.js";
 
 export class MangadexScraper implements Scraper {
   private readonly baseUrl: string = "https://mangadex.org";
