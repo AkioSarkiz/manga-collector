@@ -5,7 +5,7 @@ import fs from "fs";
 
 const main = async () => {
   const scraper = (await MangaScraperFactory.make(MangaSource.MANGADEX)) as MangadexScraper;
-  const result = await scraper.search("Solo Max-Level Newbie");
+  const result = await scraper.search("san");
 
   await fs.promises.writeFile("search.json", JSON.stringify(result, null, 2));
 

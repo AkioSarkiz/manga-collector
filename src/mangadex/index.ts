@@ -1,6 +1,6 @@
 import axios from "axios";
 import { chapter, genre, image_chapter, ResponseChapter, ResponseDetailManga, ResponseListManga } from "./types/type";
-import { Scraper } from "../types/index.js";
+import { ScrapedListOfManga, ScrapedListOfMangaItem, Scraper } from "../types/index.js";
 
 export class MangadexScraper implements Scraper {
   private readonly baseUrl: string = "https://mangadex.org";
@@ -154,44 +154,35 @@ export class MangadexScraper implements Scraper {
     };
   }
 
-  public async search(keyword: string, page?: number | undefined): Promise<ResponseListManga> {
-    let totalData = 0;
-    let data: {
-      _id: number;
-      image_thumbnail: string;
-      title: string;
-      href: string;
-    }[] = [];
-    let offset = 0;
-    if (page != undefined)
-      if (page >= 0 && page <= 9983) offset = page;
-      else throw new Error("Offset is out of bound");
-    await axios
-      .get(
-        `https://api.mangadex.org/manga?limit=10&offset=${offset}&includes[]=cover_art&includes[]=artist&includes[]=author&contentRating[]=safe&contentRating[]=suggestive&contentRating[]=erotica&title=${keyword}&order[relevance]=desc`
-      )
-      .then(function (response) {
-        totalData = response.data.total;
-        const listLatestUpdate = response.data.data;
-        totalData = response.data.total;
-        data = listLatestUpdate.map((e: any, i: any) => {
-          return {
-            _id: i,
-            title: e.attributes.title.en,
-            href: e.id,
-            image_thumbnail: "not implemented",
-          };
-        });
-      })
-      .catch(function (error) {
-        console.log(error);
-      });
+  public async search(query: string, page: number = 1): Promise<ScrapedListOfManga> {
+    const data: ScrapedListOfMangaItem[] = [];
+    const limit = 20;
+    const offset = (page - 1) * limit;
+
+    const url = `https://api.mangadex.org/manga?limit=${limit}&offset=${offset}&includes[]=cover_art&includes[]=artist&includes[]=author&contentRating[]=safe&contentRating[]=suggestive&contentRating[]=erotica&title=${query}&order[relevance]=desc`;
+    const response = await axios.get(url);
+
+    console.log({ url });
+
+    response.data.data.map((e: any, i: number) => {
+      data.push({
+        _id: i,
+        title: e.attributes.title.en,
+        url: e.id,
+        imageThumbnail: "not implemented",
+      } as ScrapedListOfMangaItem);
+    });
+
+    const totalPages = Math.ceil(response.data.total / limit);
+    const canNext = offset + limit < response.data.total;
+    const canPrev = offset > 0;
+
     return {
-      totalData,
-      canNext: offset <= 9967 ? true : false,
-      canPrev: offset >= 16 ? true : false,
-      totalPage: 9983,
-      currentPage: offset,
+      totalData: response.data.total,
+      canNext,
+      canPrev,
+      totalPages,
+      currentPage: page,
       data,
     };
   }
