@@ -36,29 +36,30 @@ This package contains examples of code that you can use and modify. They are loc
 Here is a simple example how you can use that package
 
 ```typescript
-import { getLatestMangaList } from "mangalib";
+import { MangaScraperFactory, MangaSource } from "mangalib";
 
-const result = await getLatestMangaList();
+const scraper = await MangaScraperFactory.make(MangaSource.MANGANATO);
 
-// an example result
-// [
+console.log(
+    scraper.getDetailedManga("manga url here")
+);
+
+// Example output
+// {
+//   "url": "https://chapmanganato.to/manga-fy982633",
+//   "title": "Beauty And The Beasts",
+//   "status": "ongoing",
+//   "description": "As soon as she fell into the world of beast men, a leopard forcibly took her back to his home. Indeed, Bai Jingjing is at a complete and utter loss. The males in this world are all handsome beyond compare, while the women are all so horrid that even the gods shudder at their sight. As a first-rate girl from the modern world (she's even a quarter Russian), Bai Jingjing finds herself sitting at the center of a harem filled with beautiful men -- at the very peak of existence.",
+//   "genres": [
 //    ...
-//   {
-//     title: 'Attack On Titan',
-//     link: 'https://chapmanganato.to/manga-oa952283',
-//     cover: 'https://avt.mkklcdnv6temp.com/34/b/1-1583465037.jpg',
-//     rating: '4.5',
-//     views: 'View : 106.5M'
-//   },
-//   {
-//     title: 'Shingeki No Kyojin - Before The Fall',
-//     link: 'https://chapmanganato.to/manga-vi952091',
-//     cover: 'https://avt.mkklcdnv6temp.com/27/k/1-1583464768.jpg',
-//     rating: '4.7',
-//     views: 'View : 8M'
-//   },
-//   ...
-// ]
+//   ],
+//   "chapters": [
+//     ...
+//   ],
+//   "authors": [
+//     ...
+//   ]
+// }
 ```
 
 ### Available methods

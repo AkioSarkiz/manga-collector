@@ -1,5 +1,4 @@
-import { MangaSource } from "../../constants.js";
-import { MangaScraperFactory } from "../../factory.js";
+import { MangaScraperFactory, MangaSource } from "../../index.js";
 import { MangadexScraper } from "../index.js";
 import fs from "fs";
 

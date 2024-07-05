@@ -1,5 +1,4 @@
-import { MangaSource } from "../../constants.js";
-import { MangaScraperFactory } from "../../factory.js";
+import { MangaScraperFactory, MangaSource } from "../../index.js";
 import { MangadexScraper } from "../index.js";
 import fs from "fs";
 
@@ -9,7 +8,7 @@ const main = async () => {
 
   const scraper = (await MangaScraperFactory.make(MangaSource.MANGADEX)) as MangadexScraper;
   const result = await scraper.getDetailedChapter(url);
-  
+
   await fs.promises.writeFile(filename, JSON.stringify(result, null, 2));
 
   console.log(`Result has been saved to ${filename}`);
