@@ -36,7 +36,7 @@ This package contains examples of code that you can use and modify. They are loc
 Here is a simple example how you can use that package
 
 ```typescript
-import { getLatestMangaList } from "manganato-scraper";
+import { getLatestMangaList } from "mangalib";
 
 const result = await getLatestMangaList();
 
