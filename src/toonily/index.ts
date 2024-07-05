@@ -1,4 +1,3 @@
-import axios from "axios";
 import * as cheerio from "cheerio";
 import { useGetDataItemsManga } from "./hooks/getListLatest";
 import {
@@ -13,7 +12,7 @@ import {
   Scraper,
 } from "../types/index.js";
 import dayjs from "dayjs";
-import { convertToNumber, extractChapterIndex } from "../utils/index.js";
+import { axios, convertToNumber, extractChapterIndex } from "../utils/index.js";
 
 export class ToonilyScraper implements Scraper {
   private readonly baseUrl: string = "https://toonily.com/";

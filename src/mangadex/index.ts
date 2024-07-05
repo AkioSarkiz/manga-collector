@@ -1,4 +1,3 @@
-import axios from "axios";
 import {
   ScrapedArtist,
   ScrapedAuthor,
@@ -11,6 +10,7 @@ import {
   ScrapedListOfMangaItem,
   Scraper,
 } from "../types/index.js";
+import { axios } from "../utils/axios.js";
 
 export class MangadexScraper implements Scraper {
   private readonly baseUrl: string = "https://mangadex.org";
