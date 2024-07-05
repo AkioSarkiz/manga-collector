@@ -19,8 +19,8 @@ export class ToonilyScraper implements Scraper {
   private readonly baseUrl: string = "https://toonily.com/";
 
   async getListLatestUpdate(page?: number | undefined): Promise<ScrapedListOfManga> {
-    const axios_get = await axios.get(`${this.baseUrl}${page !== undefined && page > 1 ? `/page/${page}` : ``}`);
-    const $ = cheerio.load(axios_get.data);
+    const response = await axios.get(`${this.baseUrl}${page !== undefined && page > 1 ? `/page/${page}` : ``}`);
+    const $ = cheerio.load(response.data);
 
     const paramsSelector = {
       cheerioApi: $,
@@ -33,12 +33,12 @@ export class ToonilyScraper implements Scraper {
 
     const data = await useGetDataItemsManga(paramsSelector);
 
-    const last_page = $("div.wp-pagenavi").find("a.last").attr("href")!;
+    const lastPage = $("div.wp-pagenavi").find("a.last").attr("href")!;
 
     const totalPage = Number(
-      last_page !== undefined
-        ? last_page
-            .substring(0, last_page.length - 1)
+      lastPage !== undefined
+        ? lastPage
+            .substring(0, lastPage.length - 1)
             .split("/")
             .at(-1)
         : page !== undefined
@@ -99,7 +99,7 @@ export class ToonilyScraper implements Scraper {
       });
     });
 
-    $("div.genres-content > a").each((_i, e) => {
+    $("div.genres-content > a").each((_, e) => {
       genres.push({
         url: $(e).attr("href")!,
         name: $(e).text().trim(),
@@ -114,7 +114,7 @@ export class ToonilyScraper implements Scraper {
 
       description,
 
-      author,
+      authors: [author],
 
       genres,
       rate,
@@ -176,16 +176,16 @@ export class ToonilyScraper implements Scraper {
         _id: i,
         title: $(e).find("div.item-summary > div.post-title.font-title > h3 > a").text(),
         imageThumbnail: $(e).find("div.item-thumb.c-image-hover > a > img").attr("data-src")!,
-        href: $(e).find("div.item-summary > div.post-title.font-title > h3 > a").attr("href")!,
+        url: $(e).find("div.item-summary > div.post-title.font-title > h3 > a").attr("href")!,
       });
     });
 
-    const last_page = $("div.wp-pagenavi").find("a.last").attr("href")!;
+    const latPage = $("div.wp-pagenavi").find("a.last").attr("href")!;
 
     const totalPages = Number(
-      last_page !== undefined
-        ? last_page
-            .substring(0, last_page.length - 1)
+      latPage !== undefined
+        ? latPage
+            .substring(0, latPage.length - 1)
             .split("/")
             .at(-1)
         : page !== undefined
