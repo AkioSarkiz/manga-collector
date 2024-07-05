@@ -34,10 +34,10 @@ export interface ScrapedDetailedManga {
   title: string;
   status: ScrapedMangaStatus;
   description: string;
-  
+
   type?: ScrapedMangaType;
-  author?: ScrapedAuthor[];
-  artist?: ScrapedArtist[];
+  authors?: ScrapedAuthor[];
+  artists?: ScrapedArtist[];
   views?: number;
   rate?: number;
   rateVoters?: number;
@@ -68,11 +68,15 @@ export type ScrapedListOfMangaItem = {
 };
 
 export type ScrapedListOfManga = {
-  totalData: number;
   currentPage: number;
+
+  // Total count of manga
+  totalData?: number;
+  // Total count of pages
+  totalPages?: number;
+
   canPrev?: boolean;
   canNext?: boolean;
-  totalPages?: number;
 
   data: ScrapedListOfMangaItem[];
 };

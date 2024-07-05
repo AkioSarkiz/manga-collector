@@ -4,15 +4,20 @@ import { DashboardManga, ParseDashboardPageProps } from "../types/list.js";
 import {
   Author,
   Genre,
+  ScrapedAuthor,
   ScrapedChapter,
+  ScrapedDetailedChapter,
+  ScrapedDetailedChapterFrame,
   ScrapedDetailedManga,
+  ScrapedGenre,
   ScrapedListOfManga,
   ScrapedListOfMangaItem,
   Scraper,
 } from "../types/index.js";
 import { decode } from "html-entities";
-import { convertToNumber, extractChapterIndex } from "../utils/index.js";
+import { convertToNumber, extractChapterIndex, extractNumbersFromStrings } from "../utils/index.js";
 import dayjs from "dayjs";
+import * as cheerio from "cheerio";
 
 export const BASE_URL = "https://manganato.com";
 
@@ -72,7 +77,6 @@ export class ManganatoScraper implements Scraper {
     const items: ScrapedListOfMangaItem[] = [];
     const formattedQuery = query.replaceAll(" ", "_");
     const url = getBaseUrl(`search/story/${formattedQuery}?${page ? page : ""}`);
-
     const response = await axios.get(url);
 
     if (response.status !== 200) {
@@ -101,9 +105,33 @@ export class ManganatoScraper implements Scraper {
       }
     }
 
+    const totalData = (function () {
+      const result = document?.querySelector(".group-qty")?.innerText;
+
+      if (!result) {
+        return 0;
+      }
+
+      return extractNumbersFromStrings(result)[0];
+    })();
+
+    const totalPages = (function () {
+      const result = document.querySelector(".page-last")?.innerText;
+
+      if (!result) {
+        return 0;
+      }
+
+      return extractNumbersFromStrings(result)[0];
+    })();
+
     return {
       currentPage: page,
-      totalData: 0,
+      canNext: page < totalPages,
+      canPrev: page > 1,
+      totalPages,
+      totalData,
+      data: items,
     } as ScrapedListOfManga;
   }
 
@@ -160,7 +188,7 @@ export class ManganatoScraper implements Scraper {
     const title = String(storyRightInfo?.querySelector("h1")?.innerText);
 
     if (!storyRightInfo || !chapterContainer) {
-      throw new Error("Failed to get detailed manga");
+      throw new Error(`Failed to get detailed manga, url ${url}`);
     }
 
     const chapterLis = Array.from(chapterContainer.querySelectorAll("li"));
@@ -172,37 +200,40 @@ export class ManganatoScraper implements Scraper {
 
     const parsedTableInfo = parseTable(tableInfo);
 
-    const altTitles: string[] | undefined = parsedTableInfo
-      .find((value) => value.header.innerText.trim() === "Alternative :")
-      ?.value.innerText.split(",")
-      .map((value) => value.trim());
+    const altTitles: string[] =
+      parsedTableInfo
+        .find((value) => value.header.innerText.trim() === "Alternative :")
+        ?.value.innerText.split(",")
+        .map((value) => value.trim()) ?? [];
 
     const status = parsedTableInfo
       .find((value) => value.header.innerText.trim() === "Status :")
       ?.value.innerText.trim()
       .toLocaleLowerCase();
 
-    const authors: Author[] | undefined = parsedTableInfo
-      .find((value) => value.header.innerText.trim() === "Author(s) :")
-      ?.value.querySelectorAll("a")
-      .map(
-        (value) =>
-          ({
-            link: value.getAttribute("href"),
-            name: value.innerText.trim(),
-          } as Author)
-      );
+    const authors: ScrapedAuthor[] =
+      parsedTableInfo
+        .find((value) => value.header.innerText.trim() === "Author(s) :")
+        ?.value.querySelectorAll("a")
+        .map(
+          (value) =>
+            ({
+              link: value.getAttribute("href"),
+              name: value.innerText.trim(),
+            } as ScrapedAuthor)
+        ) ?? [];
 
-    const genres: Genre[] | undefined = parsedTableInfo
-      .find((value) => value.header.innerText.trim() === "Genres :")
-      ?.value.querySelectorAll("a")
-      .map(
-        (value) =>
-          ({
-            link: value.getAttribute("href"),
-            name: value.innerText.trim(),
-          } as Genre)
-      );
+    const genres: ScrapedGenre[] =
+      parsedTableInfo
+        .find((value) => value.header.innerText.trim() === "Genres :")
+        ?.value.querySelectorAll("a")
+        .map(
+          (value) =>
+            ({
+              url: value.getAttribute("href")?.trim(),
+              name: value.innerText.trim(),
+            } as ScrapedGenre)
+        ) ?? [];
 
     const chapters: ScrapedChapter[] = chapterLis.map((value, index): ScrapedChapter => {
       const lastUpdate = value.querySelector(".chapter-time")?.innerText?.trim();
@@ -243,9 +274,36 @@ export class ManganatoScraper implements Scraper {
       title,
       status,
       description,
-
+      genres,
       chapters,
+      authors,
     } as ScrapedDetailedManga;
+  }
+
+  public async getDetailedChapter(url: string): Promise<ScrapedDetailedChapter> {
+    const response = await axios.get(url);
+    const $ = cheerio.load(response.data);
+    const frames: ScrapedDetailedChapterFrame[] = [];
+
+    $(".container-chapter-reader img").each((i, e) => {
+      const originSrc = $(e).attr("src")?.trim();
+
+      if (!originSrc) {
+        throw new Error("Failed to get detailed chapter");
+      }
+
+      frames.push({
+        _id: i,
+        originSrc,
+        alt: $(e).attr("alt")?.trim(),
+      });
+    });
+
+    return {
+      title: $(".panel-chapter-info-top h1").text().trim(),
+      url,
+      frames,
+    } as ScrapedDetailedChapter;
   }
 
   public async init() {
