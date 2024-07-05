@@ -1,0 +1,46 @@
+{
+  "name": "mangalib",
+  "version": "1.0.0",
+  "description": "The mangalib scraper",
+  "main": "./dist/index.js",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.ts",
+  "scripts": {
+    "build": "tsup",
+    "test": "vitest run"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/AkioSarkiz/mangalib.git"
+  },
+  "keywords": [
+    "mangalib",
+    "api",
+    "scraper"
+  ],
+  "author": "Dmytro Laptiev <akiosarkiz@gmail.com>",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/AkioSarkiz/mangalib/issues"
+  },
+  "homepage": "https://github.com/AkioSarkiz/mangalib#readme",
+  "devDependencies": {
+    "ts-node": "^10.9.2",
+    "tsup": "^8.0.2",
+    "typescript": "^5.4.3",
+    "vitest": "^1.4.0"
+  },
+  "volta": {
+    "node": "20.11.1",
+    "npm": "10.5.0"
+  },
+  "dependencies": {
+    "axios": "^1.6.8",
+    "cheerio": "^1.0.0-rc.12",
+    "dayjs": "^1.11.11",
+    "html-entities": "^2.5.2",
+    "node-html-parser": "^6.1.12",
+    "puppeteer": "^22.12.1",
+    "url-join": "^5.0.0"
+  }
+}
