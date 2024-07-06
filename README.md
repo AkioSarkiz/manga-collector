@@ -1,4 +1,4 @@
-# The manga-collector (ESM only)
+# The manga-collector
 
 [![License](https://img.shields.io/badge/license-MIT-blue)](https://opensource.org/licenses/MIT)
 
