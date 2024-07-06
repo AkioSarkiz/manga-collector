@@ -1,4 +1,5 @@
-/* eslint-disable @typescript-eslint/no-non-null-assertion */
+// Experimental scraper
+// @ts-nocheck
 import { CheerioAPI } from "cheerio";
 import { not_null } from "../utils/validate.js";
 import { Page } from "puppeteer";

@@ -39,7 +39,7 @@ export type ResponseDetailManga = {
   chapters: chapter[];
 };
 export type image_chapter = {
-  _id: number;
+  _id?: number;
   src_origin: string;
   src_cdn?: string;
   alt: string;

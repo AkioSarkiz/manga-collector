@@ -1,10 +1,9 @@
-/* eslint-disable @typescript-eslint/no-non-null-assertion */
-/* eslint-disable @typescript-eslint/no-unsafe-call */
-/* eslint-disable @typescript-eslint/no-unsafe-assignment */
+// Experimental scraper
+// @ts-nocheck
 import { CheerioAPI } from "cheerio";
 import { Page } from "puppeteer";
 import { not_null } from "../utils/validate";
-import { chapter, image_chapter, responseChapter } from "../types/type";
+import { chapter, image_chapter } from "../types/type";
 
 interface paramsSelector {
   puppeteer?: Page;
@@ -22,7 +21,7 @@ interface paramsSelector {
   nextChapterSelector: string;
 }
 
-export const useGetDataChapter = async (params: paramsSelector): Promise<responseChapter> => {
+export const useGetDataChapter = async (params: paramsSelector): Promise<any> => {
   const {
     puppeteer,
     cheerioApi,

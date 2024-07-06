@@ -1,4 +1,4 @@
-import parse, { HTMLElement } from "node-html-parser";
+import { parse, HTMLElement } from "node-html-parser";
 import {
   ScrapedAuthor,
   ScrapedChapter,
@@ -10,7 +10,6 @@ import {
   ScrapedListOfMangaItem,
   Scraper,
 } from "../types/index.js";
-import { decode } from "html-entities";
 import { convertToNumber, extractChapterIndex, extractNumbersFromStrings } from "../utils/index.js";
 import dayjs from "dayjs";
 import * as cheerio from "cheerio";
@@ -39,25 +38,15 @@ const parseDashboardPage = async (path: string, page: number): Promise<ScrapedLi
 
   for (let i = 0; i < mangaCards.length; i++) {
     const mangaCard = mangaCards[i];
-    const title = mangaCard.querySelector(".genres-item-info > h3")?.innerText;
+    const title = mangaCard.querySelector(".genres-item-info > h3")?.innerText?.trim();
     const link = mangaCard.querySelector(".genres-item-info > a")?.getAttribute("href") as string;
-    const cover = mangaCard.querySelector(".img-loading")?.getAttribute("src") as string;
-    const rating = mangaCard.querySelector(".genres-item-rate")?.innerText;
-    const views = mangaCard.querySelector(".genres-item-view")?.innerText;
-    let description = mangaCard.querySelector(".genres-item-description")?.innerText || null;
+    const imageThumbnail = mangaCard.querySelector(".img-loading")?.getAttribute("src") as string;
 
-    if (description) {
-      description = decode(description.replace(/\n/g, ""));
-    }
-
-    if (title && link && cover && rating && views) {
+    if (title && link && imageThumbnail) {
       mangaList.push({
-        title: title.trim(),
-        link,
-        cover,
-        rating,
-        views,
-        description,
+        title,
+        url: link,
+        imageThumbnail,
       });
     }
   }
@@ -99,7 +88,7 @@ const getBaseUrl = (path: string = ""): string => {
 export class ManganatoScraper implements Scraper {
   public async search(query: string, page: number = 1): Promise<ScrapedListOfManga> {
     const items: ScrapedListOfMangaItem[] = [];
-    const formattedQuery = query.replaceAll(" ", "_");
+    const formattedQuery = query.replace(/ /g, "_");
     const url = getBaseUrl(`search/story/${formattedQuery}?${page ? page : ""}`);
     const response = await axios.get(url);
 

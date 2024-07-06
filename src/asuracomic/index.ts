@@ -1,3 +1,5 @@
+// Experimental scraper
+// @ts-nocheck
 import puppeteer, { Browser } from "puppeteer";
 import { chapter, genre, ResponseChapter, ResponseDetailManga, ResponseListManga } from "./types/type";
 import { not_null } from "./utils/validate";
