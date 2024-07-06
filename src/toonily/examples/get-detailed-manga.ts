@@ -1,9 +1,8 @@
 import { MangaScraperFactory, MangaSource } from "../../index.js";
-import { ToonilyScraper } from "../index.js";
 import fs from "fs";
 
 const main = async () => {
-  const scraper = (await MangaScraperFactory.make(MangaSource.TOONILY)) as ToonilyScraper;
+  const scraper = await MangaScraperFactory.make(MangaSource.TOONILY);
   const result = await scraper.getDetailedManga("https://toonily.com/webtoon/the-duke-and-the-fox-princess/");
   const filename = "detailed-manga.json";
 

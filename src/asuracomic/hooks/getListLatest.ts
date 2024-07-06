@@ -21,9 +21,8 @@ export const useGetDataItemsManga = async (params: MangaDataParams): Promise<Scr
 
   if (cheerioApi !== undefined) {
     const wrapItems = cheerioApi(wrapSelector);
-    wrapItems.each((i, e) => {
+    wrapItems.each((_, e) => {
       data.push({
-        _id: i,
         title: cheerioApi(e).find(titleSelector).text(),
         imageThumbnail: not_null(cheerioApi(e).find(thumbnailSelector).attr(thumbnailAttr)),
         url: not_null(cheerioApi(e).find(hrefSelector).attr("href")),
@@ -33,7 +32,7 @@ export const useGetDataItemsManga = async (params: MangaDataParams): Promise<Scr
     const wrapItems = await puppeteer!.$$(wrapSelector);
 
     data = await Promise.all(
-      wrapItems.map(async (e, i) => {
+      wrapItems.map(async (e) => {
         const imageThumbnail: string = await (await e.$(thumbnailSelector))!.evaluate((el, thumbnailAttr) => {
           return el.getAttribute(thumbnailAttr)!;
         }, thumbnailAttr);
@@ -42,7 +41,6 @@ export const useGetDataItemsManga = async (params: MangaDataParams): Promise<Scr
         const { title } = await e.$eval(titleSelector, (el) => ({ title: el.textContent }));
 
         return {
-          _id: i,
           title: not_null(title).trim().replace(/\n/, ""),
           url: not_null(href),
           imageThumbnail: imageThumbnail.startsWith("//") ? `https:${imageThumbnail}` : imageThumbnail,

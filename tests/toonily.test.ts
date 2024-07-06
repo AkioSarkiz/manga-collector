@@ -47,18 +47,18 @@ const MANGA_DATA_TO_DETAILED_SCRAPE = [
   },
 ];
 
-describe("test asuracomic", async () => {
+describe("test toonily", async () => {
   const scraper = (await MangaScraperFactory.make(MangaSource.TOONILY)) as ToonilyScraper;
 
   test("should load latest manga", async () => {
-    const result = await scraper.getListLatestUpdate();
+    const result = await scraper.getLatestUpdates();
+    expect(result.data.length).greaterThanOrEqual(1);
     expectTypeOf(result).toEqualTypeOf<ScrapedListOfManga>();
   });
 
   test("search Solo Leveling manga", async () => {
     const result = await scraper.search("Solo Leveling");
     expectTypeOf(result).toEqualTypeOf<ScrapedListOfManga>();
-    console.log(result);
     expect(result.data.length).greaterThanOrEqual(1);
   });
 

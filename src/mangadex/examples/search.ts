@@ -1,9 +1,8 @@
 import { MangaScraperFactory, MangaSource } from "../../index.js";
-import { MangadexScraper } from "../index.js";
 import fs from "fs";
 
 const main = async () => {
-  const scraper = (await MangaScraperFactory.make(MangaSource.MANGADEX)) as MangadexScraper;
+  const scraper = await MangaScraperFactory.make(MangaSource.MANGADEX);
   const result = await scraper.search("san");
   const filename = "search.json";
 

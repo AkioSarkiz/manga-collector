@@ -42,9 +42,7 @@ import { MangaScraperFactory, MangaSource } from "mangalib";
 
 const scraper = await MangaScraperFactory.make(MangaSource.MANGANATO);
 
-console.log(
-    scraper.getDetailedManga("manga url here")
-);
+console.log(await scraper.getDetailedManga("manga url here"));
 
 // Example output
 // {
@@ -66,11 +64,12 @@ console.log(
 
 ### Available methods
 
-| Method             | Description                |
-| ------------------ | -------------------------- |
-| getDetailedManga   | Get details of the manga   |
-| getDetailedChapter | Get details of the chapter |
-| search             | Find the mangas by query   |
+| Method             | Description                  |
+| ------------------ | ---------------------------- |
+| getDetailedManga   | Get details of the manga     |
+| getDetailedChapter | Get details of the chapter   |
+| getLatestUpdates   | Get latest updates of mangas |
+| search             | Find the mangas by query     |
 
 ## Contributing
 

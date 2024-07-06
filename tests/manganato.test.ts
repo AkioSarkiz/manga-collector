@@ -1,6 +1,6 @@
-import { MangaScraperFactory } from "../src";
+import { MangaScraperFactory } from "../src/index.js";
 import { describe, test, expect, expectTypeOf, assert } from "vitest";
-import { DashboardManga, ScrapedDetailedManga, ScrapedListOfManga, SearchManga } from "../src/types";
+import { ScrapedDetailedManga, ScrapedListOfManga } from "../src/types/index.js";
 import { MangaSource } from "../src/index.js";
 import { ManganatoScraper } from "../src/manganato/index.js";
 
@@ -18,17 +18,15 @@ describe("should load latest manga", async () => {
   const scraper = (await MangaScraperFactory.make(MangaSource.MANGANATO)) as ManganatoScraper;
 
   test("without any props", async () => {
-    const result = await scraper.getLatestMangaList();
-    expect(result).toBeInstanceOf(Array);
-    expect(result.length).toBeGreaterThanOrEqual(1);
-    expectTypeOf(result).toEqualTypeOf<DashboardManga[]>();
+    const result = await scraper.getLatestUpdates();
+    expect(result.data.length).toBeGreaterThanOrEqual(1);
+    expectTypeOf(result).toEqualTypeOf<ScrapedListOfManga>();
   });
 
   test("a second page", async () => {
-    const result = await scraper.getLatestMangaList(2);
-    expect(result).toBeInstanceOf(Array);
-    expect(result.length).toBeGreaterThanOrEqual(1);
-    expectTypeOf(result).toEqualTypeOf<DashboardManga[]>();
+    const result = await scraper.getLatestUpdates(2);
+    expect(result.data.length).toBeGreaterThanOrEqual(1);
+    expectTypeOf(result).toEqualTypeOf<ScrapedListOfManga>();
   });
 });
 
@@ -37,16 +35,14 @@ describe("should load newest manga", async () => {
 
   test("without any props", async () => {
     const result = await scraper.getNewestMangaList();
-    expect(result).toBeInstanceOf(Array);
-    expect(result.length).toBeGreaterThanOrEqual(1);
-    expectTypeOf(result).toEqualTypeOf<DashboardManga[]>();
+    expect(result.data.length).toBeGreaterThanOrEqual(1);
+    expectTypeOf(result).toEqualTypeOf<ScrapedListOfManga>();
   });
 
   test("a second page", async () => {
     const result = await scraper.getNewestMangaList(2);
-    expect(result).toBeInstanceOf(Array);
-    expect(result.length).toBeGreaterThanOrEqual(1);
-    expectTypeOf(result).toEqualTypeOf<DashboardManga[]>();
+    expect(result.data.length).toBeGreaterThanOrEqual(1);
+    expectTypeOf(result).toEqualTypeOf<ScrapedListOfManga>();
   });
 });
 
@@ -55,16 +51,14 @@ describe("should load hot manga", async () => {
 
   test("without any props", async () => {
     const result = await scraper.geHotMangaList();
-    expect(result).toBeInstanceOf(Array);
-    expect(result.length).toBeGreaterThanOrEqual(1);
-    expectTypeOf(result).toEqualTypeOf<DashboardManga[]>();
+    expect(result.data.length).toBeGreaterThanOrEqual(1);
+    expectTypeOf(result).toEqualTypeOf<ScrapedListOfManga>();
   });
 
   test("a second page", async () => {
     const result = await scraper.geHotMangaList(2);
-    expect(result).toBeInstanceOf(Array);
-    expect(result.length).toBeGreaterThanOrEqual(1);
-    expectTypeOf(result).toEqualTypeOf<DashboardManga[]>();
+    expect(result.data.length).toBeGreaterThanOrEqual(1);
+    expectTypeOf(result).toEqualTypeOf<ScrapedListOfManga>();
   });
 });
 
