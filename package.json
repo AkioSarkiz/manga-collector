@@ -19,7 +19,7 @@
     "scraper"
   ],
   "author": "Dmytro Laptiev <akiosarkiz@gmail.com>",
-  "license": "ISC",
+  "license": "MIT",
   "bugs": {
     "url": "https://github.com/AkioSarkiz/manga-collector/issues"
   },
