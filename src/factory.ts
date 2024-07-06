@@ -31,6 +31,7 @@ export class MangaScraperFactory {
 
     await scraper.init();
 
+    // @ts-ignore
     return scraper;
   }
 }

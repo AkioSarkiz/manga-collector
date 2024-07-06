@@ -6,3 +6,8 @@
 
 # macos
 .DS_Store
+
+# source code & dev
+/src/
+/tests/
+/.github/
