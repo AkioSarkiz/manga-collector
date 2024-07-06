@@ -1,4 +1,4 @@
-name: Publish mangalib package
+name: Publish manga-collector package
 
 on:
   release:

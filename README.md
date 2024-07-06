@@ -1,8 +1,8 @@
-# The mangalib
+# The manga-collector
 
 [![License](https://img.shields.io/badge/license-MIT-blue)](https://opensource.org/licenses/MIT)
 
-The mangalib is a library designed to easily scrape manga content from various websites. This package is licensed under the MIT License and is fully test-covered.
+The manga-collector is a library designed to easily scrape manga content from various websites. This package is licensed under the MIT License and is fully test-covered.
 
 ## Features
 
@@ -12,13 +12,13 @@ The mangalib is a library designed to easily scrape manga content from various w
 
 ## Supported websites
 
-The mangalib currently supports the following manga websites (updating):
+The manga-collector currently supports the following manga websites (updating):
 
 |        **Website**        |                                                                                           **Status**                                                                                           |
 | :-----------------------: | :--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------: |
-|         Manganato         | [![Test scrape manganato](https://github.com/AkioSarkiz/mangalib/actions/workflows/manganato-test.yml/badge.svg)](https://github.com/AkioSarkiz/mangalib/actions/workflows/manganato-test.yml) |
-|          Toonily          |    [![Test scrape toonily](https://github.com/AkioSarkiz/mangalib/actions/workflows/toonily-test.yml/badge.svg)](https://github.com/AkioSarkiz/mangalib/actions/workflows/toonily-test.yml)    |
-|         Mangadex          |  [![Test scrape mangadex](https://github.com/AkioSarkiz/mangalib/actions/workflows/mangadex-test.yml/badge.svg)](https://github.com/AkioSarkiz/mangalib/actions/workflows/mangadex-test.yml)   |
+|         Manganato         | [![Test scrape manganato](https://github.com/AkioSarkiz/manga-collector/actions/workflows/manganato-test.yml/badge.svg)](https://github.com/AkioSarkiz/manga-collector/actions/workflows/manganato-test.yml) |
+|          Toonily          |    [![Test scrape toonily](https://github.com/AkioSarkiz/manga-collector/actions/workflows/toonily-test.yml/badge.svg)](https://github.com/AkioSarkiz/manga-collector/actions/workflows/toonily-test.yml)    |
+|         Mangadex          |  [![Test scrape mangadex](https://github.com/AkioSarkiz/manga-collector/actions/workflows/mangadex-test.yml/badge.svg)](https://github.com/AkioSarkiz/manga-collector/actions/workflows/mangadex-test.yml)   |
 | asuracomic (experimental) |                                                                                           no status                                                                                            |
 
 ## Requirements
@@ -28,7 +28,7 @@ The mangalib currently supports the following manga websites (updating):
 ### How to install
 
 ```bash
-npm install mangalib
+npm install manga-collector
 ```
 
 ### How to use
@@ -38,7 +38,7 @@ This package contains examples of code that you can use and modify. They are loc
 Here is a simple example how you can use that package
 
 ```typescript
-import { MangaScraperFactory, MangaSource } from "mangalib";
+import { MangaScraperFactory, MangaSource } from "manga-collector";
 
 const scraper = await MangaScraperFactory.make(MangaSource.MANGANATO);
 

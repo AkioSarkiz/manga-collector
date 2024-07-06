@@ -1,7 +1,7 @@
 {
-  "name": "mangalib",
+  "name": "manga-collector",
   "version": "1.0.0",
-  "description": "The mangalib scraper",
+  "description": "The manga-collector",
   "main": "./dist/index.js",
   "module": "./dist/index.mjs",
   "types": "./dist/index.d.ts",
@@ -11,19 +11,19 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/AkioSarkiz/mangalib.git"
+    "url": "git+https://github.com/AkioSarkiz/manga-collector.git"
   },
   "keywords": [
-    "mangalib",
+    "manga",
     "api",
     "scraper"
   ],
   "author": "Dmytro Laptiev <akiosarkiz@gmail.com>",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/AkioSarkiz/mangalib/issues"
+    "url": "https://github.com/AkioSarkiz/manga-collector/issues"
   },
-  "homepage": "https://github.com/AkioSarkiz/mangalib#readme",
+  "homepage": "https://github.com/AkioSarkiz/manga-collector#readme",
   "devDependencies": {
     "ts-node": "^10.9.2",
     "tsup": "^8.0.2",
