@@ -11,46 +11,39 @@ import {
   Scraper,
 } from "../types/index.js";
 import { axios } from "../lib/index.js";
+import urlJoin from "url-join";
 
 export class MangadexScraper implements Scraper {
   private readonly baseUrl: string = "https://mangadex.org";
 
-  public async getListLatestUpdate(page?: number | undefined): Promise<ResponseListManga> {
-    let totalData = 0;
-    let data: {
-      _id: number;
-      image_thumbnail: string;
-      title: string;
-      href: string;
-    }[] = [];
-    let offset = 0;
-    if (page != undefined)
-      if (page >= 0 && page <= 9983) offset = page;
-      else throw new Error("Offset is out of bound");
-    await axios
-      .get(
-        `https://api.mangadex.org/manga?limit=16&offset=${offset}&contentRating[]=safe&contentRating[]=suggestive&contentRating[]=erotica&contentRating[]=pornographic`
-      )
-      .then(function (response) {
-        const listLatestUpdate = response.data.data;
-        totalData = response.data.total;
-        data = listLatestUpdate.map((e: any, i: any) => {
-          return {
-            _id: offset + i,
-            title: e.attributes.title.en,
-            href: `/${e.id}`,
-            image_thumbnail: "not implemented",
-          };
-        });
-      })
-      .catch(function (error) {
-        console.log(error);
+  private getUrl(path: string = ""): string {
+    return urlJoin(this.baseUrl, path);
+  }
+
+  public async getLatestUpdates(page: number = 1): Promise<ScrapedListOfManga> {
+    const data: ScrapedListOfMangaItem[] = [];
+    const limit = 20;
+    const offset = (page - 1) * limit;
+
+    const url = `https://api.mangadex.org/manga?limit=${limit}&offset=${offset}&contentRating[]=safe&contentRating[]=suggestive&contentRating[]=erotica&contentRating[]=pornographic&includes[]=cover_art`;
+    const response = await axios.get(url);
+    const listLatestUpdate = response.data.data;
+
+    listLatestUpdate.map((e: any, i: number) => {
+      const coverId = e.relationships.find((r: any) => r.type === "cover_art").attributes.fileName;
+
+      data.push({
+        title: e.attributes.title.en,
+        url: this.getUrl(`title/${e.id}`),
+        imageThumbnail: this.getUrl(`covers/${e.id}/${coverId}`),
       });
+    });
+
     return {
-      totalData,
-      canNext: offset <= 9967 ? true : false,
-      canPrev: offset === 0 ? false : true,
-      totalPage: 9983,
+      totalData: response.data.total,
+      canNext: offset <= 9967,
+      canPrev: offset !== 0,
+      totalPages: 9983,
       currentPage: offset,
       data,
     };
@@ -101,7 +94,6 @@ export class MangadexScraper implements Scraper {
 
     chaptersResponse.data.data.map((e: any, i: number) => {
       chapters.push({
-        _id: i,
         url: `https://mangadex.org/chapter/${e.id}`,
         title: e.attributes.title,
         index: e.attributes.chapter,
@@ -140,7 +132,6 @@ export class MangadexScraper implements Scraper {
 
     for (let i = 0; i < responseChapters.data.chapter.data.length; i++) {
       frames.push({
-        _id: i,
         originSrc: `https://uploads.mangadex.org/data/${hash}/${responseChapters.data.chapter.data[i]}`,
       });
     }
@@ -164,7 +155,6 @@ export class MangadexScraper implements Scraper {
       const coverRelationship = e.relationships.find((r: any) => r.type === "cover_art");
 
       data.push({
-        _id: i,
         title: e.attributes.title.en,
         url: `https://mangadex.org/title/${e.id}`,
         imageThumbnail: `https://mangadex.org/covers/${e.id}/${coverRelationship.attributes.fileName}`,

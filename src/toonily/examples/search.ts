@@ -1,9 +1,8 @@
 import { MangaScraperFactory, MangaSource } from "../../index.js";
-import { ToonilyScraper } from "../index.js";
 import fs from "fs";
 
 const main = async () => {
-  const scraper = (await MangaScraperFactory.make(MangaSource.ASURACOMIC)) as ToonilyScraper;
+  const scraper = await MangaScraperFactory.make(MangaSource.ASURACOMIC);
   const result = await scraper.search("Solo Leveling");
   const filename = "search.json";
 

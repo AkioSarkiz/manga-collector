@@ -1,5 +1,4 @@
 import * as cheerio from "cheerio";
-import { useGetDataItemsManga } from "./hooks/getListLatest";
 import {
   ScrapedChapter,
   ScrapedDetailedChapter,
@@ -14,28 +13,32 @@ import {
 import dayjs from "dayjs";
 import { convertToNumber, extractChapterIndex } from "../utils/index.js";
 import { axios } from "../lib/index.js";
+import urlJoin from "url-join";
 
 export class ToonilyScraper implements Scraper {
   private readonly baseUrl: string = "https://toonily.com/";
 
-  async getListLatestUpdate(page?: number | undefined): Promise<ScrapedListOfManga> {
-    const response = await axios.get(`${this.baseUrl}${page !== undefined && page > 1 ? `/page/${page}` : ``}`);
+  private getUrl(path: string = ""): string {
+    return urlJoin(this.baseUrl, path);
+  }
+
+  public async getLatestUpdates(page: number = 1): Promise<ScrapedListOfManga> {
+    const items: ScrapedListOfMangaItem[] = [];
+    const url = this.getUrl(`${page !== undefined && page > 1 ? `/page/${page}` : ``}`);
+    const response = await axios.get(url);
     const $ = cheerio.load(response.data);
 
-    const paramsSelector = {
-      cheerioApi: $,
-      wrapSelector: "#loop-content > div > div > div",
-      titleSelector: "div.item-summary > div.post-title.font-title > h3 > a",
-      thumbnailSelector: "div.item-thumb.c-image-hover > a > img",
-      thumbnailAttr: "data-src",
-      hrefSelector: "div.item-summary > div.post-title.font-title > h3 > a",
-    };
-
-    const data = await useGetDataItemsManga(paramsSelector);
+    $("#loop-content > div > div > div").each((i, e) => {
+      items.push({
+        title: $(e).find("div.item-summary > div.post-title.font-title > h3 > a").text(),
+        imageThumbnail: $(e).find("div.item-thumb.c-image-hover > a > img").attr("data-src")!,
+        url: $(e).find("div.item-summary > div.post-title.font-title > h3 > a").attr("href")!,
+      });
+    });
 
     const lastPage = $("div.wp-pagenavi").find("a.last").attr("href")!;
 
-    const totalPage = Number(
+    const totalPages = Number(
       lastPage !== undefined
         ? lastPage
             .substring(0, lastPage.length - 1)
@@ -47,11 +50,13 @@ export class ToonilyScraper implements Scraper {
     );
 
     return {
-      data,
-      totalData: data.length,
-      totalPage,
+      data: items,
+      // there are not way to get total data from website. Sure, we can make something like this:
+      // totalPages * max data per page, but it's not true, because the last page can contains less then 20 items
+      totalData: undefined,
+      totalPages,
       currentPage: page !== undefined ? page : 1,
-      canNext: page !== undefined ? page < totalPage : 1 < totalPage,
+      canNext: page !== undefined ? page < totalPages : 1 < totalPages,
       canPrev: page !== undefined ? page > 1 : false,
     };
   }
@@ -91,7 +96,6 @@ export class ToonilyScraper implements Scraper {
 
     siteContent.find("ul.main.version-chap.no-volumn > li.wp-manga-chapter").each((i, e) => {
       chapters.push({
-        _id: i,
         url: $(e).find("a").attr("href")!,
         title: $(e).find("a").text().trim(),
         lastUpdate: dayjs($(e).find(".chapter-release-date").text().trim(), "MMM D, YY").toDate(),
@@ -149,7 +153,6 @@ export class ToonilyScraper implements Scraper {
 
     siteContent.find("div.entry-content div.reading-content > div.page-break > img").each((i, e) => {
       frames.push({
-        _id: i,
         originSrc: $(e).attr("data-src")!.trim(),
         alt: $(e).attr("alt")?.trim(),
       });
@@ -173,7 +176,6 @@ export class ToonilyScraper implements Scraper {
 
     wrapItems.each((i, e) => {
       data.push({
-        _id: i,
         title: $(e).find("div.item-summary > div.post-title.font-title > h3 > a").text(),
         imageThumbnail: $(e).find("div.item-thumb.c-image-hover > a > img").attr("data-src")!,
         url: $(e).find("div.item-summary > div.post-title.font-title > h3 > a").attr("href")!,

@@ -8,7 +8,6 @@ export interface ScrapedGenre {
 }
 
 export interface ScrapedChapter {
-  _id: number;
   url: string;
 
   index?: number;
@@ -48,7 +47,6 @@ export interface ScrapedDetailedManga {
 }
 
 export interface ScrapedDetailedChapterFrame {
-  _id: number;
   originSrc: string;
   cdnSrc?: string;
   alt?: string;
@@ -61,7 +59,6 @@ export interface ScrapedDetailedChapter {
 }
 
 export type ScrapedListOfMangaItem = {
-  _id: number;
   imageThumbnail: string;
   title: string;
   url: string;
@@ -87,5 +84,6 @@ export interface Scraper {
 
   getDetailedManga: (url: string) => Promise<ScrapedDetailedManga>;
   getDetailedChapter: (url: string) => Promise<ScrapedDetailedChapter>;
+  getLatestUpdates: (page?: number) => Promise<ScrapedListOfManga>;
   search: (query: string, page?: number) => Promise<ScrapedListOfManga>;
 }

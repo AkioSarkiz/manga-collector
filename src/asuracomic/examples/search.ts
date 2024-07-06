@@ -1,14 +1,14 @@
 import { MangaScraperFactory, MangaSource } from "../../index.js";
-import { AsuraComicScraper } from "../index.js";
 import fs from "fs";
 
 const main = async () => {
-  const scraper = (await MangaScraperFactory.make(MangaSource.ASURACOMIC)) as AsuraComicScraper;
-  const result = await scraper.search("Solo Max-Level Newbie");
+  const scraper = await MangaScraperFactory.make(MangaSource.ASURACOMIC);
+  const result = await scraper.search("Solo Leveling");
+  const filename = "search.json";
 
-  await fs.promises.writeFile("search.json", JSON.stringify(result, null, 2));
+  await fs.promises.writeFile(filename, JSON.stringify(result, null, 2));
 
-  console.log("Result has been saved to search.json");
+  console.log(`Result has been saved to ${filename}`);
 
   scraper.shutdown();
 };

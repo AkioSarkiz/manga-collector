@@ -1,5 +1,4 @@
 import parse, { HTMLElement } from "node-html-parser";
-import { DashboardManga, ParseDashboardPageProps } from "../types/list.js";
 import {
   ScrapedAuthor,
   ScrapedChapter,
@@ -19,21 +18,21 @@ import { axios } from "../lib/index.js";
 
 export const BASE_URL = "https://manganato.com";
 
-const parseDashboardPage = async (props: ParseDashboardPageProps): Promise<DashboardManga[]> => {
-  const mangaList: DashboardManga[] = [];
-  const url = getBaseUrl(props.url);
+const parseDashboardPage = async (path: string, page: number): Promise<ScrapedListOfManga> => {
+  const mangaList: ScrapedListOfMangaItem[] = [];
+  const url = getBaseUrl(path);
 
   const response = await axios.get(url);
 
   if (response.status !== 200) {
-    return [];
+    throw new Error("Failed to get dashboard page");
   }
 
   const document = parse(response.data);
   const panel = document.querySelector(".panel-content-genres");
 
   if (!panel) {
-    return [];
+    throw new Error("Failed to get panel content genres");
   }
 
   const mangaCards = panel.querySelectorAll(".content-genres-item");
@@ -63,7 +62,34 @@ const parseDashboardPage = async (props: ParseDashboardPageProps): Promise<Dashb
     }
   }
 
-  return mangaList;
+  const totalData = (function () {
+    const result = document?.querySelector(".group-qty")?.innerText;
+
+    if (!result) {
+      return 0;
+    }
+
+    return extractNumbersFromStrings(result)[0];
+  })();
+
+  const totalPages = (function () {
+    const result = document.querySelector(".page-last")?.innerText;
+
+    if (!result) {
+      return 0;
+    }
+
+    return extractNumbersFromStrings(result)[0];
+  })();
+
+  return {
+    totalPages,
+    totalData,
+    canNext: page < totalPages,
+    canPrev: page > 1,
+    currentPage: page,
+    data: mangaList,
+  } as ScrapedListOfManga;
 };
 
 const getBaseUrl = (path: string = ""): string => {
@@ -97,7 +123,7 @@ export class ManganatoScraper implements Scraper {
       const imageThumbnail = mangaCard.querySelector(".img-loading")?.getAttribute("src") as string;
 
       if (title && url && imageThumbnail) {
-        items.push({ _id: i, title, url, imageThumbnail });
+        items.push({ title, url, imageThumbnail });
       } else {
         throw new Error("Failed to fetch manga list");
       }
@@ -133,22 +159,34 @@ export class ManganatoScraper implements Scraper {
     } as ScrapedListOfManga;
   }
 
-  public async getLatestMangaList(page: number = 1): Promise<DashboardManga[]> {
+  public async getLatestUpdates(page?: number): Promise<ScrapedListOfManga> {
+    if (!page) {
+      page = 1;
+    }
+
     const url = `genre-all/${page ? page : ""}`;
 
-    return parseDashboardPage({ url, page });
+    return parseDashboardPage(url, page);
   }
 
-  public async getNewestMangaList(page: number = 1): Promise<DashboardManga[]> {
+  public async getNewestMangaList(page: number = 1): Promise<ScrapedListOfManga> {
+    if (!page) {
+      page = 1;
+    }
+
     const url = `genre-all/${page ? page : ""}?type=newest`;
 
-    return parseDashboardPage({ url, page });
+    return parseDashboardPage(url, page);
   }
 
-  public async geHotMangaList(page: number = 1): Promise<DashboardManga[]> {
+  public async geHotMangaList(page: number = 1): Promise<ScrapedListOfManga> {
+    if (!page) {
+      page = 1;
+    }
+
     const url = `genre-all/${page ? page : ""}?type=topview`;
 
-    return parseDashboardPage({ url, page });
+    return parseDashboardPage(url, page);
   }
 
   public async getDetailedManga(url: string): Promise<ScrapedDetailedManga> {
@@ -244,7 +282,6 @@ export class ManganatoScraper implements Scraper {
       }
 
       return {
-        _id: index,
         url,
         title,
         index: extractChapterIndex(title),
@@ -291,7 +328,6 @@ export class ManganatoScraper implements Scraper {
       }
 
       frames.push({
-        _id: i,
         originSrc,
         alt: $(e).attr("alt")?.trim(),
       });

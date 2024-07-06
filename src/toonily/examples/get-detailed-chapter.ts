@@ -1,9 +1,8 @@
 import { MangaScraperFactory, MangaSource } from "../../index.js";
-import { ToonilyScraper } from "../index.js";
 import fs from "fs";
 
 const main = async () => {
-  const scraper = (await MangaScraperFactory.make(MangaSource.TOONILY)) as ToonilyScraper;
+  const scraper = await MangaScraperFactory.make(MangaSource.TOONILY);
   const result = await scraper.getDetailedChapter("https://toonily.com/webtoon/not-a-lady-anymore/chapter-1/");
   const filename = "detailed-chapter.json";
 

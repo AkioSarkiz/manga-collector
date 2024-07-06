@@ -1,10 +1,10 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 /* eslint-disable @typescript-eslint/no-unsafe-call */
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
-import { CheerioAPI } from 'cheerio';
-import { Page } from 'puppeteer';
-import { not_null } from '../utils/validate';
-import { chapter, image_chapter, responseChapter } from '../types/type';
+import { CheerioAPI } from "cheerio";
+import { Page } from "puppeteer";
+import { not_null } from "../utils/validate";
+import { chapter, image_chapter, responseChapter } from "../types/type";
 
 interface paramsSelector {
   puppeteer?: Page;
@@ -22,9 +22,7 @@ interface paramsSelector {
   nextChapterSelector: string;
 }
 
-export const useGetDataChapter = async (
-  params: paramsSelector
-): Promise<responseChapter> => {
+export const useGetDataChapter = async (params: paramsSelector): Promise<responseChapter> => {
   const {
     puppeteer,
     cheerioApi,
@@ -44,34 +42,29 @@ export const useGetDataChapter = async (
   if (cheerioApi === undefined) {
     const content = await puppeteer!.$(mainContentSelector);
 
-    const title = not_null(
-      await content!.$eval(titleSelector, (el) => el.textContent)
-    );
+    const title = not_null(await content!.$eval(titleSelector, (el) => el.textContent));
     const images: image_chapter[] = await Promise.all(
       (
         await content!.$$(`${imageSelectorAll}`)
-      ).map(async (e, i) => {
+      ).map(async (e) => {
         const _data_image = await e.evaluate(
           (el, originImageAttr, cdnImageAttr) => {
             return {
               src_origin: el.getAttribute(originImageAttr),
-              ...(cdnImageAttr
-                ? { src_cdn: el.getAttribute(cdnImageAttr) }
-                : {}),
-              alt: el.getAttribute('alt'),
+              ...(cdnImageAttr ? { src_cdn: el.getAttribute(cdnImageAttr) } : {}),
+              alt: el.getAttribute("alt"),
             };
           },
           originImageAttr,
           cdnImageAttr
         );
         return {
-          _id: i,
-          src_origin: not_null(_data_image.src_origin).startsWith('//')
+          src_origin: not_null(_data_image.src_origin).startsWith("//")
             ? `https:${not_null(_data_image.src_origin)}`
             : not_null(_data_image.src_origin),
-          ...(not_null(_data_image.src_cdn) !== ''
+          ...(not_null(_data_image.src_cdn) !== ""
             ? {
-                src_cdn: not_null(_data_image.src_cdn).startsWith('//')
+                src_cdn: not_null(_data_image.src_cdn).startsWith("//")
                   ? `https:${not_null(_data_image.src_cdn)}`
                   : not_null(_data_image.src_cdn),
               }
@@ -86,7 +79,7 @@ export const useGetDataChapter = async (
       const prev_chapter_get = await content!
         .$eval(prevChapterSelector, (el) => {
           return {
-            url_chapter: el.getAttribute('href'),
+            url_chapter: el.getAttribute("href"),
           };
         })
         .catch(() => null);
@@ -104,7 +97,7 @@ export const useGetDataChapter = async (
       const next_chapter_get = await content!
         .$eval(nextChapterSelector, (el) => {
           return {
-            url_chapter: el.getAttribute('href'),
+            url_chapter: el.getAttribute("href"),
           };
         })
         .catch(() => null);
@@ -123,6 +116,6 @@ export const useGetDataChapter = async (
       prev_chapter: Object.keys(prev).length === 0 ? null : prev,
     };
   } else {
-    throw new Error('not yet define');
+    throw new Error("not yet define");
   }
 };
