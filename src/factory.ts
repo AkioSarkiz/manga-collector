@@ -1,4 +1,3 @@
-import { AsuraComicScraper } from "./asuracomic/index.js";
 import { MangaSource, Scraper } from "./index.js";
 import { MangadexScraper } from "./mangadex/index.js";
 import { ManganatoScraper } from "./manganato/index.js";
@@ -12,11 +11,7 @@ export class MangaScraperFactory {
       case MangaSource.MANGANATO:
         scraper = new ManganatoScraper();
         break;
-
-      case MangaSource.ASURACOMIC:
-        scraper = new AsuraComicScraper();
-        break;
-
+        
       case MangaSource.TOONILY:
         scraper = new ToonilyScraper();
         break;
