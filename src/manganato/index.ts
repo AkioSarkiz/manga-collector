@@ -40,7 +40,7 @@ const parseDashboardPage = async (path: string, page: number): Promise<ScrapedLi
   for (let i = 0; i < mangaCards.length; i++) {
     const mangaCard = mangaCards[i];
     const title = mangaCard.querySelector(".genres-item-info > h3")?.innerText?.trim();
-    const link = mangaCard.querySelector(".genres-item-info > .genres-item-name")?.getAttribute("href") as string;
+    const link = mangaCard.querySelector(".genres-item-info .genres-item-name")?.getAttribute("href") as string;
     const imageThumbnail = mangaCard.querySelector(".img-loading")?.getAttribute("src") as string;
 
     if (title && link && imageThumbnail) {
@@ -49,6 +49,8 @@ const parseDashboardPage = async (path: string, page: number): Promise<ScrapedLi
         url: link,
         imageThumbnail,
       });
+    } else {
+      throw new Error("Failed to parse manga card");
     }
   }
 
@@ -79,7 +81,7 @@ const parseDashboardPage = async (path: string, page: number): Promise<ScrapedLi
     canPrev: page > 1,
     currentPage: page,
     data: mangaList,
-  } as ScrapedListOfManga;
+  };
 };
 
 const getBaseUrl = (path: string = ""): string => {
@@ -154,9 +156,9 @@ export class ManganatoScraper implements Scraper {
       page = 1;
     }
 
-    const url = `genre-all/${page ? page : ""}`;
+    const path = `genre-all/${page}`;
 
-    return parseDashboardPage(url, page);
+    return parseDashboardPage(path, page);
   }
 
   public async getNewestMangaList(page: number = 1): Promise<ScrapedListOfManga> {
