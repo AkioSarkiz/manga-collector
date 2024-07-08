@@ -77,6 +77,12 @@ export class ToonilyScraper implements Scraper {
     const views: number = convertToNumber($(".manga-rate-view-comment .item:nth-child(2)").text().trim());
     const rate = Number($(".manga-rate-view-comment .item:nth-child(1) #averagerate").text().trim());
     const rateNumber = Number(siteContent.find("#countrate").text().trim());
+    const imageThumbnail = $(".summary_image img").data("src");
+    const alternativeTitles = $(".manga-info-row > div:nth-child(2) > div:nth-child(2)")
+      .text()
+      .trim()
+      .split(",")
+      .map((v) => v.trim());
 
     const title = siteContent
       .find("div.post-content > div.post-title > h1")
@@ -110,6 +116,10 @@ export class ToonilyScraper implements Scraper {
       });
     });
 
+    if (!imageThumbnail || typeof imageThumbnail !== "string") {
+      throw new Error("Failed to get image thumbnail");
+    }
+
     return {
       url,
 
@@ -117,6 +127,9 @@ export class ToonilyScraper implements Scraper {
       type: "manhwa",
 
       description,
+      alternativeTitles,
+
+      imageThumbnail,
 
       authors: [author],
 
@@ -153,6 +166,7 @@ export class ToonilyScraper implements Scraper {
 
     siteContent.find("div.entry-content div.reading-content > div.page-break > img").each((i, e) => {
       frames.push({
+        index: i,
         originSrc: $(e).attr("data-src")!.trim(),
         alt: $(e).attr("alt")?.trim(),
       });
