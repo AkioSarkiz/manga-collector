@@ -2,9 +2,11 @@ import { MangaScraperFactory, MangaSource } from "../../index.js";
 import fs from "fs";
 
 const main = async () => {
-  const scraper = await MangaScraperFactory.make(MangaSource.MANGANATO);
-  const result = await scraper.getDetailedChapter("https://chapmanganato.to/manga-oa952283/chapter-133");
-  const filename = "data-chapter.json";
+  const url = "https://fanfox.net/manga/battle_royale/";
+  const filename = "detailed-manga.json";
+
+  const scraper = await MangaScraperFactory.make(MangaSource.FANFOX);
+  const result = await scraper.getDetailedManga(url);
 
   await fs.promises.writeFile(filename, JSON.stringify(result, null, 2));
 

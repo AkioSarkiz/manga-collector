@@ -2,9 +2,9 @@ import { MangaScraperFactory, MangaSource } from "../../index.js";
 import fs from "fs";
 
 const main = async () => {
-  const scraper = await MangaScraperFactory.make(MangaSource.MANGANATO);
-  const result = await scraper.getDetailedChapter("https://chapmanganato.to/manga-oa952283/chapter-133");
-  const filename = "data-chapter.json";
+  const scraper = await MangaScraperFactory.make(MangaSource.FANFOX);
+  const result = await scraper.getLatestUpdates();
+  const filename = "get-list-latest-update.json";
 
   await fs.promises.writeFile(filename, JSON.stringify(result, null, 2));
 

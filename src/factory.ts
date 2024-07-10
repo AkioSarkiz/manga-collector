@@ -1,3 +1,4 @@
+import { FanFoxScraper } from "./fanfox/index.js";
 import { MangaSource, Scraper } from "./index.js";
 import { MangadexScraper } from "./mangadex/index.js";
 import { ManganatoScraper } from "./manganato/index.js";
@@ -11,13 +12,17 @@ export class MangaScraperFactory {
       case MangaSource.MANGANATO:
         scraper = new ManganatoScraper();
         break;
-        
+
       case MangaSource.TOONILY:
         scraper = new ToonilyScraper();
         break;
 
       case MangaSource.MANGADEX:
         scraper = new MangadexScraper();
+        break;
+
+      case MangaSource.FANFOX:
+        scraper = new FanFoxScraper();
         break;
 
       default:

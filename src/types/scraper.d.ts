@@ -33,7 +33,10 @@ export interface ScrapedDetailedManga {
   title: string;
   status: ScrapedMangaStatus;
   description: string;
+  imageThumbnail: string;
 
+  alternativeTitles?: string[];
+  releaseYear?: number;
   type?: ScrapedMangaType;
   authors?: ScrapedAuthor[];
   artists?: ScrapedArtist[];
@@ -47,6 +50,7 @@ export interface ScrapedDetailedManga {
 }
 
 export interface ScrapedDetailedChapterFrame {
+  index: number;
   originSrc: string;
   cdnSrc?: string;
   alt?: string;
