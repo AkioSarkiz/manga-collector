@@ -12,7 +12,7 @@ const main = async () => {
 
   console.log(`Result has been saved to ${filename}`);
 
-  scraper.shutdown();
+  await scraper.shutdown();
 };
 
 main()
