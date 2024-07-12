@@ -12,6 +12,7 @@ const MANGA_DATA_TO_DETAILED_SCRAPE = [
   { link: "https://manganato.com/manga-kh987642" },
   { link: "https://manganato.com/manga-js987275" },
   { link: "https://chapmanganato.to/manga-dg980989" },
+  { link: "https://chapmanganato.to/manga-zq1002451" },
 ];
 
 describe("should load latest manga", async () => {
