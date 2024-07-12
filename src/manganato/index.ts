@@ -204,6 +204,8 @@ export class ManganatoScraper implements Scraper {
         .filter((value) => value) as ParsedTableRow[];
     };
 
+    let chapters: ScrapedChapter[] = [];
+
     const response = await axios.get(url);
 
     if (response.status !== 200) {
@@ -216,11 +218,35 @@ export class ManganatoScraper implements Scraper {
     const title = String(storyRightInfo?.querySelector("h1")?.innerText);
     const imageThumbnail = document.querySelector(".info-image .img-loading")?.getAttribute("src");
 
-    if (!storyRightInfo || !chapterContainer) {
+    if (!storyRightInfo) {
       throw new Error(`Failed to get detailed manga, url ${url}`);
     }
 
-    const chapterLis = Array.from(chapterContainer.querySelectorAll("li"));
+    if (chapterContainer) {
+      const chapterLis = Array.from(chapterContainer.querySelectorAll("li"));
+
+      chapters = chapterLis.map((value, index): ScrapedChapter => {
+        const lastUpdate = value.querySelector(".chapter-time")?.innerText?.trim();
+        const views = value.querySelector(".chapter-view")?.innerText?.trim();
+        const title = value.querySelector("a")?.innerText.replace(/Vol\.\d+\s+Chapter\s+\d+:"/i, "");
+        const url = value.querySelector("a")?.getAttribute("href");
+  
+        if (!lastUpdate || !views || !title || !url) {
+          throw Error(`Failed to parse chapter ${url}, index: ${index}`);
+        }
+  
+        return {
+          url,
+          title,
+          index: extractChapterIndex(title),
+          views: convertToNumber(views),
+          lastUpdate: dayjs(lastUpdate, "MMM D, YY").toDate(),
+        };
+      });
+  
+    }
+
+    
     const tableInfo = storyRightInfo.querySelector(".variations-tableInfo");
 
     if (!tableInfo) {
@@ -272,25 +298,6 @@ export class ManganatoScraper implements Scraper {
             } as ScrapedGenre)
         ) ?? [];
 
-    const chapters: ScrapedChapter[] = chapterLis.map((value, index): ScrapedChapter => {
-      const lastUpdate = value.querySelector(".chapter-time")?.innerText?.trim();
-      const views = value.querySelector(".chapter-view")?.innerText?.trim();
-      const title = value.querySelector("a")?.innerText.replace(/Vol\.\d+\s+Chapter\s+\d+:"/i, "");
-      const url = value.querySelector("a")?.getAttribute("href");
-
-      if (!lastUpdate || !views || !title || !url) {
-        throw Error(`Failed to parse chapter ${url}, index: ${index}`);
-      }
-
-      return {
-        url,
-        title,
-        index: extractChapterIndex(title),
-        views: convertToNumber(views),
-        lastUpdate: dayjs(lastUpdate, "MMM D, YY").toDate(),
-      };
-    });
-
     const description = document.querySelector("#panel-story-info-description")?.childNodes[2].textContent.trim();
 
     if (
@@ -300,7 +307,6 @@ export class ManganatoScraper implements Scraper {
       !authors ||
       !description ||
       !genres ||
-      !chapters ||
       !imageThumbnail
     ) {
       throw new Error("Failed to get detailed manga");
