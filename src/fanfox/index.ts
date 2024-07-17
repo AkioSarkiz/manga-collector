@@ -1,5 +1,6 @@
 import urlJoin from "url-join";
 import {
+  ScrapedAuthor,
   ScrapedChapter,
   ScrapedDetailedChapter,
   ScrapedDetailedChapterFrame,
@@ -48,6 +49,18 @@ export class FanFoxScraper implements Scraper {
     const imageThumbnail = $(".detail-info-cover-img").attr("src");
     const description = $(".detail-info-right-content").text()?.trim();
     const rawStatus = $(".detail-info-right-title-tip").text().trim();
+    const authors = $(".detail-info-right-say a")
+      .map((_, el): ScrapedAuthor => {
+        const name = $(el).text().trim();
+        const url = $(el).attr("href");
+
+        if (!name || !url) {
+          throw new Error("Failed to get detailed manga");
+        }
+
+        return { name, url: this.getUrl(url) };
+      })
+      .toArray();
 
     if (!title || !imageThumbnail || !description) {
       throw new Error("Failed to get detailed manga");
@@ -90,6 +103,7 @@ export class FanFoxScraper implements Scraper {
       genres,
       status: this.formatStatus(rawStatus),
       url,
+      authors,
     };
   }
 
