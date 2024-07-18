@@ -47,7 +47,8 @@
     "dayjs": "^1.11.11",
     "html-entities": "^2.5.2",
     "node-html-parser": "^6.1.12",
-    "puppeteer": "^22.12.1",
+    "puppeteer": "^22.13.1",
+    "puppeteer-extra": "^3.3.6",
     "url-join": "^5.0.0"
   }
 }
