@@ -95,7 +95,7 @@ test.each(MANGA_SEARCH_QUERIES)("search %s", async (query) => {
   expect(result.data.length).toBeGreaterThanOrEqual(1);
 });
 
-test.each(MANGA_DATA_TO_DETAILED_SCRAPE)("scrape of $url", async ({ link, expectedDataPath }) => {
+test.each(MANGA_DATA_TO_DETAILED_SCRAPE)("scrape of $link", async ({ link, expectedDataPath }) => {
   const scraper = await MangaScraperFactory.make(MangaSource.MANGANATO);
   const result = await scraper.getDetailedManga(link);
 
