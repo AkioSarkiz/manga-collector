@@ -14,12 +14,12 @@ The manga-collector is a library designed to easily scrape manga content from va
 
 The manga-collector currently supports the following manga websites (updating):
 
-|        **Website**        |                                                                                           **Status**                                                                                           |
-| :-----------------------: | :--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------: |
-|         Manganato         | [![Test scrape manganato](https://github.com/AkioSarkiz/manga-collector/actions/workflows/manganato-test.yml/badge.svg)](https://github.com/AkioSarkiz/manga-collector/actions/workflows/manganato-test.yml) |
-|          Toonily          |    [![Test scrape toonily](https://github.com/AkioSarkiz/manga-collector/actions/workflows/toonily-test.yml/badge.svg)](https://github.com/AkioSarkiz/manga-collector/actions/workflows/toonily-test.yml)    |
-|         Mangadex          |  [![Test scrape mangadex](https://github.com/AkioSarkiz/manga-collector/actions/workflows/mangadex-test.yml/badge.svg)](https://github.com/AkioSarkiz/manga-collector/actions/workflows/mangadex-test.yml)   |   
-|         Fanfox          |  [![Test scrape fanfox](https://github.com/AkioSarkiz/manga-collector/actions/workflows/fanfox-test.yml/badge.svg)](https://github.com/AkioSarkiz/manga-collector/actions/workflows/fanfox-test.yml)   |                                                                                       |
+| **Website** |                                                                                                  **Status**                                                                                                  |
+| :---------: | :----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------: | --- |
+|  Manganato  | [![Test scrape manganato](https://github.com/AkioSarkiz/manga-collector/actions/workflows/manganato-test.yml/badge.svg)](https://github.com/AkioSarkiz/manga-collector/actions/workflows/manganato-test.yml) |
+|   Toonily   |    [![Test scrape toonily](https://github.com/AkioSarkiz/manga-collector/actions/workflows/toonily-test.yml/badge.svg)](https://github.com/AkioSarkiz/manga-collector/actions/workflows/toonily-test.yml)    |
+|  Mangadex   |  [![Test scrape mangadex](https://github.com/AkioSarkiz/manga-collector/actions/workflows/mangadex-test.yml/badge.svg)](https://github.com/AkioSarkiz/manga-collector/actions/workflows/mangadex-test.yml)   |
+|   Fanfox    |     [![Test scrape fanfox](https://github.com/AkioSarkiz/manga-collector/actions/workflows/fanfox-test.yml/badge.svg)](https://github.com/AkioSarkiz/manga-collector/actions/workflows/fanfox-test.yml)      |     |
 
 ## Requirements
 
@@ -44,6 +44,8 @@ const scraper = await MangaScraperFactory.make(MangaSource.MANGANATO);
 
 console.log(await scraper.getDetailedManga("manga url here"));
 
+await scraper.shutdown();
+
 // Example output
 // {
 //   "url": "https://chapmanganato.to/manga-fy982633",
@@ -64,12 +66,13 @@ console.log(await scraper.getDetailedManga("manga url here"));
 
 ### Available methods
 
-| Method             | Description                  |
-| ------------------ | ---------------------------- |
-| getDetailedManga   | Get details of the manga     |
-| getDetailedChapter | Get details of the chapter   |
-| getLatestUpdates   | Get latest updates of mangas |
-| search             | Find the mangas by query     |
+| Method             | Description                      |
+| ------------------ | -------------------------------- |
+| getDetailedManga   | Get details of the manga         |
+| getDetailedChapter | Get details of the chapter       |
+| getLatestUpdates   | Get latest updates of mangas     |
+| search             | Find the mangas by query         |
+| shutdown           | Remove resources from the memory |
 
 ## Contributing
 
