@@ -48,7 +48,6 @@
     "cheerio": "^1.0.0-rc.12",
     "dayjs": "^1.11.11",
     "html-entities": "^2.5.2",
-    "node-html-parser": "^6.1.12",
     "puppeteer": "^22.12.1",
     "url-join": "^5.0.0"
   }

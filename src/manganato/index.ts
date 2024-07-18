@@ -1,4 +1,3 @@
-import { parse, HTMLElement } from "node-html-parser";
 import {
   ScrapedAuthor,
   ScrapedChapter,
@@ -16,113 +15,48 @@ import dayjs from "dayjs";
 import * as cheerio from "cheerio";
 import { axios } from "../lib/index.js";
 
-export const BASE_URL = "https://manganato.com";
-
-const parseDashboardPage = async (path: string, page: number): Promise<ScrapedListOfManga> => {
-  const mangaList: ScrapedListOfMangaItem[] = [];
-  const url = getBaseUrl(path);
-
-  const response = await axios.get(url);
-
-  if (response.status !== 200) {
-    throw new Error("Failed to get dashboard page");
-  }
-
-  const document = parse(response.data);
-  const panel = document.querySelector(".panel-content-genres");
-
-  if (!panel) {
-    throw new Error("Failed to get panel content genres");
-  }
-
-  const mangaCards = panel.querySelectorAll(".content-genres-item");
-
-  for (let i = 0; i < mangaCards.length; i++) {
-    const mangaCard = mangaCards[i];
-    const title = mangaCard.querySelector(".genres-item-info > h3")?.innerText?.trim();
-    const link = mangaCard.querySelector(".genres-item-info .genres-item-name")?.getAttribute("href") as string;
-    const imageThumbnail = mangaCard.querySelector(".img-loading")?.getAttribute("src") as string;
-
-    if (title && link && imageThumbnail) {
-      mangaList.push({
-        title,
-        url: link,
-        imageThumbnail,
-      });
-    } else {
-      throw new Error("Failed to parse manga card");
-    }
-  }
-
-  const totalData = (function () {
-    const result = document?.querySelector(".group-qty")?.innerText;
-
-    if (!result) {
-      return 0;
-    }
-
-    return extractNumbersFromStrings(result)[0];
-  })();
-
-  const totalPages = (function () {
-    const result = document.querySelector(".page-last")?.innerText;
-
-    if (!result) {
-      return 0;
-    }
-
-    return extractNumbersFromStrings(result)[0];
-  })();
-
-  return {
-    totalPages,
-    totalData,
-    canNext: page < totalPages,
-    canPrev: page > 1,
-    currentPage: page,
-    data: mangaList,
-  };
-};
-
-const getBaseUrl = (path: string = ""): string => {
-  return `${BASE_URL}/${path}`;
-};
+interface ParsedTableRow {
+  header: cheerio.Cheerio<cheerio.Element>;
+  value: cheerio.Cheerio<cheerio.Element>;
+}
 
 export class ManganatoScraper implements Scraper {
+  private readonly baseUrl = "https://manganato.com";
+
   public async search(query: string, page: number = 1): Promise<ScrapedListOfManga> {
     const items: ScrapedListOfMangaItem[] = [];
     const formattedQuery = query.replace(/ /g, "_");
-    const url = getBaseUrl(`search/story/${formattedQuery}?${page ? page : ""}`);
+    const url = this.getBaseUrl(`search/story/${formattedQuery}?${page ? page : ""}`);
     const response = await axios.get(url);
 
     if (response.status !== 200) {
-      throw new Error("Failed to fetch manga list");
+      throw new Error(`Failed to fetch manga list ${url}`);
     }
 
-    const document = parse(response.data);
-    const panel = document.querySelector(".panel-search-story");
+    const $ = cheerio.load(response.data);
+    const panel = $(".panel-search-story");
 
     if (!panel) {
-      throw new Error("Failed to fetch manga list");
+      throw new Error(`Failed to fetch manga list ${url}`);
     }
 
-    const mangaCards = panel?.querySelectorAll(".search-story-item");
+    const mangaCards = panel?.find(".search-story-item");
 
     for (let i = 0; i < mangaCards.length; i++) {
       const mangaCard = mangaCards[i];
-      const title = mangaCard.querySelector("h3")?.innerText?.trim();
-      const url = mangaCard.querySelector(".item-img")?.getAttribute("href") as string;
-      const imageThumbnail = mangaCard.querySelector(".img-loading")?.getAttribute("src") as string;
+      const title = $(mangaCard).find("h3")?.text()?.trim();
+      const url = $(mangaCard).find(".item-img")?.attr("href") as string;
+      const imageThumbnail = $(mangaCard).find(".img-loading")?.attr("src") as string;
 
       if (title && url && imageThumbnail) {
         items.push({ title, url, imageThumbnail });
       } else {
-        throw new Error("Failed to fetch manga list");
+        throw new Error(`Failed to fetch manga list ${url}`);
       }
     }
 
     const totalData = (function () {
-      const result = document?.querySelector(".group-qty")?.innerText;
+      const result = $(".group-qty")?.text().trim();
 
       if (!result) {
         return 0;
@@ -132,7 +66,7 @@ export class ManganatoScraper implements Scraper {
     })();
 
     const totalPages = (function () {
-      const result = document.querySelector(".page-last")?.innerText;
+      const result = $(".page-last")?.text();
 
       if (!result) {
         return 0;
@@ -148,7 +82,7 @@ export class ManganatoScraper implements Scraper {
       totalPages,
       totalData,
       data: items,
-    } as ScrapedListOfManga;
+    };
   }
 
   public async getLatestUpdates(page?: number): Promise<ScrapedListOfManga> {
@@ -158,7 +92,7 @@ export class ManganatoScraper implements Scraper {
 
     const path = `genre-all/${page}`;
 
-    return parseDashboardPage(path, page);
+    return this.parseDashboardPage(path, page);
   }
 
   public async getNewestMangaList(page: number = 1): Promise<ScrapedListOfManga> {
@@ -168,7 +102,7 @@ export class ManganatoScraper implements Scraper {
 
     const url = `genre-all/${page ? page : ""}?type=newest`;
 
-    return parseDashboardPage(url, page);
+    return this.parseDashboardPage(url, page);
   }
 
   public async geHotMangaList(page: number = 1): Promise<ScrapedListOfManga> {
@@ -178,127 +112,195 @@ export class ManganatoScraper implements Scraper {
 
     const url = `genre-all/${page ? page : ""}?type=topview`;
 
-    return parseDashboardPage(url, page);
+    return this.parseDashboardPage(url, page);
+  }
+
+  private async parseDashboardPage(path: string, page: number): Promise<ScrapedListOfManga> {
+    const mangaList: ScrapedListOfMangaItem[] = [];
+    const url = this.getBaseUrl(path);
+
+    const response = await axios.get(url);
+
+    if (response.status !== 200) {
+      throw new Error(`Failed to get dashboard page ${url}`);
+    }
+
+    const $ = cheerio.load(response.data);
+    const panel = $(".panel-content-genres");
+
+    if (!panel) {
+      throw new Error(`Failed to get panel content genres ${url}`);
+    }
+
+    const mangaCards = panel.find(".content-genres-item");
+
+    for (let i = 0; i < mangaCards.length; i++) {
+      const mangaCard = mangaCards[i];
+      const title = $(mangaCard).find(".genres-item-info > h3")?.text()?.trim();
+      const url = $(mangaCard).find(".genres-item-info .genres-item-name")?.attr("href") as string;
+      const imageThumbnail = $(mangaCard).find(".img-loading")?.attr("src") as string;
+
+      if (title && url && imageThumbnail) {
+        mangaList.push({
+          title,
+          url,
+          imageThumbnail,
+        });
+      } else {
+        throw new Error(`Failed to parse manga card, for url ${url}`);
+      }
+    }
+
+    const totalData = (function () {
+      const result = $(".group-qty")?.text().trim();
+
+      if (!result) {
+        return 0;
+      }
+
+      return extractNumbersFromStrings(result)[0];
+    })();
+
+    const totalPages = (function () {
+      const result = $(".page-last")?.text().trim();
+
+      if (!result) {
+        return 0;
+      }
+
+      return extractNumbersFromStrings(result)[0];
+    })();
+
+    return {
+      totalPages,
+      totalData,
+      canNext: page < totalPages,
+      canPrev: page > 1,
+      currentPage: page,
+      data: mangaList,
+    };
+  }
+
+  private getBaseUrl(path: string = ""): string {
+    return `${this.baseUrl}/${path}`;
+  }
+
+  private parseTable($: cheerio.CheerioAPI, tableNode: cheerio.Cheerio<cheerio.Element>): Array<ParsedTableRow> {
+    let tableTrs = tableNode.find("tr");
+
+    return Array.from(tableTrs)
+      .map((item): ParsedTableRow | null => {
+        const header = $(item).find("td:nth-child(1)");
+        const value = $(item).find("td:nth-child(2)");
+
+        if (!header || !value) {
+          return null;
+        }
+
+        return { header, value };
+      })
+      .filter((value) => value) as ParsedTableRow[];
   }
 
   public async getDetailedManga(url: string): Promise<ScrapedDetailedManga> {
-    interface ParsedTableRow {
-      header: HTMLElement;
-      value: HTMLElement;
-    }
-
-    const parseTable = (tableNode: HTMLElement): Array<ParsedTableRow> => {
-      let tableTrs = tableNode.querySelectorAll("tr");
-
-      return Array.from(tableTrs)
-        .map((item: HTMLElement): ParsedTableRow | null => {
-          const header = item.querySelector("td:nth-child(1)");
-          const value = item.querySelector("td:nth-child(2)");
-
-          if (!header || !value) {
-            return null;
-          }
-
-          return { header, value };
-        })
-        .filter((value) => value) as ParsedTableRow[];
-    };
-
     let chapters: ScrapedChapter[] = [];
 
     const response = await axios.get(url);
 
     if (response.status !== 200) {
-      throw new Error("Failed to get detailed manga");
+      throw new Error(`Failed to get detailed manga ${url}`);
     }
 
-    const document = parse(response.data);
-    const storyRightInfo = document.querySelector(".story-info-right");
-    const chapterContainer = document.querySelector(".row-content-chapter");
-    const title = String(storyRightInfo?.querySelector("h1")?.innerText);
-    const imageThumbnail = document.querySelector(".info-image .img-loading")?.getAttribute("src");
+    const $ = cheerio.load(response.data);
+
+    const storyRightInfo = $(".story-info-right");
+    const chapterContainer = $(".row-content-chapter");
+    const title = String(storyRightInfo?.find("h1")?.text().trim());
+    const imageThumbnail = $(".info-image .img-loading")?.attr("src");
 
     if (!storyRightInfo) {
       throw new Error(`Failed to get detailed manga, url ${url}`);
     }
 
     if (chapterContainer) {
-      const chapterLis = Array.from(chapterContainer.querySelectorAll("li"));
+      chapters = $(chapterContainer)
+        .find("li")
+        .map((index, value): ScrapedChapter => {
+          const lastUpdate = $(value).find(".chapter-time")?.text()?.trim();
+          const views = $(value).find(".chapter-view")?.text()?.trim();
+          const url = $(value).find("a")?.attr("href");
 
-      chapters = chapterLis.map((value, index): ScrapedChapter => {
-        const lastUpdate = value.querySelector(".chapter-time")?.innerText?.trim();
-        const views = value.querySelector(".chapter-view")?.innerText?.trim();
-        const title = value.querySelector("a")?.innerText.replace(/Vol\.\d+\s+Chapter\s+\d+:"/i, "");
-        const url = value.querySelector("a")?.getAttribute("href");
-  
-        if (!lastUpdate || !views || !title || !url) {
-          throw Error(`Failed to parse chapter ${url}, index: ${index}`);
-        }
-  
-        return {
-          url,
-          title,
-          index: extractChapterIndex(title),
-          views: convertToNumber(views),
-          lastUpdate: dayjs(lastUpdate, "MMM D, YY").toDate(),
-        };
-      });
-  
+          const title = $(value)
+            .find("a")
+            ?.text()
+            .replace(/Vol\.\d+\s+Chapter\s+\d+:"/i, "");
+
+          if (!lastUpdate || !views || !title || !url) {
+            throw Error(`Failed to parse chapter ${url}, index: ${index}`);
+          }
+
+          return {
+            url,
+            title,
+            index: extractChapterIndex(title),
+            views: convertToNumber(views),
+            lastUpdate: dayjs(lastUpdate, "MMM D, YY").toDate(),
+          };
+        })
+        .toArray();
     }
 
-    
-    const tableInfo = storyRightInfo.querySelector(".variations-tableInfo");
+    const tableInfo = storyRightInfo.find(".variations-tableInfo");
 
     if (!tableInfo) {
-      throw new Error("Failed to get detailed manga");
+      throw new Error(`Failed to get detailed manga ${url}`);
     }
 
-    const parsedTableInfo = parseTable(tableInfo);
+    const parsedTableInfo = this.parseTable($, tableInfo);
 
     const altTitles: string[] =
       parsedTableInfo
-        .find((value) => value.header.innerText.trim() === "Alternative :")
-        ?.value.innerText.split(",")
+        .find((value) => value.header.text().trim() === "Alternative :")
+        ?.value.text()
+        .split(",")
         .map((value) => value.trim()) ?? [];
 
     const status = parsedTableInfo
-      .find((value) => value.header.innerText.trim() === "Status :")
-      ?.value.innerText.trim()
+      .find((value) => value.header.text().trim() === "Status :")
+      ?.value.text()
+      .trim()
       .toLocaleLowerCase();
 
     const authors: ScrapedAuthor[] =
       parsedTableInfo
-        .find((value) => value.header.innerText.trim() === "Author(s) :")
-        ?.value.querySelectorAll("a")
-        .map(
-          (value) =>
-            ({
-              link: value.getAttribute("href"),
-              name: value.innerText.trim(),
-            } as ScrapedAuthor)
-        ) ?? [];
-        
+        .find((value) => value.header.text().trim() === "Author(s) :")
+        ?.value.find("a")
+        .map((_, value) => ({
+          url: $(value).attr("href"),
+          name: $(value).text().trim(),
+        }))
+        .toArray() || [];
+
     const alternativeTitles =
       parsedTableInfo
-        .find((value) => value.header.innerText.trim() === "Alternative :")
-        ?.value.querySelector("h2")
-        ?.innerText.trim()
+        .find((value) => value.header.text().trim() === "Alternative :")
+        ?.value.find("h2")
+        ?.text()
+        .trim()
         .split(";")
         .map((value: string) => value.trim()) ?? [];
 
     const genres: ScrapedGenre[] =
       parsedTableInfo
-        .find((value) => value.header.innerText.trim() === "Genres :")
-        ?.value.querySelectorAll("a")
-        .map(
-          (value) =>
-            ({
-              url: value.getAttribute("href")?.trim(),
-              name: value.innerText.trim(),
-            } as ScrapedGenre)
-        ) ?? [];
+        .find((value) => value.header.text().trim() === "Genres :")
+        ?.value.find("a")
+        .map((_, value) => ({
+          url: $(value).attr("href")?.trim(),
+          name: $(value).text().trim(),
+        }))
+        .toArray() ?? [];
 
-    const description = document.querySelector("#panel-story-info-description")?.childNodes[2].textContent.trim();
+    const description = $("#panel-story-info-description").clone().children().remove().end().text().trim();
 
     if (
       !altTitles ||
@@ -309,7 +311,7 @@ export class ManganatoScraper implements Scraper {
       !genres ||
       !imageThumbnail
     ) {
-      throw new Error("Failed to get detailed manga");
+      throw new Error(`Failed to get detailed manga ${url}`);
     }
 
     return {
@@ -334,7 +336,7 @@ export class ManganatoScraper implements Scraper {
       const originSrc = $(e).attr("src")?.trim();
 
       if (!originSrc) {
-        throw new Error("Failed to get detailed chapter");
+        throw new Error(`Failed to get detailed chapter ${url}`);
       }
 
       frames.push({

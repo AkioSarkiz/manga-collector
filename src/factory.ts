@@ -21,7 +21,7 @@ export class MangaScraperFactory {
         break;
 
       default:
-        throw new Error("Invalid manga source");
+        throw new Error(`Invalid manga source: ${source}`);
     }
 
     await scraper.init();
