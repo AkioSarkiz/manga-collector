@@ -32,6 +32,7 @@
   },
   "homepage": "https://github.com/AkioSarkiz/manga-collector#readme",
   "devDependencies": {
+    "@types/jquery": "^3.5.30",
     "ts-node": "^10.9.2",
     "tsup": "^8.0.2",
     "typescript": "^5.4.3",
@@ -47,6 +48,7 @@
     "dayjs": "^1.11.11",
     "html-entities": "^2.5.2",
     "node-html-parser": "^6.1.12",
+    "p-limit": "^6.1.0",
     "puppeteer": "^22.13.1",
     "puppeteer-extra": "^3.3.6",
     "puppeteer-extra-plugin-adblocker": "^2.13.6",
