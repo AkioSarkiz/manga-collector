@@ -19,7 +19,7 @@ The manga-collector currently supports the following manga websites (updating):
 |         Manganato         | [![Test scrape manganato](https://github.com/AkioSarkiz/manga-collector/actions/workflows/manganato-test.yml/badge.svg)](https://github.com/AkioSarkiz/manga-collector/actions/workflows/manganato-test.yml) |
 |          Toonily          |    [![Test scrape toonily](https://github.com/AkioSarkiz/manga-collector/actions/workflows/toonily-test.yml/badge.svg)](https://github.com/AkioSarkiz/manga-collector/actions/workflows/toonily-test.yml)    |
 |         Mangadex          |  [![Test scrape mangadex](https://github.com/AkioSarkiz/manga-collector/actions/workflows/mangadex-test.yml/badge.svg)](https://github.com/AkioSarkiz/manga-collector/actions/workflows/mangadex-test.yml)   |   
-|         Fanfox (FAILED)          |  [![Test scrape fanfox](https://github.com/AkioSarkiz/manga-collector/actions/workflows/fanfox-test.yml/badge.svg)](https://github.com/AkioSarkiz/manga-collector/actions/workflows/fanfox-test.yml)   |                                                                                       |
+|         Fanfox (Experimental)          |  [![Test scrape fanfox](https://github.com/AkioSarkiz/manga-collector/actions/workflows/fanfox-test.yml/badge.svg)](https://github.com/AkioSarkiz/manga-collector/actions/workflows/fanfox-test.yml)   |                                                                                       |
 
 ## Requirements
 
