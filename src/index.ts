@@ -6,5 +6,4 @@ export enum MangaSource {
   MANGANATO = "manganato",
   MANGADEX = "mangadex",
   TOONILY = "toonily",
-  FANFOX = "fanfox",
 }
