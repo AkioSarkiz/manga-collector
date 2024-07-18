@@ -49,6 +49,8 @@
     "node-html-parser": "^6.1.12",
     "puppeteer": "^22.13.1",
     "puppeteer-extra": "^3.3.6",
+    "puppeteer-extra-plugin-adblocker": "^2.13.6",
+    "puppeteer-extra-plugin-stealth": "^2.11.2",
     "url-join": "^5.0.0"
   }
 }
