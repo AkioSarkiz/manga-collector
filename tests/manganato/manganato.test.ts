@@ -124,19 +124,20 @@ test.each(MANGA_DATA_TO_DETAILED_SCRAPE)("scrape of $link", async ({ link, expec
       expectedData.chapters = expectedData.chapters.map((chapter: any) => {
         return {
           ...chapter,
-          lastUpdate: new Date(chapter.lastUpdate),
-          // views are dynamic property so we should not compare them
+          // views & lastUpdate are dynamic properties so we should not compare them
           // because it will fail in CI from time to time and make fake status of the scaping
           views: undefined,
+          lastUpdate: undefined,
         };
       });
 
       const formattedChapters = result.chapters.map((chapter: any) => {
         return {
           ...chapter,
-          // views are dynamic property so we should not compare them
+          // views & lastUpdate are dynamic properties so we should not compare them
           // because it will fail in CI from time to time and make fake status of the scaping
           views: undefined,
+          lastUpdate: undefined,
         };
       });
 
