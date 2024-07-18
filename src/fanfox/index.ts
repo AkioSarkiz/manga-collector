@@ -13,9 +13,20 @@ import {
 } from "../types/scraper.js";
 import * as cheerio from "cheerio";
 import { axios } from "../lib/axios.js";
+import puppeteer, { Browser, GoToOptions } from "puppeteer";
+import { injectJquery } from "../lib/puppeteer.js";
+import pLimit, { LimitFunction } from "p-limit";
 
 export class FanFoxScraper implements Scraper {
   private readonly baseUrl = "https://fanfox.net";
+
+  private puppeteerInstance: Browser | null = null;
+  private puppeteerGotoOptions: GoToOptions = {
+    waitUntil: "networkidle0",
+    timeout: 30_000,
+  };
+
+  private limit: LimitFunction = pLimit(70);
 
   private getUrl(path: string = ""): string {
     return urlJoin(this.baseUrl, path);
@@ -108,29 +119,75 @@ export class FanFoxScraper implements Scraper {
   }
 
   public async getDetailedChapter(url: string): Promise<ScrapedDetailedChapter> {
+    const puppeteerInstanceLink = this.puppeteerInstance;
     const frames: ScrapedDetailedChapterFrame[] = [];
-    const response = await axios.get(url);
-    const $ = cheerio.load(response.data);
+    const promises: Promise<any>[] = [];
 
-    const title = $(".reader-header-title-1").text().trim();
-    const totalFrames = $(".pager-list-left").last().find("a").eq(-2)?.text()?.trim()?.match(/\d+/);
+    if (!this.puppeteerInstance || !puppeteerInstanceLink) {
+      throw new Error("Puppeteer not initialized");
+    }
+
+    const page = await this.puppeteerInstance.newPage();
+
+    await page.goto(url, this.puppeteerGotoOptions);
+
+    await injectJquery(page);
+
+    const title = await page.evaluate(() => {
+      // @ts-ignore
+      return $(".reader-header-title-1").text().trim();
+    });
+
+    const totalFrames = await page.evaluate(() => {
+      let result = -1;
+
+      $("[data-page]").each((_, el) => {
+        const pageNumber = Number($(el).data("page"));
+
+        if (pageNumber > result) {
+          result = pageNumber;
+        }
+      });
+
+      return result;
+    });
+
+    if (totalFrames === null || !title) {
+      throw new Error(`Failed to get detailed chapter from ${url}`);
+    }
 
     for (let i = 0; i < Number(totalFrames); i++) {
-      const chapterPageUrl = `${url}#ipg12`;
+      const scrapeFrame = async () => {
+        console.log(i);
+        const chapterPageUrl = url.split("/").slice(0, -1).join("/") + `/${i + 1}.html`;
 
-      const response = await axios.get(chapterPageUrl);
-      const $ = cheerio.load(response.data);
-      const frame = $("reader-main-img").attr("src");
+        const chapterPage = await puppeteerInstanceLink.newPage();
 
-      if (!frame) {
-        throw new Error("Failed to get detailed chapter");
-      }
+        await chapterPage.goto(chapterPageUrl, this.puppeteerGotoOptions);
+        await injectJquery(chapterPage);
 
-      frames.push({
-        index: i,
-        originSrc: `https:${frame}`,
-      });
+        const frame = await chapterPage.evaluate(() => {
+          return $(".reader-main-img").attr("src");
+        });
+
+        if (!frame) {
+          throw new Error(`Failed to get detailed chapter from ${url} on page ${chapterPageUrl}`);
+        }
+
+        frames.push({
+          index: i,
+          originSrc: `https:${frame}`,
+        });
+
+        await chapterPage.close();
+      };
+
+      promises.push(this.limit(scrapeFrame));
     }
+
+    await Promise.all(promises);
+
+    await page.close();
 
     return {
       title,
@@ -182,11 +239,15 @@ export class FanFoxScraper implements Scraper {
   }
 
   public async init(): Promise<void> {
-    //
+    this.puppeteerInstance = await puppeteer.launch({
+      headless: true,
+    });
   }
 
   public async shutdown(): Promise<void> {
-    //
+    if (this.puppeteerInstance) {
+      await this.puppeteerInstance.close();
+    }
   }
 
   public async search(query: string, page: number = 1): Promise<ScrapedListOfManga> {

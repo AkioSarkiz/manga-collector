@@ -2,7 +2,7 @@ import { MangaScraperFactory, MangaSource } from "../../index.js";
 import fs from "fs";
 
 const main = async () => {
-  const url = "https://mangadex.org/chapter/0f7f932b-c426-46c6-9d36-2923ae3f7e13";
+  const url = "https://fanfox.net/manga/wo_he_wo_de_ai_ni_ya/v01/c001/1.html";
   const filename = "detailed-chapter.json";
 
   const scraper = await MangaScraperFactory.make(MangaSource.FANFOX);
