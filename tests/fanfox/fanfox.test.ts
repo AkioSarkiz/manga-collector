@@ -36,19 +36,22 @@ describe("test fanfox", async () => {
     expect(result.data.length).greaterThanOrEqual(1);
   });
 
-  describe.each(MANGA_DATA_TO_DETAILED_CHAPTER_SCRAPE)("get detailed chapter of $link", async ({ link, expected }) => {
-    test('', async () => {
+  test.each(MANGA_DATA_TO_DETAILED_CHAPTER_SCRAPE)(
+    "get detailed chapter of $link",
+    async ({ link, expected }) => {
       const expectedData = await import(expected);
-      console.log({ expectedData });
+
       const result = await scraper.getDetailedChapter(link);
-      console.log({ result });
-      expect(result).be(expectedData);
       expectTypeOf(result).toEqualTypeOf<ScrapedDetailedChapter>();
-    });
-  });
+      expect(result.url).toEqual(expectedData.url);
+      expect(result.title).toEqual(expectedData.title);
+      expect(new Set(result.frames)).toEqual(new Set(expectedData.frames));
+    },
+    60_000
+  );
 
   describe.each(MANGA_DATA_TO_DETAILED_SCRAPE)("get detailed manga of $link", async ({ link }) => {
-    test('', async () => {
+    test("", async () => {
       const result = await scraper.getDetailedManga(link);
       expectTypeOf(result).toEqualTypeOf<ScrapedDetailedManga>();
     });

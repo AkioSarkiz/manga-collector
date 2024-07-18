@@ -26,7 +26,7 @@ export class FanFoxScraper implements Scraper {
     timeout: 30_000,
   };
 
-  private limit: LimitFunction = pLimit(70);
+  private limit: LimitFunction = pLimit(4);
 
   private getUrl(path: string = ""): string {
     return urlJoin(this.baseUrl, path);
@@ -158,17 +158,37 @@ export class FanFoxScraper implements Scraper {
 
     for (let i = 0; i < Number(totalFrames); i++) {
       const scrapeFrame = async () => {
-        console.log(i);
+        let frame: string | null = null;
         const chapterPageUrl = url.split("/").slice(0, -1).join("/") + `/${i + 1}.html`;
 
         const chapterPage = await puppeteerInstanceLink.newPage();
 
-        await chapterPage.goto(chapterPageUrl, this.puppeteerGotoOptions);
-        await injectJquery(chapterPage);
+        await chapterPage.setRequestInterception(true);
 
-        const frame = await chapterPage.evaluate(() => {
-          return $(".reader-main-img").attr("src");
+        chapterPage.on("request", (request) => {
+          if (request.resourceType() === "image") {
+            request.abort();
+          } else {
+            request.continue();
+          }
         });
+
+        await chapterPage.goto(chapterPageUrl);
+
+        for (let i = 0; i < 200 && frame === null; i++) {
+          await injectJquery(chapterPage);
+
+          frame =
+            (await chapterPage.evaluate(() => {
+              return $(".reader-main-img").attr("src");
+            })) || null;
+
+          if (frame === null) {
+            await new Promise((resolve) => setTimeout(resolve, 100));
+          } else {
+            break;
+          }
+        }
 
         if (!frame) {
           throw new Error(`Failed to get detailed chapter from ${url} on page ${chapterPageUrl}`);

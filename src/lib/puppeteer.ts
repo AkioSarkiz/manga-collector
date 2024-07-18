@@ -10,4 +10,5 @@ const injectJquery = async (page: Page) => {
   await page.addScriptTag({ url: "https://code.jquery.com/jquery-3.7.1.min.js" });
 };
 
+
 export { puppeteer, injectJquery };
