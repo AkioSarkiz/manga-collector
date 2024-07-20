@@ -33,11 +33,12 @@
   },
   "homepage": "https://github.com/AkioSarkiz/manga-collector#readme",
   "devDependencies": {
+    "@types/diacritics": "^1.3.3",
     "@vitest/coverage-istanbul": "^2.0.3",
     "ts-node": "^10.9.2",
     "tsup": "^8.0.2",
     "typescript": "^5.4.3",
-    "vitest": "^2.0.3"
+    "vitest": "2.0.3"
   },
   "volta": {
     "node": "20.11.1",
@@ -47,6 +48,7 @@
     "axios": "^1.6.8",
     "cheerio": "^1.0.0-rc.12",
     "dayjs": "^1.11.11",
+    "diacritics": "^1.3.0",
     "html-entities": "^2.5.2",
     "puppeteer": "^22.12.1",
     "url-join": "^5.0.0"
