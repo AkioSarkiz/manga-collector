@@ -2,7 +2,7 @@ import { MangaScraperFactory, MangaSource } from "../../index.js";
 import fs from "fs";
 
 const main = async () => {
-  const url = "https://mangadex.org/title/58bb34a5-452a-49a3-bd08-e167d654dbe4";
+  const url = "https://mangadex.org/title/6b958848-c885-4735-9201-12ee77abcb3c/spy-family";
   const filename = "detailed-manga.json";
 
   const scraper = await MangaScraperFactory.make(MangaSource.MANGADEX);

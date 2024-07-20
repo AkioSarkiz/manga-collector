@@ -3,7 +3,7 @@ import fs from "fs";
 
 const main = async () => {
   const scraper = await MangaScraperFactory.make(MangaSource.TOONILY);
-  const result = await scraper.getDetailedManga("https://toonily.com/webtoon/the-duke-and-the-fox-princess/");
+  const result = await scraper.getDetailedManga("https://toonily.com/webtoon/eleceed/");
   const filename = "detailed-manga.json";
 
   await fs.promises.writeFile(filename, JSON.stringify(result, null, 2));
