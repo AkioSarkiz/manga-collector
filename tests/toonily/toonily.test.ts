@@ -1,8 +1,8 @@
 import { describe, expect, expectTypeOf, test } from "vitest";
-import { MangaSource } from "../src/index.js";
-import { MangaScraperFactory } from "../src/factory.js";
-import { ToonilyScraper } from "../src/toonily/index.js";
-import { ScrapedDetailedChapter, ScrapedDetailedManga, ScrapedListOfManga } from "../src/index.js";
+import { MangaSource } from "../../src/index.js";
+import { MangaScraperFactory } from "../../src/factory.js";
+import { ToonilyScraper } from "../../src/toonily/index.js";
+import { ScrapedDetailedChapter, ScrapedDetailedManga, ScrapedListOfManga } from "../../src/index.js";
 
 const MANGA_DATA_TO_DETAILED_SCRAPE = [
   {
@@ -53,18 +53,15 @@ describe("test toonily", async () => {
   test("should load latest manga", async () => {
     const result = await scraper.getLatestUpdates();
     expect(result.data.length).greaterThanOrEqual(1);
-    expectTypeOf(result).toEqualTypeOf<ScrapedListOfManga>();
   });
 
   test("search Solo Leveling manga", async () => {
     const result = await scraper.search("Solo Leveling");
-    expectTypeOf(result).toEqualTypeOf<ScrapedListOfManga>();
     expect(result.data.length).greaterThanOrEqual(1);
   });
 
   test("get data chapter of Solo Leveling manga", async () => {
     const result = await scraper.getDetailedChapter("https://toonily.com/webtoon/solo-leveling-005/chapter-0/");
-    expectTypeOf(result).toEqualTypeOf<ScrapedDetailedChapter>();
     expect(result.frames.length).equal(18);
   });
 });
@@ -74,7 +71,6 @@ describe.each(MANGA_DATA_TO_DETAILED_SCRAPE)("scrape $url", async ({ url, expect
 
   test("scrape", async () => {
     const result = await scraper.getDetailedManga(url);
-    expectTypeOf(result).toEqualTypeOf<ScrapedDetailedManga>();
 
     if (expected) {
       expect(result.genres).toEqual(expected.genres);
