@@ -2,7 +2,7 @@ import { MangaScraperFactory, MangaSource } from "../../index.js";
 import fs from "fs";
 
 const main = async () => {
-  const url = "https://manganato.com/manga-gb984258";
+  const url = "https://manganato.com/manga-vz956108";
   const filename = "detailed-manga.json";
 
   const scraper = await MangaScraperFactory.make(MangaSource.MANGANATO);
