@@ -28,6 +28,11 @@ export interface ScrapedAuthor {
   url?: string;
 }
 
+export interface ExternalSource {
+  name: string;
+  data: any;
+}
+
 export interface ScrapedDetailedManga {
   url: string;
   title: string;
@@ -47,6 +52,8 @@ export interface ScrapedDetailedManga {
 
   chapters: ScrapedChapter[];
   genres: ScrapedGenre[];
+
+  externalSources?: ExternalSource[];
 }
 
 export interface ScrapedDetailedChapterFrame {

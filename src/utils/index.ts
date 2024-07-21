@@ -71,3 +71,4 @@ export const extractNumbersFromStrings = (input: string): number[] => {
 };
 
 export { extractChapterIndex } from "./chapter.js";
+export { tryLinkMangaUpdatesData } from "./manga.js";
