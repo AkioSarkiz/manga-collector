@@ -10,7 +10,7 @@ import {
   ScrapedMangaStatus,
   Scraper,
 } from "../types/index.js";
-import dayjs from "dayjs";
+import { dayjs } from "../lib/index.js";
 import { convertToNumber, extractChapterIndex } from "../utils/index.js";
 import { axios } from "../lib/index.js";
 import urlJoin from "url-join";
