@@ -14,6 +14,8 @@ The manga-collector is a library designed to easily scrape manga content from va
 
 The manga-collector currently supports the following manga websites (updating):
 
+NOTE: By default github caches images, so it makes sense to turn off browser caching to see actual status
+
 |        **Website**        |                                                                                           **Status**                                                                                           |
 | :-----------------------: | :--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------: |
 |         Manganato         | [![Test scrape manganato](https://github.com/AkioSarkiz/manga-collector/actions/workflows/manganato-test.yml/badge.svg)](https://github.com/AkioSarkiz/manga-collector/actions/workflows/manganato-test.yml) |
