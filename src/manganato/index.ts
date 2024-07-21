@@ -10,8 +10,14 @@ import {
   ScrapedMangaStatus,
   Scraper,
 } from "../types/index.js";
-import { convertToNumber, extractChapterIndex, extractNumbersFromStrings } from "../utils/index.js";
-import dayjs from "dayjs";
+import {
+  convertToNumber,
+  extractChapterIndex,
+  extractNumbersFromStrings,
+  isOnlyNumbers,
+  parseRelativeTime,
+} from "../utils/index.js";
+import { dayjs } from "../lib/index.js";
 import * as cheerio from "cheerio";
 import { axios } from "../lib/index.js";
 
@@ -243,8 +249,10 @@ export class ManganatoScraper implements Scraper {
             url,
             title,
             index: extractChapterIndex(title),
-            views: convertToNumber(views),
-            lastUpdate: dayjs(lastUpdate, "MMM D, YY").toDate(),
+            views: isOnlyNumbers(views) ? Number(views) : convertToNumber(views),
+            lastUpdate: dayjs(lastUpdate, "MMM D, YY").isValid()
+              ? dayjs(lastUpdate, "MMM D, YY").toDate()
+              : parseRelativeTime(lastUpdate).toDate(),
           };
         })
         .toArray();
