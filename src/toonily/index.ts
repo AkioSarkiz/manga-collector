@@ -1,5 +1,7 @@
 import * as cheerio from "cheerio";
 import {
+  ScrapedArtist,
+  ScrapedAuthor,
   ScrapedChapter,
   ScrapedDetailedChapter,
   ScrapedDetailedChapterFrame,
@@ -68,21 +70,40 @@ export class ToonilyScraper implements Scraper {
     const genres: ScrapedGenre[] = [];
     const chapters: ScrapedChapter[] = [];
     const siteContent = $("div.site-content");
-    const author = {
-      name: siteContent.find("div.summary-content > div.author-content > a").text()?.trim(),
-      url: siteContent.find("div.summary-content > div.author-content > a").attr("href")?.trim(),
-    };
+
+    const authors = $(".author-content")
+      .find("a")
+      .map((_, e): ScrapedAuthor => {
+        return {
+          name: $(e).text().trim(),
+          url: $(e).attr("href")?.trim(),
+        };
+      })
+      .toArray();
+
+    const artists = $(".artist-content")
+      .find("a")
+      .map((_, e): ScrapedArtist => {
+        return {
+          name: $(e).text().trim(),
+          url: $(e).attr("href")?.trim(),
+        };
+      })
+      .toArray();
+
     const status = this.formatStatus($(".post-status .post-content_item:nth-child(2) .summary-content").text().trim());
     const description = $(".summary__content").text().trim();
     const views: number = convertToNumber($(".manga-rate-view-comment .item:nth-child(2)").text().trim());
     const rate = Number($(".manga-rate-view-comment .item:nth-child(1) #averagerate").text().trim());
     const rateNumber = Number(siteContent.find("#countrate").text().trim());
     const imageThumbnail = $(".summary_image img").data("src");
+
     const alternativeTitles = $(".manga-info-row > div:nth-child(2) > div:nth-child(2)")
       .text()
       .trim()
       .split(",")
-      .map((v) => v.trim());
+      .map((v) => v.trim())
+      .filter((v) => v.toLowerCase() !== "updating");
 
     const title = siteContent
       .find("div.post-content > div.post-title > h1")
@@ -131,7 +152,8 @@ export class ToonilyScraper implements Scraper {
 
       imageThumbnail,
 
-      authors: [author],
+      authors,
+      artists,
 
       genres,
       rate,
