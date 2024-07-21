@@ -102,7 +102,8 @@ export class ToonilyScraper implements Scraper {
       .text()
       .trim()
       .split(",")
-      .map((v) => v.trim());
+      .map((v) => v.trim())
+      .filter((v) => v.toLowerCase() !== "updating");
 
     const title = siteContent
       .find("div.post-content > div.post-title > h1")
