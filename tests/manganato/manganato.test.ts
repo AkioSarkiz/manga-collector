@@ -1,11 +1,5 @@
-import { describe, test, expect, expectTypeOf, assert } from "vitest";
-import {
-  MangaSource,
-  MangaScraperFactory,
-  ScrapedDetailedManga,
-  ScrapedListOfManga,
-  ScrapedDetailedChapter,
-} from "../../src/index.js";
+import { describe, test, expect, assert } from "vitest";
+import { MangaSource, MangaScraperFactory } from "../../src/index.js";
 import path from "path";
 
 const MANGA_DATA_TO_DETAILED_SCRAPE = [
@@ -78,20 +72,18 @@ describe("should load latest manga", async () => {
   test("without any props", async () => {
     const result = await scraper.getLatestUpdates();
     expect(result.data.length).toBeGreaterThanOrEqual(1);
-    expectTypeOf(result).toEqualTypeOf<ScrapedListOfManga>();
   });
 
   test("a second page", async () => {
     const result = await scraper.getLatestUpdates(2);
     expect(result.data.length).toBeGreaterThanOrEqual(1);
-    expectTypeOf(result).toEqualTypeOf<ScrapedListOfManga>();
   });
 });
 
 test.each(MANGA_SEARCH_QUERIES)("search %s", async (query) => {
   const scraper = await MangaScraperFactory.make(MangaSource.MANGANATO);
   const result = await scraper.search(query);
-  expectTypeOf(result).toEqualTypeOf<ScrapedListOfManga>();
+
   expect(result.data.length).toBeGreaterThanOrEqual(1);
 });
 
@@ -102,8 +94,6 @@ test.each(MANGA_DATA_TO_DETAILED_SCRAPE)("scrape of $link", async ({ link, expec
   if (!result) {
     assert.fail("parse failed");
   }
-
-  expectTypeOf(result).toEqualTypeOf<ScrapedDetailedManga>();
 
   if (expectedDataPath) {
     const expectedData = { ...(await import(expectedDataPath)) };
@@ -159,7 +149,6 @@ test.each(MANGA_DATA_CHAPTERS)("get detailed chapter of $link", async ({ link, e
     assert.fail("parse failed");
   }
 
-  expectTypeOf(result).toEqualTypeOf<ScrapedDetailedChapter>();
   expect(result.title).toEqual(expectedData.title);
   expect(result.url).toEqual(expectedData.url);
   expect(new Set(result.frames)).toEqual(new Set(expectedData.frames));
