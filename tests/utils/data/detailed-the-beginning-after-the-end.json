@@ -1266,6 +1266,7 @@
   "externalSources": [
     {
       "name": "manga-updates",
+      "url": "https://www.mangaupdates.com/series/rwg23en/the-beginning-after-the-end",
       "data": {
         "series_id": 60735012287,
         "title": "The Beginning After the End",

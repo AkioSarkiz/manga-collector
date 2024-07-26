@@ -937,6 +937,7 @@
   "externalSources": [
     {
       "name": "manga-updates",
+      "url": "https://www.mangaupdates.com/series/d9kgu2a/mystic-musketeer",
       "data": {
         "series_id": 28876743730,
         "title": "Mystic Musketeer",

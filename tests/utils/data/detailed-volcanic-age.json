@@ -1649,6 +1649,7 @@
   "externalSources": [
     {
       "name": "manga-updates",
+      "url": "https://www.mangaupdates.com/series/bj0un1d/volcanic-age",
       "data": {
         "series_id": 25094892577,
         "title": "Volcanic Age",

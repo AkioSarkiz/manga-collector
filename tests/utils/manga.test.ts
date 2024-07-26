@@ -111,6 +111,7 @@ test.each(MANGA_LINK_DATA)("should link manga $name", async ({ detailedMangaPath
   expect(data.externalSources).toContainEqual({
     name: ExternalSource.MANGA_UPDATES,
     data: expect.anything(),
+    url: expect.anything(),
   });
 
   const externalMangaUpdates = data.externalSources!.find(({ name }) => name === ExternalSource.MANGA_UPDATES);
@@ -120,4 +121,5 @@ test.each(MANGA_LINK_DATA)("should link manga $name", async ({ detailedMangaPath
   }
 
   expect(externalMangaUpdates!.data.url).toBe(expectedExternalDataUrl);
+  expect(externalMangaUpdates!.url).toBe(expectedExternalDataUrl);
 });

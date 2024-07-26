@@ -1226,6 +1226,7 @@
   "externalSources": [
     {
       "name": "manga-updates",
+      "url": "https://www.mangaupdates.com/series/sclnjge/teenage-mercenary",
       "data": {
         "series_id": 61711869758,
         "title": "Teenage Mercenary",
