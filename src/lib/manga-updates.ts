@@ -8,6 +8,10 @@ export class MangaUpdatesClient {
   private readonly baseUrl: string = "https://api.mangaupdates.com/v1";
   private readonly axios: AxiosInstance;
 
+  private readonly config = {
+    request_retry: 5,
+  }
+
   public constructor() {
     this.axios = axios;
   }
@@ -17,35 +21,45 @@ export class MangaUpdatesClient {
   }
 
   public async getSeriesById(id: number): Promise<SeriesResponse> {
+    let lastError: any = null;
     const url = this.getUrl(`series/${id}`);
 
-    try {
-      const response = await this.axios.get(url);
+    for (let i = 0; i < this.config.request_retry; i++) {
+      try {
+        const response = await this.axios.get(url);
 
-      const serialResponse: SeriesResponse = response.data;
+        const serialResponse: SeriesResponse = response.data;
 
-      serialResponse.associated = serialResponse.associated.map((v) => ({
-        ...v,
-        title: decode(v.title),
-      }));
+        serialResponse.associated = serialResponse.associated.map((v) => ({
+          ...v,
+          title: decode(v.title),
+        }));
 
-      return serialResponse;
-    } catch (e) {
-      throw e;
+        return serialResponse;
+      } catch (e) {
+        lastError = e;
+      }
     }
+
+    throw lastError;
   }
 
   public async searchSeries(query: string): Promise<SearchedSeriesResponse> {
+    let lastError: any = null;
     const url = this.getUrl("series/search");
 
-    try {
-      const response = await this.axios.post(url, {
-        search: query,
-      });
+    for (let i = 0; i < this.config.request_retry; i++) {
+      try {
+        const response = await this.axios.post(url, {
+          search: query,
+        });
 
-      return response.data;
-    } catch (e) {
-      throw e;
+        return response.data;
+      } catch (e) {
+        lastError = e;
+      }
     }
+
+    throw lastError;
   }
 }
