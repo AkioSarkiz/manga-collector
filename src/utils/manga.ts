@@ -1,6 +1,6 @@
 import { ExternalSource } from "..";
-import { MangaUpdatesClient } from "../lib";
-import { ScrapedDetailedManga } from "../types";
+import { MangaUpdatesClient } from "../lib/index.js";
+import { ScrapedDetailedManga } from "../types/index.js";
 import diacritics from "diacritics";
 
 const compareDiacriticsStrings = (str1: string, str2: string): boolean => {
