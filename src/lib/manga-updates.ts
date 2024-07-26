@@ -1,5 +1,5 @@
 import urlJoin from "url-join";
-import { axios } from "./index";
+import { axios } from "./index.js";
 import { AxiosInstance } from "axios";
 import { SearchedSeriesResponse, SeriesResponse } from "../types";
 import { decode } from "html-entities";
