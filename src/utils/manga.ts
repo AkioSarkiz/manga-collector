@@ -65,6 +65,7 @@ export const tryLinkMangaUpdatesData = async (manga: ScrapedDetailedManga): Prom
       manga.externalSources.push({
         name: ExternalSource.MANGA_UPDATES,
         data: series,
+        url: series.url,
       });
 
       break;

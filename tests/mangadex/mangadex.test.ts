@@ -46,7 +46,7 @@ test.each(MANGA_DATA_TO_SEARCH_SCRAPE)("search $query", async ({ query }) => {
   expect(result.data.length).greaterThanOrEqual(1);
 });
 
-test.each(MANGA_DATA_TO_DETAILED_SCRAPE)("get detailed manga of $url", async ({ link, expectedDataPath }) => {
+test.each(MANGA_DATA_TO_DETAILED_SCRAPE)("get detailed manga of $link", async ({ link, expectedDataPath }) => {
   const expectedData = { ...(await import(expectedDataPath)) };
   const scraper = await MangaScraperFactory.make(MangaSource.MANGADEX);
   const result = await scraper.getDetailedManga(link);
@@ -91,7 +91,7 @@ test.each(MANGA_DATA_TO_DETAILED_SCRAPE)("get detailed manga of $url", async ({ 
   }
 });
 
-test.each(MANGA_DATA_TO_DETAILED_CHAPTER_SCRAPE)("get detailed chapter of $url", async ({ link, expectedDataPath }) => {
+test.each(MANGA_DATA_TO_DETAILED_CHAPTER_SCRAPE)("get detailed chapter of $link", async ({ link, expectedDataPath }) => {
   const expectedData = { ...(await import(expectedDataPath)) };
   const scraper = await MangaScraperFactory.make(MangaSource.MANGADEX);
   const result = await scraper.getDetailedChapter(link);

@@ -1,5 +1,8 @@
+import { SeriesResponse } from "./manga-updates.js";
+
 export type ScrapedMangaStatus = "ongoing" | "completed" | "hiatus" | "cancelled";
 export type ScrapedMangaType = "manga" | "novel" | "one-shot" | "doujin" | "manhwa" | "manhua";
+export type ExternalSourceName = "manga-updates";
 
 export interface ScrapedGenre {
   name: string;
@@ -29,8 +32,9 @@ export interface ScrapedAuthor {
 }
 
 export interface ExternalSource {
-  name: string;
-  data: any;
+  name: ExternalSourceName;
+  url: string;
+  data: SeriesResponse;
 }
 
 export interface ScrapedDetailedManga {
