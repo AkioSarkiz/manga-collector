@@ -37,6 +37,10 @@ const MANGA_DATA_TO_DETAILED_SCRAPE = [
   },
   {
     link: "https://manganato.com/manga-vz956108",
+
+    // The chapters were removed from the expected data file because manganto is a little bit dump 😅
+    // He creates a new chapters for that one manga even that manga was completed a long time ago.
+    // I don't want to have to update the expected data files for every new fake chapter will be released.
     expectedDataPath: path.join(__dirname, "/data/detailed-manga-vz956108.json"),
   },
 ];
