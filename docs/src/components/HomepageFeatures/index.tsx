@@ -11,17 +11,17 @@ type FeatureItem = {
 const FeatureList: FeatureItem[] = [
   {
     title: "Multiple Website Support",
-    imgPath: "/img/website.png",
+    imgPath: "img/website.png",
     description: <>Scrape data from various manga websites seamlessly.</>,
   },
   {
     title: "Easy Data Extraction",
-    imgPath: "/img/extract.png",
+    imgPath: "img/extract.png",
     description: <>Simple APIs to extract manga information effortlessly.</>,
   },
   {
     title: "Test Coverage",
-    imgPath: "/img/tested.png",
+    imgPath: "img/tested.png",
     description: <>Ensuring reliability and performance.</>,
   },
 ];
