@@ -10,3 +10,5 @@ The manga-collector is a library designed to easily scrape manga content from va
 - Supports multiple popular manga websites.
 - Provides a simple and intuitive API for easy integration.
 
+## Contributing
+Contributions are welcome! If you find any issues or would like to suggest enhancements, please submit a pull request or open an issue in the GitHub repository.
