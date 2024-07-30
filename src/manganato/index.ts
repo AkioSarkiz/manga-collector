@@ -16,7 +16,6 @@ import {
   extractNumbersFromStrings,
   isOnlyNumbers,
   parseRelativeTime,
-  tryLinkMangaUpdatesData,
 } from "../utils/index.js";
 import { dayjs } from "../lib/index.js";
 import * as cheerio from "cheerio";
@@ -323,7 +322,7 @@ export class ManganatoScraper implements Scraper {
       throw new Error(`Failed to get detailed manga ${url}`);
     }
 
-    return tryLinkMangaUpdatesData({
+    return {
       url,
       title,
       alternativeTitles,
@@ -333,7 +332,7 @@ export class ManganatoScraper implements Scraper {
       genres,
       chapters,
       authors,
-    });
+    };
   }
 
   public async getDetailedChapter(url: string): Promise<ScrapedDetailedChapter> {

@@ -1,3 +1,8 @@
+---
+sidebar_position: 1
+title: Intro
+---
+
 # The manga-collector
 
 [![License](https://img.shields.io/badge/license-MIT-blue)](https://opensource.org/licenses/MIT)
@@ -16,25 +21,25 @@ The manga-collector currently supports the following manga websites (updating):
 
 NOTE: By default github caches images, so it makes sense to turn off browser caching to see actual status
 
-|        **Website**        |                                                                                           **Status**                                                                                           |
-| :-----------------------: | :--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------: |
-|         Manganato         | [![Test scrape manganato](https://github.com/AkioSarkiz/manga-collector/actions/workflows/manganato-test.yml/badge.svg)](https://github.com/AkioSarkiz/manga-collector/actions/workflows/manganato-test.yml) |
-|          Toonily          |    [![Test scrape toonily](https://github.com/AkioSarkiz/manga-collector/actions/workflows/toonily-test.yml/badge.svg)](https://github.com/AkioSarkiz/manga-collector/actions/workflows/toonily-test.yml)    |
-|         Mangadex          |  [![Test scrape mangadex](https://github.com/AkioSarkiz/manga-collector/actions/workflows/mangadex-test.yml/badge.svg)](https://github.com/AkioSarkiz/manga-collector/actions/workflows/mangadex-test.yml)   |   
+| **Website** |                                                                                                  **Status**                                                                                                  |
+| :---------: | :----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------: |
+|  Manganato  | [![Test scrape manganato](https://github.com/AkioSarkiz/manga-collector/actions/workflows/manganato-test.yml/badge.svg)](https://github.com/AkioSarkiz/manga-collector/actions/workflows/manganato-test.yml) |
+|   Toonily   |    [![Test scrape toonily](https://github.com/AkioSarkiz/manga-collector/actions/workflows/toonily-test.yml/badge.svg)](https://github.com/AkioSarkiz/manga-collector/actions/workflows/toonily-test.yml)    |
+|  Mangadex   |  [![Test scrape mangadex](https://github.com/AkioSarkiz/manga-collector/actions/workflows/mangadex-test.yml/badge.svg)](https://github.com/AkioSarkiz/manga-collector/actions/workflows/mangadex-test.yml)   |
 
 ## Requirements
 
 - Node version 20.x and above
 
-### How to install
+## How to install
 
 ```bash
 npm install manga-collector
 ```
 
-### How to use
+## Basic usage
 
-This package contains examples of code that you can use and modify. They are located in `src/examples` folder.
+This package contains examples of code that you can use and modify. They are located in `examples` folder.
 
 Here is a simple example how you can use that package
 
@@ -63,7 +68,7 @@ console.log(await scraper.getDetailedManga("manga url here"));
 // }
 ```
 
-### Available methods
+## Available methods
 
 | Method             | Description                  |
 | ------------------ | ---------------------------- |

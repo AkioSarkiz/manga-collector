@@ -13,7 +13,7 @@ import {
   Scraper,
 } from "../types/index.js";
 import { dayjs } from "../lib/index.js";
-import { convertToNumber, extractChapterIndex, tryLinkMangaUpdatesData } from "../utils/index.js";
+import { convertToNumber, extractChapterIndex } from "../utils/index.js";
 import { axios } from "../lib/index.js";
 import urlJoin from "url-join";
 
@@ -141,7 +141,7 @@ export class ToonilyScraper implements Scraper {
       throw new Error("Failed to get image thumbnail");
     }
 
-    return tryLinkMangaUpdatesData({
+    return {
       url,
 
       // this site hosts only manhwa
@@ -163,7 +163,7 @@ export class ToonilyScraper implements Scraper {
       title,
       status: status.toLowerCase() as ScrapedMangaStatus,
       chapters,
-    });
+    };
   }
 
   private formatStatus(status: string): string {

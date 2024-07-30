@@ -1,6 +1,6 @@
 import urlJoin from "url-join";
 import { axios } from "./index.js";
-import { AxiosInstance } from "axios";
+import { AxiosInstance, AxiosRequestConfig } from "axios";
 import { SearchedSeriesResponse, SeriesResponse } from "../types";
 import { decode } from "html-entities";
 
@@ -10,7 +10,7 @@ export class MangaUpdatesClient {
 
   private readonly config = {
     request_retry: 5,
-  }
+  };
 
   public constructor() {
     this.axios = axios;
@@ -20,22 +20,14 @@ export class MangaUpdatesClient {
     return urlJoin(this.baseUrl, path);
   }
 
-  public async getSeriesById(id: number): Promise<SeriesResponse> {
-    let lastError: any = null;
-    const url = this.getUrl(`series/${id}`);
+  private async callRequest<T>(request: AxiosRequestConfig): Promise<T> {
+    let lastError: unknown | null = null;
 
     for (let i = 0; i < this.config.request_retry; i++) {
       try {
-        const response = await this.axios.get(url);
+        const response = await this.axios.request(request);
 
-        const serialResponse: SeriesResponse = response.data;
-
-        serialResponse.associated = serialResponse.associated.map((v) => ({
-          ...v,
-          title: decode(v.title),
-        }));
-
-        return serialResponse;
+        return response.data as T;
       } catch (e) {
         lastError = e;
       }
@@ -44,22 +36,31 @@ export class MangaUpdatesClient {
     throw lastError;
   }
 
+  public async getSeriesById(id: number): Promise<SeriesResponse> {
+    const requestConfig: AxiosRequestConfig = {
+      method: "GET",
+      url: this.getUrl(`series/${id}`),
+    };
+
+    const data = await this.callRequest<SeriesResponse>(requestConfig);
+
+    data.associated = data.associated.map((v) => ({
+      ...v,
+      title: decode(v.title),
+    }));
+
+    return data;
+  }
+
   public async searchSeries(query: string): Promise<SearchedSeriesResponse> {
-    let lastError: any = null;
-    const url = this.getUrl("series/search");
+    const requestConfig: AxiosRequestConfig = {
+      method: "POST",
+      url: this.getUrl("series/search"),
+      data: {
+        search: query,
+      },
+    };
 
-    for (let i = 0; i < this.config.request_retry; i++) {
-      try {
-        const response = await this.axios.post(url, {
-          search: query,
-        });
-
-        return response.data;
-      } catch (e) {
-        lastError = e;
-      }
-    }
-
-    throw lastError;
+    return await this.callRequest<SearchedSeriesResponse>(requestConfig);
   }
 }

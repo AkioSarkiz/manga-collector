@@ -12,7 +12,6 @@ import {
 } from "../types/index.js";
 import { axios } from "../lib/index.js";
 import urlJoin from "url-join";
-import { tryLinkMangaUpdatesData } from "../utils/manga.js";
 
 export class MangadexScraper implements Scraper {
   private readonly baseUrl: string = "https://mangadex.org";
@@ -112,7 +111,7 @@ export class MangadexScraper implements Scraper {
       });
     });
 
-    return tryLinkMangaUpdatesData({
+    return {
       // type??
       alternativeTitles,
       imageThumbnail,
@@ -124,7 +123,7 @@ export class MangadexScraper implements Scraper {
       title: mangaData.attributes.title.en,
       status: mangaData.attributes.status,
       chapters,
-    });
+    };
   }
 
   public async getDetailedChapter(url: string): Promise<ScrapedDetailedChapter> {

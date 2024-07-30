@@ -2,9 +2,11 @@ import { MangaScraperFactory, MangaSource } from "../../index.js";
 import fs from "fs";
 
 const main = async () => {
-  const scraper = await MangaScraperFactory.make(MangaSource.TOONILY);
-  const result = await scraper.getDetailedManga("https://toonily.com/webtoon/eleceed/");
+  const url = "https://toonily.com/webtoon/eleceed/";
   const filename = "detailed-manga.json";
+
+  const scraper = await MangaScraperFactory.make(MangaSource.TOONILY);
+  const result = await scraper.getDetailedManga(url);
 
   await fs.promises.writeFile(filename, JSON.stringify(result, null, 2));
 

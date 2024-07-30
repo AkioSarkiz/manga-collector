@@ -1,13 +1,26 @@
 import { ManipulateType } from "dayjs";
 import { dayjs } from "../lib/index.js";
 
-export const isOnlyNumbers = (str: string): Boolean => {
+/**
+ * Checks if a given string consists only of numbers.
+ *
+ * @param {string} str - The string to be checked.
+ * @return {boolean} Returns `true` if the string consists only of numbers,
+ *                   else returns `false`.
+ */
+export const isOnlyNumbers = (str: string): boolean => {
   const pattern = /^\d+$/;
 
   return pattern.test(str);
 };
 
-export const parseRelativeTime = (relativeTime: string) => {
+/**
+ * Parses a relative time string and returns a Dayjs object.
+ *
+ * @param {string} relativeTime - The relative time string to be parsed.
+ * @return {dayjs.Dayjs} A Dayjs object representing the parsed relative time.
+ */
+export const parseRelativeTime = (relativeTime: string): dayjs.Dayjs => {
   try {
     const now = dayjs();
 
@@ -35,6 +48,7 @@ export const parseRelativeTime = (relativeTime: string) => {
     return dayjs();
   }
 };
+
 /**
  * Converts a string representation of a number with a suffix (K, M, B, T) to a numeric value.
  *
@@ -59,6 +73,12 @@ export const convertToNumber = (numberString: string): number => {
   }
 };
 
+/**
+ * Extracts numbers from a given string.
+ *
+ * @param {string} input - The input string from which numbers are to be extracted.
+ * @return {number[]} An array of extracted numbers.
+ */
 export const extractNumbersFromStrings = (input: string): number[] => {
   const regex = /\d+/g;
   const matches = input.match(regex);
@@ -71,4 +91,3 @@ export const extractNumbersFromStrings = (input: string): number[] => {
 };
 
 export { extractChapterIndex } from "./chapter.js";
-export { tryLinkMangaUpdatesData } from "./manga.js";
