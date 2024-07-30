@@ -4,6 +4,12 @@ import { ManganatoScraper } from "./manganato/index.js";
 import { ToonilyScraper } from "./toonily/index.js";
 
 export class MangaScraperFactory {
+  /**
+   * Creates a scraper instance based on the given source.
+   *
+   * @param {MangaSource} source - The source of the manga.
+   * @return {Promise<Scraper>} A promise that resolves to the created scraper instance.
+   */
   public static async make(source: MangaSource): Promise<Scraper> {
     let scraper;
 
@@ -26,7 +32,6 @@ export class MangaScraperFactory {
 
     await scraper.init();
 
-    // @ts-ignore
     return scraper;
   }
 }

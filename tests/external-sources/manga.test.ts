@@ -1,7 +1,7 @@
 import { expect, test } from "vitest";
-import { tryLinkMangaUpdatesData } from "../../src/utils/index.js";
 import path from "path";
 import { ExternalSource } from "../../src/index.js";
+import { MangaUpdatesExternalSourceMatcher } from "../../src/external-sources/manga-updates-external-source-matcher.js";
 
 const MANGA_LINK_DATA = [
   {
@@ -106,15 +106,16 @@ const MANGA_LINK_DATA = [
 ];
 
 test.each(MANGA_LINK_DATA)("should link manga $name", async ({ detailedMangaPath, expectedExternalDataUrl }) => {
-  const data = await tryLinkMangaUpdatesData(await import(detailedMangaPath));
+  const matcher = new MangaUpdatesExternalSourceMatcher(await import(detailedMangaPath));
+  const matchedManga = await matcher.tryMatchExternalSource();
 
-  expect(data.externalSources).toContainEqual({
+  expect(matchedManga.externalSources).toContainEqual({
     name: ExternalSource.MANGA_UPDATES,
     data: expect.anything(),
     url: expect.anything(),
   });
 
-  const externalMangaUpdates = data.externalSources!.find(({ name }) => name === ExternalSource.MANGA_UPDATES);
+  const externalMangaUpdates = matchedManga.externalSources!.find(({ name }) => name === ExternalSource.MANGA_UPDATES);
 
   if (!externalMangaUpdates) {
     test.fails(`Could not find ${ExternalSource.MANGA_UPDATES}`);
