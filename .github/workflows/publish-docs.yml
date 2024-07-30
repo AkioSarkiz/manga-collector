@@ -18,28 +18,13 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v1
-
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v4
         with:
-          # choose node.js version to use
-          node-version: "20"
+          node-version: ${{ matrix.node-version }}
+          cache: "npm"
 
-      # cache node_modules
-      - name: Cache dependencies
-        uses: actions/cache@v2
-        id: node-cache
-        with:
-          path: |
-            **/node_modules
-          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
-          restore-keys: |
-            ${{ runner.os }}-node-
-
-      # install dependencies if the cache did not hit
-      - name: Install dependencies
-        if: steps.node-cache.outputs.cache-hit != 'true'
-        run: node ci
+      - run: npm ci
 
       # copy .env file
       - name: Copy .env file
