@@ -41,6 +41,10 @@ jobs:
         if: steps.node-cache.outputs.cache-hit != 'true'
         run: node ci
 
+      # copy .env file
+      - name: Copy .env file
+        run: cp .env.example .env
+
       # run build script
       - name: Build
         run: npm run build
