@@ -7,7 +7,7 @@ export default defineConfig({
     },
     coverage: {
       provider: "istanbul",
-      exclude: ["src/*/examples/**"],
+      exclude: ["src/examples/**", "docs/**", "tests/**"],
       reporter: ["text", "html", "clover", "json", "json-summary"],
     },
   },

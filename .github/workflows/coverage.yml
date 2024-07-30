@@ -20,6 +20,6 @@ jobs:
       - name: "Install Deps"
         run: npm ci
       - name: "Test"
-        run: npx vitest --coverage.enabled true
+        run: npm run coverage
       - name: "Report Coverage"
         uses: davelosert/vitest-coverage-report-action@v2
