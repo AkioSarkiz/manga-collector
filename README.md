@@ -1,6 +1,8 @@
 # The manga-collector
 
-[Full Documentation](https://akiosarkiz.github.io/manga-collector/)
+![banner](assets/manga-collector-banner.jpg)
+
+##  [Full Documentation](https://akiosarkiz.github.io/manga-collector/)
 
 The manga-collector is a library designed to easily scrape manga content from various websites. This package is licensed under the MIT License and is fully test-covered.
 
