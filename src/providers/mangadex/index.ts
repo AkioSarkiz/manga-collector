@@ -9,8 +9,8 @@ import {
   ScrapedListOfManga,
   ScrapedListOfMangaItem,
   Scraper,
-} from "../types/index.js";
-import { axios } from "../lib/index.js";
+} from "../../types/index.js";
+import { axios } from "../../lib/index.js";
 import urlJoin from "url-join";
 
 export class MangadexScraper implements Scraper {
