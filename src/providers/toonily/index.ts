@@ -11,10 +11,10 @@ import {
   ScrapedListOfMangaItem,
   ScrapedMangaStatus,
   Scraper,
-} from "../types/index.js";
-import { dayjs } from "../lib/index.js";
-import { convertToNumber, extractChapterIndex } from "../utils/index.js";
-import { axios } from "../lib/index.js";
+} from "../../types/index.js";
+import { dayjs } from "../../lib/index.js";
+import { convertToNumber, extractChapterIndex } from "../../utils/index.js";
+import { axios } from "../../lib/index.js";
 import urlJoin from "url-join";
 
 export class ToonilyScraper implements Scraper {
