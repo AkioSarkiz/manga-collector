@@ -11,3 +11,6 @@
 /src/
 /tests/
 /.github/
+
+# ignore assets
+/assets/

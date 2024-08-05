@@ -1,7 +1,7 @@
 import urlJoin from "url-join";
 import { axios } from "./index.js";
 import { AxiosInstance, AxiosRequestConfig } from "axios";
-import { SearchedSeriesResponse, SeriesResponse } from "../types";
+import { SearchedSeriesResponse, SeriesResponse } from "../types/index";
 import { decode } from "html-entities";
 
 export class MangaUpdatesClient {
