@@ -14,3 +14,6 @@
 
 # ignore assets
 /assets/
+
+# ignore docs
+/docs/
