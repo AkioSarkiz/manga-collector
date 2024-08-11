@@ -85,6 +85,29 @@ main()
 `}
     </CodeBlock>
   </TabItem>
+  <TabItem value="mangafire" label="Mangafire">
+    <CodeBlock language="js" showLineNumbers>
+{`import { MangaScraperFactory, MangaSource } from "manga-collector";
+
+const main = async () => {
+  const url = "https://mangafire.to/manga/monster-no-niku-wo-kutte-itara-oui-no-tsuita-ken.xvqxv";
+
+  // First we need make a scraper via factory
+  const scraper = await MangaScraperFactory.make(MangaSource.MANGAFIRE);
+
+  // Second we scrape data from the website
+  const result = await scraper.getDetailedManga(url);
+
+  // Then we can see the result of scraping
+  console.log(result);
+};
+
+main()
+  .then(() => console.log("Done"))
+  .catch(console.error);
+`}
+    </CodeBlock>
+  </TabItem>
 </Tabs>
 
 ### `getDetailedChapter(url: string)`
@@ -149,6 +172,29 @@ const main = async () => {
 
   // First we need make a scraper via factory
   const scraper = await MangaScraperFactory.make(MangaSource.TOONILY);
+
+  // Second we scrape data from the website
+  const result = await scraper.getDetailedChapter(url);
+
+  // Then we can see the result of scraping
+  console.log(result);
+};
+
+main()
+  .then(() => console.log("Done"))
+  .catch(console.error);
+`}
+    </CodeBlock>
+  </TabItem>
+  <TabItem value="mangafire" label="Mangafire">
+    <CodeBlock language="js" showLineNumbers>
+{`import { MangaScraperFactory, MangaSource } from "manga-collector";
+
+const main = async () => {
+  const url = "https://mangafire.to/read/monster-no-niku-wo-kutte-itara-oui-no-tsuita-ken.xvqxv/en/chapter-1";
+
+  // First we need make a scraper via factory
+  const scraper = await MangaScraperFactory.make(MangaSource.MANGAFIRE);
 
   // Second we scrape data from the website
   const result = await scraper.getDetailedChapter(url);
@@ -241,6 +287,29 @@ main()
 `}
     </CodeBlock>
   </TabItem>
+  <TabItem value="toonily" label="Toonily">
+    <CodeBlock language="js" showLineNumbers>
+{`import { MangaScraperFactory, MangaSource } from "manga-collector";
+
+const main = async () => {
+  // First we need make a scraper via factory
+  const scraper = await MangaScraperFactory.make(MangaSource.MANGAFIRE);
+
+  // Second we scrape data from the website
+  const firstPage = await scraper.getLatestUpdates();
+  const secondPage = await scraper.getLatestUpdates(2);
+
+  // Then we can see the result of scraping
+  console.log(firstPage);
+  console.log(secondPage);
+};
+
+main()
+  .then(() => console.log("Done"))
+  .catch(console.error);
+`}
+    </CodeBlock>
+  </TabItem>
 </Tabs>
 
 ### `search(query: string)`
@@ -299,6 +368,27 @@ main()
 const main = async () => {
   // First we need make a scraper via factory
   const scraper = await MangaScraperFactory.make(MangaSource.TOONILY);
+
+  // Second we scrape data from the website
+  const list = await scraper.search("san");
+
+  // Then we can see the result of scraping
+  console.log(list);
+};
+
+main()
+  .then(() => console.log("Done"))
+  .catch(console.error);
+`}
+    </CodeBlock>
+  </TabItem>
+  <TabItem value="toonily" label="Toonily">
+    <CodeBlock language="js" showLineNumbers>
+{`import { MangaScraperFactory, MangaSource } from "manga-collector";
+
+const main = async () => {
+  // First we need make a scraper via factory
+  const scraper = await MangaScraperFactory.make(MangaSource.MANGAFIRE);
 
   // Second we scrape data from the website
   const list = await scraper.search("san");
