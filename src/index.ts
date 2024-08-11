@@ -7,6 +7,7 @@ export enum MangaSource {
   MANGANATO = "manganato",
   MANGADEX = "mangadex",
   TOONILY = "toonily",
+  MANGAFIRE = "mangafire",
 }
 
 export enum ExternalSource {
