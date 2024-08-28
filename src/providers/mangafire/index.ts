@@ -118,9 +118,13 @@ export class MangafireScraper implements Scraper {
 
     const urlObj = new URL(url);
     const chapterId = urlObj.pathname.split("/")[2].split(".").pop();
-    const response = await axios.get(urlJoin(this.baseUrl, `ajax/read/${chapterId}/chapter/ja`));
+    const response = await axios.get(urlJoin(this.baseUrl, `ajax/read/${chapterId}/chapter/en`));
     const $ = cheerio.load(response.data.result.html);
     const realChapterId = Number($("[data-id]").data("id"));
+
+    if (Number.isNaN(realChapterId)) {
+      throw Error("Failed to get real chapter id");
+    }
 
     const { data }: { data: { result: { images: Array<string[]> } } } = await axios.get(
       urlJoin(this.baseUrl, `ajax/read/chapter/${realChapterId}`)

@@ -2,7 +2,7 @@ import { MangaScraperFactory, MangaSource } from "../../index.js";
 import fs from "fs";
 
 const main = async () => {
-  const url = "https://mangafire.to/read/kiritani-san-chossore-kuunsu-ka.59pzm/ja/chapter-1";
+  const url = "https://mangafire.to/read/mushibamihime.qn0q5/en/chapter-6";
   const filename = "detailed-chapter.json";
 
   const scraper = await MangaScraperFactory.make(MangaSource.MANGAFIRE);

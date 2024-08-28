@@ -1,6 +1,5 @@
 import { MangaSource, Scraper } from "./index.js";
-import { ToonilyScraper, ManganatoScraper, MangadexScraper } from "./providers/index.js";
-import { MangafireScraper } from "./providers/mangafire/index.js";
+import { ToonilyScraper, ManganatoScraper, MangadexScraper, MangafireScraper } from "./providers/index.js";
 
 export class MangaScraperFactory {
   /**
