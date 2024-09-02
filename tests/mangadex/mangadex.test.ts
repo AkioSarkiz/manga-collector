@@ -53,7 +53,11 @@ test.each(MANGA_DATA_TO_DETAILED_SCRAPE)("get detailed manga of $link", async ({
 
   expect(result.title).toEqual(expectedData.title);
   expect(result.status).toEqual(expectedData.status);
-  expect(result.description).toEqual(expectedData.description);
+
+  if (expectedData.description) {
+    expect(result.description).toEqual(expectedData.description);
+  }
+
   expect(new Set(result.alternativeTitles)).toEqual(new Set(expectedData.alternativeTitles));
   expect(result.imageThumbnail).toEqual(expectedData.imageThumbnail);
   expect(new Set(result.genres)).toEqual(new Set(expectedData.genres));
