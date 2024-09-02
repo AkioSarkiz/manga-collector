@@ -3,6 +3,7 @@
 # Ignore test-related files
 /coverage.data
 /coverage/
+vitest.config.mts
 
 # macos
 .DS_Store
@@ -11,6 +12,9 @@
 /src/
 /tests/
 /.github/
+.prettierrc
+tsup.config.ts
+tsconfig.json
 
 # ignore assets
 /assets/

@@ -69,8 +69,9 @@ export interface ScrapedDetailedChapterFrame {
 
 export interface ScrapedDetailedChapter {
   url: string;
-  title: string;
   frames: ScrapedDetailedChapterFrame[];
+
+  title?: string;
 }
 
 export type ScrapedListOfMangaItem = {
