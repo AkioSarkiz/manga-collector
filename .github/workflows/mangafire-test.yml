@@ -2,9 +2,9 @@ name: Test scrape mangafire
 
 on:
   push:
-    branches: ["main"]
+    branches: ["never"]
   pull_request:
-    branches: ["main"]
+    branches: ["never"]
 
 jobs:
   test:
