@@ -11,7 +11,7 @@ import {
   Scraper,
 } from "../../types/index.js";
 import { axios } from "../../lib/index.js";
-import urlJoin from "url-join";
+import { urlJoin } from "../../functions.js";
 
 export class MangadexScraper implements Scraper {
   private readonly baseUrl: string = "https://mangadex.org";

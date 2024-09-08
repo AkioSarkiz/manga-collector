@@ -12,7 +12,7 @@ import {
 } from "../../index.js";
 import * as cheerio from "cheerio";
 import { axios } from "../../lib/axios.js";
-import urlJoin from "url-join";
+import { urlJoin } from "../../functions.js";
 
 export class MangafireScraper implements Scraper {
   private readonly baseUrl = "https://mangafire.to";

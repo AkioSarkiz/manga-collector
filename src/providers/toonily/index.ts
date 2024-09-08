@@ -15,7 +15,7 @@ import {
 import { dayjs } from "../../lib/index.js";
 import { convertToNumber, extractChapterIndex } from "../../utils/index.js";
 import { axios } from "../../lib/index.js";
-import urlJoin from "url-join";
+import { urlJoin } from "../../functions.js";
 
 export class ToonilyScraper implements Scraper {
   private readonly baseUrl: string = "https://toonily.com/";
