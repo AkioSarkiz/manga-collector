@@ -1,5 +1,5 @@
 import * as cheerio from "cheerio";
-import {
+import type {
   ScrapedArtist,
   ScrapedAuthor,
   ScrapedChapter,
@@ -11,7 +11,7 @@ import {
   ScrapedListOfMangaItem,
   ScrapedMangaStatus,
   Scraper,
-} from "../../types/index.js";
+} from "../../types/index.d.js";
 import { dayjs } from "../../lib/index.js";
 import { convertToNumber, extractChapterIndex } from "../../utils/index.js";
 import { axios } from "../../lib/index.js";

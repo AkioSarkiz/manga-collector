@@ -1,4 +1,4 @@
-import {
+import type {
   ScrapedArtist,
   ScrapedAuthor,
   ScrapedChapter,
@@ -9,7 +9,7 @@ import {
   ScrapedListOfManga,
   ScrapedListOfMangaItem,
   Scraper,
-} from "../../types/index.js";
+} from "../../types/index.d.js";
 import { axios } from "../../lib/index.js";
 import { urlJoin } from "../../functions.js";
 
