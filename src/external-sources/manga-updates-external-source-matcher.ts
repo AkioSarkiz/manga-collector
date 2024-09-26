@@ -1,33 +1,41 @@
 import { MangaUpdatesClient } from "../lib/index.js";
-import { ScrapedDetailedManga, ExternalSource } from "../index.js";
+import {
+  type ScrapedDetailedManga,
+  ExternalSource,
+  AbstractExternalSourceMatcher,
+  ExternalSourceMatcher,
+} from "../index.js";
 import diacritics from "diacritics";
 
-export class MangaUpdatesExternalSourceMatcher {
+export class MangaUpdatesExternalSourceMatcher implements ExternalSourceMatcher {
   private readonly mangaUpdatesClient: MangaUpdatesClient;
 
-  public constructor(private readonly detailedManga: ScrapedDetailedManga) {
-    this.mangaUpdatesClient = new MangaUpdatesClient();
-  }
-
-  private compareDiacriticsStrings(str1: string, str2: string): boolean {
+  protected compareDiacriticsStrings(str1: string, str2: string): boolean {
     const normalizedStr1 = diacritics.remove(str1);
     const normalizedStr2 = diacritics.remove(str2);
 
-    return normalizedStr1 === normalizedStr2;
+    return normalizedStr1.toLowerCase() === normalizedStr2.toLowerCase();
+  }
+
+  public constructor(private readonly detailedManga: ScrapedDetailedManga) {
+    // super();
+
+    this.mangaUpdatesClient = new MangaUpdatesClient();
   }
 
   public async tryMatchExternalSource(): Promise<ScrapedDetailedManga> {
+    const clonedDetailedManga = { ...this.detailedManga };
     const response = await this.mangaUpdatesClient.searchSeries(this.detailedManga.title);
 
     if (response.results.length === 0) {
-      return this.detailedManga;
+      return clonedDetailedManga;
     }
 
     for (let i = 0; i < 3 && i < response.results.length; i++) {
       const result = response.results[i];
       const series = await this.mangaUpdatesClient.getSeriesById(result.record.series_id);
 
-      const isTitleMatch = series.title.toLowerCase() === this.detailedManga.title.toLowerCase();
+      const isTitleMatch = this.compareDiacriticsStrings(series.title, this.detailedManga.title);
 
       const isTitleMatchInAlternativeNames = series.associated
         .map((v) => v.title.toLowerCase())
@@ -62,11 +70,11 @@ export class MangaUpdatesExternalSourceMatcher {
       const isMatch = (isAuthorMatch || isArtistMatch) && (isTitleMatch || isTitleMatchInAlternativeNames);
 
       if (isMatch) {
-        if (!this.detailedManga.externalSources) {
-          this.detailedManga.externalSources = [];
+        if (!clonedDetailedManga.externalSources) {
+          clonedDetailedManga.externalSources = [];
         }
 
-        this.detailedManga.externalSources.push({
+        clonedDetailedManga.externalSources.push({
           name: ExternalSource.MANGA_UPDATES,
           data: series,
           url: series.url,
@@ -76,6 +84,6 @@ export class MangaUpdatesExternalSourceMatcher {
       }
     }
 
-    return this.detailedManga;
+    return clonedDetailedManga;
   }
 }

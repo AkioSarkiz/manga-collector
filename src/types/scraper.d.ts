@@ -1,3 +1,4 @@
+import { IManga } from "@shineiichijo/marika";
 import { SeriesResponse } from "./manga-updates.js";
 
 export type ScrapedMangaStatus = "ongoing" | "completed" | "hiatus" | "cancelled";
@@ -34,7 +35,7 @@ export interface ScrapedAuthor {
 export interface ExternalSource {
   name: ExternalSourceName;
   url: string;
-  data: SeriesResponse;
+  data: SeriesResponse | IManga;
 }
 
 export interface ScrapedDetailedManga {
