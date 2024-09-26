@@ -5,12 +5,15 @@ title: Intro
 
 # The manga-collector
 
-[![License](https://img.shields.io/badge/license-MIT-blue)](https://opensource.org/licenses/MIT)
+![banner](assets/manga-collector-banner.jpg)
+
+##  [Full Documentation](https://akiosarkiz.github.io/manga-collector/)
 
 The manga-collector is a library designed to easily scrape manga content from various websites. This package is licensed under the MIT License and is fully test-covered.
 
 ## Features
 
+- Supports Nodejs, Deno, Bun runtimes
 - Scrapes manga chapters, titles, images, and other metadata.
 - Supports multiple popular manga websites.
 - Provides a simple and intuitive API for easy integration.
@@ -21,26 +24,21 @@ The manga-collector currently supports the following manga websites (updating):
 
 NOTE: By default github caches images, so it makes sense to turn off browser caching to see actual status
 
-| **Website** |                                                                                                  **Status**                                                                                                  |
-| :---------: | :----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------: |
-|  Manganato  | [![Test scrape manganato](https://github.com/AkioSarkiz/manga-collector/actions/workflows/manganato-test.yml/badge.svg)](https://github.com/AkioSarkiz/manga-collector/actions/workflows/manganato-test.yml) |
-|   Toonily   |    [![Test scrape toonily](https://github.com/AkioSarkiz/manga-collector/actions/workflows/toonily-test.yml/badge.svg)](https://github.com/AkioSarkiz/manga-collector/actions/workflows/toonily-test.yml)    |
-|  Mangadex   |  [![Test scrape mangadex](https://github.com/AkioSarkiz/manga-collector/actions/workflows/mangadex-test.yml/badge.svg)](https://github.com/AkioSarkiz/manga-collector/actions/workflows/mangadex-test.yml)   |
-|  Mangafire   |  [![Test scrape mangafire](https://github.com/AkioSarkiz/manga-collector/actions/workflows/mangafire-test.yml/badge.svg)](https://github.com/AkioSarkiz/manga-collector/actions/workflows/mangafire-test.yml)   |
+|        **Website**        |                                                                                           **Status**                                                                                           |
+| :-----------------------: | :--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------: |
+|         Manganato         | [![Test scrape manganato](https://github.com/AkioSarkiz/manga-collector/actions/workflows/manganato-test.yml/badge.svg)](https://github.com/AkioSarkiz/manga-collector/actions/workflows/manganato-test.yml) |
+|          Toonily          |    [![Test scrape toonily](https://github.com/AkioSarkiz/manga-collector/actions/workflows/toonily-test.yml/badge.svg)](https://github.com/AkioSarkiz/manga-collector/actions/workflows/toonily-test.yml)    |
+|         Mangadex          |  [![Test scrape mangadex](https://github.com/AkioSarkiz/manga-collector/actions/workflows/mangadex-test.yml/badge.svg)](https://github.com/AkioSarkiz/manga-collector/actions/workflows/mangadex-test.yml)   |
+|         MangaFire          |  Not supported auto-status  |   
 
-## Requirements
 
-- Node version 20.x and above
+### How to install
 
-## How to install
+The package uses JSR repository and supports Deno, Node, Bun. Installation commands you can find here https://jsr.io/@akiosarkiz/manga-collector
 
-```bash
-npm install manga-collector
-```
+### How to use (Node.js example)
 
-## Basic usage
-
-This package contains examples of code that you can use and modify. They are located in `examples` folder.
+This package contains examples of code that you can use and modify. They are located in `src/examples` folder.
 
 Here is a simple example how you can use that package
 
@@ -69,7 +67,7 @@ console.log(await scraper.getDetailedManga("manga url here"));
 // }
 ```
 
-## Available methods
+### Available methods
 
 | Method             | Description                  |
 | ------------------ | ---------------------------- |
