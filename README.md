@@ -1,3 +1,5 @@
+### THE PROJECT HAS MIGRATED TO THE JSR REGISTRY SINCE 1.9.2. PLEASE USE JSR REPOSITORY https://jsr.io/@akiosarkiz/manga-collector
+
 # The manga-collector
 
 ![banner](assets/manga-collector-banner.jpg)
