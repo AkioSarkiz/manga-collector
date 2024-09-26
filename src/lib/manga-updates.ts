@@ -1,6 +1,6 @@
 import { axios } from "./index.js";
 import { AxiosInstance, AxiosRequestConfig } from "axios";
-import { SearchedSeriesResponse, SeriesResponse } from "../types/index";
+import type { SearchedSeriesResponse, SeriesResponse } from "../types/index.d.js";
 import { decode } from "html-entities";
 import { urlJoin } from "../functions.js";
 

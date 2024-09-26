@@ -1,4 +1,4 @@
-import {
+import type {
   ScrapedAuthor,
   ScrapedChapter,
   ScrapedDetailedChapter,
@@ -9,7 +9,7 @@ import {
   ScrapedListOfMangaItem,
   ScrapedMangaStatus,
   Scraper,
-} from "../../types/index.js";
+} from "../../types/index.d.js";
 import {
   convertToNumber,
   extractChapterIndex,

@@ -10,6 +10,7 @@ The manga-collector is a library designed to easily scrape manga content from va
 
 ## Features
 
+- Supports Nodejs, Deno, Bun runtimes
 - Scrapes manga chapters, titles, images, and other metadata.
 - Supports multiple popular manga websites.
 - Provides a simple and intuitive API for easy integration.
@@ -27,17 +28,12 @@ NOTE: By default github caches images, so it makes sense to turn off browser cac
 |         Mangadex          |  [![Test scrape mangadex](https://github.com/AkioSarkiz/manga-collector/actions/workflows/mangadex-test.yml/badge.svg)](https://github.com/AkioSarkiz/manga-collector/actions/workflows/mangadex-test.yml)   |
 |         MangaFire          |  Not supported auto-status  |   
 
-## Requirements
-
-- Node version 20.x and above
 
 ### How to install
 
-```bash
-npm install manga-collector
-```
+The package uses JSR repository and supports Deno, Node, Bun. Installation commands you can find here https://jsr.io/@akiosarkiz/manga-collector
 
-### How to use
+### How to use (Node.js example)
 
 This package contains examples of code that you can use and modify. They are located in `src/examples` folder.
 
