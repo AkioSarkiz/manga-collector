@@ -87,7 +87,7 @@ export type ScrapedListOfManga = {
    * Total count of manga
    */
   totalData?: number;
-  
+
   /**
    * Total count of pages
    */
@@ -102,47 +102,47 @@ export type ScrapedListOfManga = {
 export interface Scraper {
   /**
    * Initialization of scraper, it should be called before any other method
-   * 
+   *
    * @returns Promise<void>
    */
   init: () => Promise<void>;
 
   /**
    * Shutdown of scraper, it should be called after any other method
-   * 
+   *
    * @returns Promise<void>
    */
   shutdown: () => Promise<void>;
 
   /**
    * Get detailed information about manga by url
-   * 
-   * @param {string} url 
+   *
+   * @param {string} url
    * @returns {Promise<ScrapedDetailedManga>}
    */
   getDetailedManga: (url: string) => Promise<ScrapedDetailedManga>;
 
   /**
    * Get detailed information about chapter by url
-   * 
-   * @param {string} url 
+   *
+   * @param {string} url
    * @returns {Promise<ScrapedDetailedChapter>}
    */
   getDetailedChapter: (url: string) => Promise<ScrapedDetailedChapter>;
 
   /**
    * Get latest updates
-   * 
-   * @param {number} page 
+   *
+   * @param {number} page
    * @returns {Promise<ScrapedListOfManga>}
    */
   getLatestUpdates: (page?: number) => Promise<ScrapedListOfManga>;
 
   /**
    * Search manga with query
-   * 
-   * @param {string} search query 
-   * @param {number} page 
+   *
+   * @param {string} search query
+   * @param {number} page
    * @returns {Promise<ScrapedListOfManga>}
    */
   search: (query: string, page?: number) => Promise<ScrapedListOfManga>;

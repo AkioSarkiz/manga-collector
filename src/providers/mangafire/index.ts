@@ -127,7 +127,7 @@ export class MangafireScraper implements Scraper {
     }
 
     const { data }: { data: { result: { images: Array<string[]> } } } = await axios.get(
-      urlJoin(this.baseUrl, `ajax/read/chapter/${realChapterId}`)
+      urlJoin(this.baseUrl, `ajax/read/chapter/${realChapterId}`),
     );
 
     data.result.images.forEach((image, i) => {
@@ -212,7 +212,7 @@ export class MangafireScraper implements Scraper {
 
     return await this.parseDashboardPage(
       `filter?keyword=${encodeURI(query)}&language[]=en&sort=release_date&page=${page}`,
-      page
+      page,
     );
   }
 }

@@ -7,11 +7,11 @@ export interface ExternalSourceMatcher {
    * @example example of getting the name
    * ``ts
    * const name = externalSourceMatcher.getSourceName();
-   * 
+   *
    * console.log(name); // "manga-updates"
    * ```
    */
-  public getSourceName(): string;
+  getSourceName(): string;
 
   /**
    * Tries to match the manga with the external source.
@@ -25,5 +25,5 @@ export interface ExternalSourceMatcher {
    * console.log(matchedManga.externalSources);
    * ```
    */
-  public tryMatchExternalSource(): Promise<ScrapedDetailedManga>;
+  tryMatchExternalSource(): Promise<ScrapedDetailedManga>;
 }

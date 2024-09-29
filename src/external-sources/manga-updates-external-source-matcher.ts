@@ -30,7 +30,7 @@ export class MangaUpdatesExternalSourceMatcher implements ExternalSourceMatcher 
       const isTitleMatchInAlternativeNames = series.associated
         .map((v) => v.title.toLowerCase())
         .some((formattedAssociatedTitle) =>
-          compareDiacriticsStrings(formattedAssociatedTitle, this.detailedManga.title.toLowerCase())
+          compareDiacriticsStrings(formattedAssociatedTitle, this.detailedManga.title.toLowerCase()),
         );
 
       const isAuthorMatch = series.authors
@@ -40,8 +40,8 @@ export class MangaUpdatesExternalSourceMatcher implements ExternalSourceMatcher 
 
           return Boolean(
             formattedMangaAuthors?.some((formattedMangaAuthor) =>
-              compareDiacriticsStrings(formattedMangaAuthor, formattedSeriesAuthor)
-            )
+              compareDiacriticsStrings(formattedMangaAuthor, formattedSeriesAuthor),
+            ),
           );
         });
 
@@ -52,8 +52,8 @@ export class MangaUpdatesExternalSourceMatcher implements ExternalSourceMatcher 
 
           return Boolean(
             formattedMangaArtists?.some((formattedMangaArtist) =>
-              compareDiacriticsStrings(formattedMangaArtist, formattedSeriesAuthor)
-            )
+              compareDiacriticsStrings(formattedMangaArtist, formattedSeriesAuthor),
+            ),
           );
         });
 

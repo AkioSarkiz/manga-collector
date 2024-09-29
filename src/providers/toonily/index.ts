@@ -47,8 +47,8 @@ export class ToonilyScraper implements Scraper {
             .split("/")
             .at(-1)
         : page !== undefined
-        ? page
-        : 1
+          ? page
+          : 1,
     );
 
     return {
@@ -227,8 +227,8 @@ export class ToonilyScraper implements Scraper {
             .split("/")
             .at(-1)
         : page !== undefined
-        ? page
-        : 1
+          ? page
+          : 1,
     );
 
     return {

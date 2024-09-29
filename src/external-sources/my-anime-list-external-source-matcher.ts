@@ -30,7 +30,7 @@ export class MyAnimeListExternalSourceMatcher implements ExternalSourceMatcher {
       const isTitleMatchInAlternativeNames = manga.titles
         .map((v) => v.title)
         .some((formattedAssociatedTitle) =>
-          compareDiacriticsStrings(formattedAssociatedTitle, this.detailedManga.title)
+          compareDiacriticsStrings(formattedAssociatedTitle, this.detailedManga.title),
         );
 
       const isAuthorMatch = manga.authors
@@ -40,8 +40,8 @@ export class MyAnimeListExternalSourceMatcher implements ExternalSourceMatcher {
 
           return Boolean(
             formattedMangaAuthors?.some((formattedMangaAuthor) =>
-              compareDiacriticsStrings(formattedMangaAuthor, formattedSeriesAuthor)
-            )
+              compareDiacriticsStrings(formattedMangaAuthor, formattedSeriesAuthor),
+            ),
           );
         });
 
@@ -52,8 +52,8 @@ export class MyAnimeListExternalSourceMatcher implements ExternalSourceMatcher {
 
           return Boolean(
             formattedMangaArtists?.some((formattedMangaArtist) =>
-              compareDiacriticsStrings(formattedMangaArtist, formattedSeriesAuthor)
-            )
+              compareDiacriticsStrings(formattedMangaArtist, formattedSeriesAuthor),
+            ),
           );
         });
 
