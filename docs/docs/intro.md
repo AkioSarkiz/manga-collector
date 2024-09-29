@@ -5,7 +5,7 @@ title: Intro
 
 # The manga-collector
 
-![banner](assets/manga-collector-banner.jpg)
+![banner](https://i.ibb.co/HC4wFkC/manga-collector-banner.jpg)
 
 ##  [Full Documentation](https://akiosarkiz.github.io/manga-collector/)
 
@@ -43,7 +43,7 @@ This package contains examples of code that you can use and modify. They are loc
 Here is a simple example how you can use that package
 
 ```typescript
-import { MangaScraperFactory, MangaSource } from "manga-collector";
+import { MangaScraperFactory, MangaSource } from "@akiosarkiz/manga-collector";
 
 const scraper = await MangaScraperFactory.make(MangaSource.MANGANATO);
 

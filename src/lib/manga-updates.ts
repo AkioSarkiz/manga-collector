@@ -9,7 +9,7 @@ export class MangaUpdatesClient {
   private readonly axios: AxiosInstance;
 
   private readonly config = {
-    request_retry: 5,
+    requestRetry: 5,
   };
 
   public constructor() {
@@ -23,7 +23,7 @@ export class MangaUpdatesClient {
   private async callRequest<T>(request: AxiosRequestConfig): Promise<T> {
     let lastError: unknown | null = null;
 
-    for (let i = 0; i < this.config.request_retry; i++) {
+    for (let i = 0; i < this.config.requestRetry; i++) {
       try {
         const response = await this.axios.request(request);
 

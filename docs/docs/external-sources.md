@@ -8,7 +8,7 @@ The manga collector supports external sources. Right now supported only one prov
 Usage example
 
 ```js
-import { MangaUpdatesExternalSourceMatcher } from "manga-collector";
+import { MangaUpdatesExternalSourceMatcher } from "@akiosarkiz/manga-collector";
 
 // It has to be detailed manga with type ScrapedDetailedManga.
 const detailedManga = null;

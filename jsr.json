@@ -2,5 +2,16 @@
   "name": "@akiosarkiz/manga-collector",
   "version": "1.10.0",
   "exports": "./src/index.ts",
-  "exclude": ["tests", "docs", ".github", ".vscode", "vitest.config.mts", ".gitignore", "tsconfig.json"]
+  "exclude": [
+    "tests",
+    "docs",
+    ".github",
+    ".vscode",
+    "vitest.config.mts",
+    ".gitignore",
+    "tsconfig.json",
+    "assets",
+    ".prettierrc",
+    "src/examples"
+  ]
 }

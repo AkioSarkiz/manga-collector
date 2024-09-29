@@ -9,7 +9,3 @@ export enum MangaSource {
   TOONILY = "toonily",
   MANGAFIRE = "mangafire",
 }
-
-export enum ExternalSource {
-  MANGA_UPDATES = "manga-updates",
-}
