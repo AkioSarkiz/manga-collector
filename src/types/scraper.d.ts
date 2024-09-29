@@ -1,8 +1,8 @@
+import { IManga } from "@shineiichijo/marika";
 import { SeriesResponse } from "./manga-updates.js";
 
 export type ScrapedMangaStatus = "ongoing" | "completed" | "hiatus" | "cancelled";
 export type ScrapedMangaType = "manga" | "novel" | "one-shot" | "doujin" | "manhwa" | "manhua";
-export type ExternalSourceName = "manga-updates";
 
 export interface ScrapedGenre {
   name: string;
@@ -32,9 +32,9 @@ export interface ScrapedAuthor {
 }
 
 export interface ExternalSource {
-  name: ExternalSourceName;
+  name: string;
   url: string;
-  data: SeriesResponse;
+  data: SeriesResponse | IManga;
 }
 
 export interface ScrapedDetailedManga {
@@ -83,9 +83,14 @@ export type ScrapedListOfMangaItem = {
 export type ScrapedListOfManga = {
   currentPage: number;
 
-  // Total count of manga
+  /**
+   * Total count of manga
+   */
   totalData?: number;
-  // Total count of pages
+  
+  /**
+   * Total count of pages
+   */
   totalPages?: number;
 
   canPrev?: boolean;
@@ -95,11 +100,50 @@ export type ScrapedListOfManga = {
 };
 
 export interface Scraper {
+  /**
+   * Initialization of scraper, it should be called before any other method
+   * 
+   * @returns Promise<void>
+   */
   init: () => Promise<void>;
+
+  /**
+   * Shutdown of scraper, it should be called after any other method
+   * 
+   * @returns Promise<void>
+   */
   shutdown: () => Promise<void>;
 
+  /**
+   * Get detailed information about manga by url
+   * 
+   * @param {string} url 
+   * @returns {Promise<ScrapedDetailedManga>}
+   */
   getDetailedManga: (url: string) => Promise<ScrapedDetailedManga>;
+
+  /**
+   * Get detailed information about chapter by url
+   * 
+   * @param {string} url 
+   * @returns {Promise<ScrapedDetailedChapter>}
+   */
   getDetailedChapter: (url: string) => Promise<ScrapedDetailedChapter>;
+
+  /**
+   * Get latest updates
+   * 
+   * @param {number} page 
+   * @returns {Promise<ScrapedListOfManga>}
+   */
   getLatestUpdates: (page?: number) => Promise<ScrapedListOfManga>;
+
+  /**
+   * Search manga with query
+   * 
+   * @param {string} search query 
+   * @param {number} page 
+   * @returns {Promise<ScrapedListOfManga>}
+   */
   search: (query: string, page?: number) => Promise<ScrapedListOfManga>;
 }

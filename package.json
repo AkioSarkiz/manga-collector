@@ -1,6 +1,5 @@
 {
   "name": "manga-collector",
-  "version": "1.9.2",
   "description": "The manga-collector",
   "main": "./dist/index.js",
   "module": "./dist/index.mjs",
@@ -42,6 +41,7 @@
     "npm": "10.8.2"
   },
   "dependencies": {
+    "@shineiichijo/marika": "^3.0.1",
     "axios": "^1.6.8",
     "cheerio": "^1.0.0-rc.12",
     "dayjs": "^1.11.11",
