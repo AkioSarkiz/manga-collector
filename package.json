@@ -1,16 +1,6 @@
 {
   "name": "manga-collector",
   "description": "The manga-collector",
-  "main": "./dist/index.js",
-  "module": "./dist/index.mjs",
-  "types": "./dist/index.d.mts",
-  "exports": {
-    ".": {
-      "require": "./dist/index.js",
-      "import": "./dist/index.mjs",
-      "types": "./dist/index.d.mts"
-    }
-  },
   "scripts": {
     "test": "vitest run",
     "coverage": "vitest run --coverage"

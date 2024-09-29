@@ -1,6 +1,6 @@
 {
   "name": "@akiosarkiz/manga-collector",
-  "version": "1.15.0",
+  "version": "1.16.0",
   "exports": "./src/index.ts",
   "exclude": [
     "tests",
