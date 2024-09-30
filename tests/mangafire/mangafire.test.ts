@@ -1,5 +1,5 @@
 import { describe, test, expect } from "vitest";
-import { MangaSource, MangaScraperFactory } from "../../src/index.js";
+import { MangaSource, MangaScraperFactory } from "../../src/index";
 import path from "node:path";
 
 const MANGA_DATA_TO_DETAILED_SCRAPE = [

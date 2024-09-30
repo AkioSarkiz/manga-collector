@@ -1,5 +1,7 @@
 import { ManipulateType } from "dayjs";
-import { dayjs } from "../lib/index.js";
+import { dayjs } from "../lib";
+
+export { extractChapterIndex } from "./chapter";
 
 /**
  * Checks if a given string consists only of numbers.
@@ -89,5 +91,3 @@ export const extractNumbersFromStrings = (input: string): number[] => {
     return [];
   }
 };
-
-export { extractChapterIndex } from "./chapter.js";

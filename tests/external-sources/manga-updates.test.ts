@@ -1,6 +1,6 @@
 import { expect, test } from "vitest";
 import path from "path";
-import { MangaUpdatesExternalSourceMatcher } from "../../src/index.js";
+import { MangaUpdatesExternalSourceMatcher } from "../../src/index";
 
 const MANGA_LINK_DATA = [
   {

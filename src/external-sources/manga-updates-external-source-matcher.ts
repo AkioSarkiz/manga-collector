@@ -1,6 +1,6 @@
-import { MangaUpdatesClient } from "../lib/index.js";
-import { type ScrapedDetailedManga, type ExternalSourceMatcher } from "../index.js";
-import { compareDiacriticsStrings } from "./functions.js";
+import { MangaUpdatesClient } from "../lib/index";
+import { type ScrapedDetailedManga, type ExternalSourceMatcher } from "../index";
+import { compareDiacriticsStrings } from "./functions";
 
 export class MangaUpdatesExternalSourceMatcher implements ExternalSourceMatcher {
   private readonly mangaUpdatesClient: MangaUpdatesClient;

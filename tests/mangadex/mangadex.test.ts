@@ -1,6 +1,5 @@
 import { expect, test } from "vitest";
-import { MangaSource } from "../../src/index.js";
-import { MangaScraperFactory } from "../../src/factory.js";
+import { MangaScraperFactory, MangaSource } from "../../src/index";
 import path from "path";
 
 const MANGA_DATA_TO_SEARCH_SCRAPE = [{ query: "san" }, { query: "attack on titan" }, { query: "one piece" }];
@@ -95,12 +94,15 @@ test.each(MANGA_DATA_TO_DETAILED_SCRAPE)("get detailed manga of $link", async ({
   }
 });
 
-test.each(MANGA_DATA_TO_DETAILED_CHAPTER_SCRAPE)("get detailed chapter of $link", async ({ link, expectedDataPath }) => {
-  const expectedData = { ...(await import(expectedDataPath)) };
-  const scraper = await MangaScraperFactory.make(MangaSource.MANGADEX);
-  const result = await scraper.getDetailedChapter(link);
+test.each(MANGA_DATA_TO_DETAILED_CHAPTER_SCRAPE)(
+  "get detailed chapter of $link",
+  async ({ link, expectedDataPath }) => {
+    const expectedData = { ...(await import(expectedDataPath)) };
+    const scraper = await MangaScraperFactory.make(MangaSource.MANGADEX);
+    const result = await scraper.getDetailedChapter(link);
 
-  expect(result.title).toEqual(expectedData.title);
-  expect(result.url).toEqual(expectedData.url);
-  expect(new Set(result.frames)).toEqual(new Set(expectedData.frames));
-});
+    expect(result.title).toEqual(expectedData.title);
+    expect(result.url).toEqual(expectedData.url);
+    expect(new Set(result.frames)).toEqual(new Set(expectedData.frames));
+  }
+);

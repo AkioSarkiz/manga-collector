@@ -5,14 +5,14 @@ import {
   ScrapedDetailedManga,
   ScrapedListOfManga,
   ScrapedDetailedChapter,
-} from "../../src/index.js";
+} from "../../src/index";
 
 describe("should load latest manga", async () => {
   const scraper = await MangaScraperFactory.make(MangaSource.MANGAFIRE);
 
   test("without any props", async () => {
     const result = await scraper.getLatestUpdates();
-    
+
     expect(result.data.length).toBeGreaterThanOrEqual(1);
     expectTypeOf(result).toEqualTypeOf<ScrapedListOfManga>();
   });
@@ -28,18 +28,18 @@ describe("should load latest manga", async () => {
 test('should search "san"', async () => {
   const scraper = await MangaScraperFactory.make(MangaSource.MANGAFIRE);
   const result = await scraper.search("san");
-  
+
   expectTypeOf(result).toEqualTypeOf<ScrapedListOfManga>();
 });
 
-test('should get detailed manga information',async () => {
+test("should get detailed manga information", async () => {
   const scraper = await MangaScraperFactory.make(MangaSource.MANGAFIRE);
   const result = await scraper.getDetailedManga("https://mangafire.to/manga/mushibamihime.qn0q5");
 
   expectTypeOf(result).toEqualTypeOf<ScrapedDetailedManga>();
 });
 
-test('should get detailed chapter information', async () => {
+test("should get detailed chapter information", async () => {
   const scraper = await MangaScraperFactory.make(MangaSource.MANGAFIRE);
   const result = await scraper.getDetailedChapter("https://mangafire.to/read/mushibamihime.qn0q5/en/chapter-6");
 

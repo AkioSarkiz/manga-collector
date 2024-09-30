@@ -9,17 +9,17 @@ import type {
   ScrapedListOfMangaItem,
   ScrapedMangaStatus,
   Scraper,
-} from "../../types/index.d.js";
+} from "../../types/index";
 import {
   convertToNumber,
   extractChapterIndex,
   extractNumbersFromStrings,
   isOnlyNumbers,
   parseRelativeTime,
-} from "../../utils/index.js";
-import { dayjs } from "../../lib/index.js";
+} from "../../utils/index";
+import { dayjs } from "../../lib/index";
 import * as cheerio from "cheerio";
-import { axios } from "../../lib/index.js";
+import { axios } from "../../lib/index";
 
 interface ParsedTableRow {
   header: cheerio.Cheerio<cheerio.Element>;

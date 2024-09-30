@@ -1,7 +1,11 @@
 import { expectTypeOf, test } from "vitest";
-import { MangaSource } from "../../src/index.js";
-import { MangaScraperFactory } from "../../src/factory.js";
-import { ScrapedDetailedChapter, ScrapedDetailedManga, ScrapedListOfManga } from "../../src/index.js";
+import {
+  MangaSource,
+  MangaScraperFactory,
+  ScrapedDetailedChapter,
+  ScrapedDetailedManga,
+  ScrapedListOfManga,
+} from "../../src/index";
 
 test("search", async () => {
   const query = "test";
