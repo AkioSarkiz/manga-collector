@@ -1,5 +1,5 @@
 import { expectTypeOf, test } from "vitest";
-import { MangaUpdatesClient } from "../../src/lib/index.js";
+import { MangaUpdatesClient } from "../../src/lib/index";
 import { SearchedSeriesResponse } from "../../src";
 
 test("should search series", async () => {

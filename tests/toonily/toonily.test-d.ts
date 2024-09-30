@@ -1,7 +1,11 @@
 import { describe, expectTypeOf, test } from "vitest";
-import { MangaSource } from "../../src/index.js";
-import { MangaScraperFactory } from "../../src/factory.js";
-import { ScrapedDetailedChapter, ScrapedDetailedManga, ScrapedListOfManga } from "../../src/index.js";
+import {
+  MangaScraperFactory,
+  ScrapedDetailedChapter,
+  ScrapedDetailedManga,
+  ScrapedListOfManga,
+  MangaSource,
+} from "../../src/index";
 
 describe("check toonily types", async () => {
   const scraper = await MangaScraperFactory.make(MangaSource.TOONILY);

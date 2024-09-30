@@ -5,7 +5,7 @@ import {
   ScrapedDetailedManga,
   ScrapedListOfManga,
   ScrapedDetailedChapter,
-} from "../../src/index.js";
+} from "../../src/index";
 
 describe("should load latest manga", async () => {
   const scraper = await MangaScraperFactory.make(MangaSource.MANGANATO);

@@ -1,6 +1,6 @@
-import { type ScrapedDetailedManga, type ExternalSourceMatcher } from "../index.js";
+import { type ScrapedDetailedManga, type ExternalSourceMatcher } from "../index";
 import { Marika } from "@shineiichijo/marika";
-import { compareDiacriticsStrings } from "./functions.js";
+import { compareDiacriticsStrings } from "./functions";
 
 export class MyAnimeListExternalSourceMatcher implements ExternalSourceMatcher {
   private readonly marika: Marika;

@@ -1,4 +1,4 @@
-import { MangaScraperFactory, MangaSource } from "../../index.js";
+import { MangaScraperFactory, MangaSource } from "../../index";
 import fs from "fs";
 
 const main = async () => {

@@ -1,5 +1,5 @@
 import { IManga } from "@shineiichijo/marika";
-import { SeriesResponse } from "./manga-updates.js";
+import { SeriesResponse } from "./manga-updates";
 
 export type ScrapedMangaStatus = "ongoing" | "completed" | "hiatus" | "cancelled";
 export type ScrapedMangaType = "manga" | "novel" | "one-shot" | "doujin" | "manhwa" | "manhua";

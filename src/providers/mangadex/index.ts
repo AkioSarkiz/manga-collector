@@ -9,9 +9,9 @@ import type {
   ScrapedListOfManga,
   ScrapedListOfMangaItem,
   Scraper,
-} from "../../types/index.d.js";
-import { axios } from "../../lib/index.js";
-import { urlJoin } from "../../functions.js";
+} from "../../types";
+import { axios } from "../../lib";
+import { urlJoin } from "../../functions";
 
 export class MangadexScraper implements Scraper {
   private readonly baseUrl: string = "https://mangadex.org";

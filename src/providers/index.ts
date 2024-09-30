@@ -1,4 +1,4 @@
-export { MangadexScraper } from "./mangadex/index.js";
-export { ManganatoScraper } from "./manganato/index.js";
-export { ToonilyScraper } from "./toonily/index.js";
-export { MangafireScraper } from "./mangafire/index.js";
+export { MangadexScraper } from "./mangadex/index";
+export { ManganatoScraper } from "./manganato/index";
+export { ToonilyScraper } from "./toonily/index";
+export { MangafireScraper } from "./mangafire/index";

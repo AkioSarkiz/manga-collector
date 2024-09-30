@@ -11,11 +11,11 @@ import type {
   ScrapedListOfMangaItem,
   ScrapedMangaStatus,
   Scraper,
-} from "../../types/index.d.js";
-import { dayjs } from "../../lib/index.js";
-import { convertToNumber, extractChapterIndex } from "../../utils/index.js";
-import { axios } from "../../lib/index.js";
-import { urlJoin } from "../../functions.js";
+} from "../../types/index";
+import { dayjs } from "../../lib/index";
+import { convertToNumber, extractChapterIndex } from "../../utils/index";
+import { axios } from "../../lib/index";
+import { urlJoin } from "../../functions";
 
 export class ToonilyScraper implements Scraper {
   private readonly baseUrl: string = "https://toonily.com/";
