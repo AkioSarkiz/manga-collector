@@ -1,5 +1,5 @@
-import { MangaScraperFactory, MangaSource } from "../../index";
 import fs from "fs";
+import { MangaScraperFactory, MangaSource } from "../../index";
 
 const main = async () => {
   const url = "https://manganato.com/manga-vz956108";

@@ -1,4 +1,6 @@
 import * as cheerio from "cheerio";
+import { urlJoin } from "../../functions";
+import { axios, dayjs } from "../../lib/index";
 import type {
   ScrapedArtist,
   ScrapedAuthor,
@@ -12,10 +14,7 @@ import type {
   ScrapedMangaStatus,
   Scraper,
 } from "../../types/index";
-import { dayjs } from "../../lib/index";
 import { convertToNumber, extractChapterIndex } from "../../utils/index";
-import { axios } from "../../lib/index";
-import { urlJoin } from "../../functions";
 
 export class ToonilyScraper implements Scraper {
   private readonly baseUrl: string = "https://toonily.com/";

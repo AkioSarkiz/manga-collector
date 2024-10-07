@@ -1,3 +1,5 @@
+import * as cheerio from "cheerio";
+import { urlJoin } from "../../functions";
 import {
   ScrapedAuthor,
   ScrapedChapter,
@@ -10,9 +12,7 @@ import {
   ScrapedMangaStatus,
   Scraper,
 } from "../../index";
-import * as cheerio from "cheerio";
 import { axios } from "../../lib/axios";
-import { urlJoin } from "../../functions";
 
 export class MangafireScraper implements Scraper {
   private readonly baseUrl = "https://mangafire.to";

@@ -1,3 +1,5 @@
+import * as cheerio from "cheerio";
+import { axios, dayjs } from "../../lib/index";
 import type {
   ScrapedAuthor,
   ScrapedChapter,
@@ -17,9 +19,6 @@ import {
   isOnlyNumbers,
   parseRelativeTime,
 } from "../../utils/index";
-import { dayjs } from "../../lib/index";
-import * as cheerio from "cheerio";
-import { axios } from "../../lib/index";
 
 interface ParsedTableRow {
   header: cheerio.Cheerio<cheerio.Element>;

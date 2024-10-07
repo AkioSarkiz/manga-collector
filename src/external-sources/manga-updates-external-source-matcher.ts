@@ -1,5 +1,5 @@
+import { type ExternalSourceMatcher, type ScrapedDetailedManga } from "../index";
 import { MangaUpdatesClient } from "../lib/index";
-import { type ScrapedDetailedManga, type ExternalSourceMatcher } from "../index";
 import { compareDiacriticsStrings } from "./functions";
 
 export class MangaUpdatesExternalSourceMatcher implements ExternalSourceMatcher {

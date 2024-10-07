@@ -1,5 +1,5 @@
-import { MangaScraperFactory, MangaSource } from "../../index";
 import fs from "fs";
+import { MangaScraperFactory, MangaSource } from "../../index";
 
 const main = async () => {
   const url = "https://mangadex.org/chapter/0f7f932b-c426-46c6-9d36-2923ae3f7e13";

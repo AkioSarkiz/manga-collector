@@ -1,10 +1,10 @@
 import { describe, expectTypeOf, test } from "vitest";
 import {
   MangaScraperFactory,
+  MangaSource,
   ScrapedDetailedChapter,
   ScrapedDetailedManga,
   ScrapedListOfManga,
-  MangaSource,
 } from "../../src/index";
 
 describe("check toonily types", async () => {

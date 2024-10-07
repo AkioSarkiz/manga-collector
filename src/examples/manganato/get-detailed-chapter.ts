@@ -1,5 +1,5 @@
-import { MangaScraperFactory, MangaSource } from "../../index";
 import fs from "fs";
+import { MangaScraperFactory, MangaSource } from "../../index";
 
 const main = async () => {
   const url = "https://chapmanganato.to/manga-oa952283/chapter-133";

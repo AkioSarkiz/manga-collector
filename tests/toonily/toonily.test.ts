@@ -1,6 +1,6 @@
-import { expect, test } from "vitest";
-import { MangaSource, MangaScraperFactory } from "../../src/index";
 import path from "node:path";
+import { expect, test } from "vitest";
+import { MangaScraperFactory, MangaSource } from "../../src/index";
 
 const MANGA_DATA_TO_DETAILED_SCRAPE = [
   {
@@ -67,6 +67,6 @@ test.each(MANGA_DATA_TO_DETAILED_SCRAPE)("detailed manga scrape of $url", async 
   expect(new Set(result.artists)).toEqual(new Set(expectedData.artists));
 
   expect(new Set(result.chapters.map((chapter) => ({ ...chapter, lastUpdate: undefined })))).toEqual(
-    new Set(expectedData.chapters.map((chapter: any) => ({ ...chapter, lastUpdate: undefined })))
+    new Set(expectedData.chapters.map((chapter: any) => ({ ...chapter, lastUpdate: undefined }))),
   );
 });

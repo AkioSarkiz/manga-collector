@@ -1,6 +1,6 @@
-import { describe, test, expect, assert } from "vitest";
-import { MangaSource, MangaScraperFactory } from "../../src/index";
 import path from "path";
+import { assert, describe, expect, test } from "vitest";
+import { MangaScraperFactory, MangaSource } from "../../src/index";
 
 const MANGA_DATA_TO_DETAILED_SCRAPE = [
   {
