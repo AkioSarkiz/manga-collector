@@ -1,5 +1,5 @@
-import { expect, test } from "vitest";
 import path from "path";
+import { expect, test } from "vitest";
 import { MangaUpdatesExternalSourceMatcher } from "../../src/index";
 
 const MANGA_LINK_DATA = [
@@ -28,7 +28,7 @@ const MANGA_LINK_DATA = [
     name: "zhang-de-tai-xiang-boss-jieguo-shiren-zhen-de-xinle",
     detailedMangaPath: path.join(
       __dirname,
-      "data/detailed-manga-zhang-de-tai-xiang-boss-jieguo-shiren-zhen-de-xinle.json"
+      "data/detailed-manga-zhang-de-tai-xiang-boss-jieguo-shiren-zhen-de-xinle.json",
     ),
     expectedExternalDataUrl:
       "https://www.mangaupdates.com/series/rq0w3cz/zhang-de-tai-xiang-boss-jieguo-shiren-zhen-de-xinle",
@@ -57,7 +57,7 @@ const MANGA_LINK_DATA = [
     name: "kouritsu-kuriya-madoushi-daini-no-jinsei-de-madou-o-kiwameru",
     detailedMangaPath: path.join(
       __dirname,
-      "data/detailed-manga-kouritsu-kuriya-madoushi-daini-no-jinsei-de-madou-o-kiwameru.json"
+      "data/detailed-manga-kouritsu-kuriya-madoushi-daini-no-jinsei-de-madou-o-kiwameru.json",
     ),
     expectedExternalDataUrl:
       "https://www.mangaupdates.com/series/relacl5/kouritsu-kuriya-madoushi-daini-no-jinsei-de-madou-o-kiwameru",

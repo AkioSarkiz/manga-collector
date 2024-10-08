@@ -1,5 +1,5 @@
-import { MangaScraperFactory, MangaSource } from "../../index";
 import fs from "fs";
+import { MangaScraperFactory, MangaSource } from "../../index";
 
 const main = async () => {
   const url = "https://mangafire.to/read/mushibamihime.qn0q5/en/chapter-6";

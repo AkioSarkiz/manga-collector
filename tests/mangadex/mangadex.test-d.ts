@@ -1,7 +1,7 @@
 import { expectTypeOf, test } from "vitest";
 import {
-  MangaSource,
   MangaScraperFactory,
+  MangaSource,
   ScrapedDetailedChapter,
   ScrapedDetailedManga,
   ScrapedListOfManga,

@@ -1,5 +1,5 @@
-import { MangaScraperFactory, MangaSource } from "../../index";
 import fs from "fs";
+import { MangaScraperFactory, MangaSource } from "../../index";
 
 const main = async () => {
   const url = "https://mangadex.org/title/6b958848-c885-4735-9201-12ee77abcb3c/spy-family";

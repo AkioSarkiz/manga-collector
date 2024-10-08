@@ -1,6 +1,6 @@
-import { describe, test, expect } from "vitest";
-import { MangaSource, MangaScraperFactory } from "../../src/index";
 import path from "node:path";
+import { describe, expect, test } from "vitest";
+import { MangaScraperFactory, MangaSource } from "../../src/index";
 
 const MANGA_DATA_TO_DETAILED_SCRAPE = [
   {
@@ -57,7 +57,7 @@ test.each(MANGA_DATA_TO_DETAILED_SCRAPE)(
     expect(new Set(result.alternativeTitles)).toEqual(new Set(expectedData.alternativeTitles));
     expect(new Set(result.authors)).toEqual(new Set(expectedData.authors));
     expect(new Set(result.genres)).toEqual(new Set(expectedData.genres));
-  }
+  },
 );
 
 test.each(CHAPTER_DATA_TO_DETAILED_SCRAPE)(
@@ -70,5 +70,5 @@ test.each(CHAPTER_DATA_TO_DETAILED_SCRAPE)(
     expect(result.title).toEqual(expectedData.title);
     expect(result.url).toEqual(expectedData.url);
     expect(new Set(result.frames)).toEqual(new Set(expectedData.frames));
-  }
+  },
 );

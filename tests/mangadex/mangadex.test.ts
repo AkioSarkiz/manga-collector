@@ -1,6 +1,6 @@
+import path from "path";
 import { expect, test } from "vitest";
 import { MangaScraperFactory, MangaSource } from "../../src/index";
-import path from "path";
 
 const MANGA_DATA_TO_SEARCH_SCRAPE = [{ query: "san" }, { query: "attack on titan" }, { query: "one piece" }];
 
@@ -104,5 +104,5 @@ test.each(MANGA_DATA_TO_DETAILED_CHAPTER_SCRAPE)(
     expect(result.title).toEqual(expectedData.title);
     expect(result.url).toEqual(expectedData.url);
     expect(new Set(result.frames)).toEqual(new Set(expectedData.frames));
-  }
+  },
 );

@@ -1,3 +1,5 @@
+import { urlJoin } from "../../functions";
+import { axios } from "../../lib";
 import type {
   ScrapedArtist,
   ScrapedAuthor,
@@ -10,8 +12,6 @@ import type {
   ScrapedListOfMangaItem,
   Scraper,
 } from "../../types";
-import { axios } from "../../lib";
-import { urlJoin } from "../../functions";
 
 export class MangadexScraper implements Scraper {
   private readonly baseUrl: string = "https://mangadex.org";

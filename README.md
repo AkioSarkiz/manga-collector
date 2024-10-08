@@ -2,7 +2,7 @@
 
 ![banner](https://i.ibb.co/HC4wFkC/manga-collector-banner.jpg)
 
-##  [Full Documentation](https://akiosarkiz.github.io/manga-collector/)
+## [Full Documentation](https://akiosarkiz.github.io/manga-collector/)
 
 The manga-collector is a library designed to easily scrape manga content from various websites. This package is licensed under the MIT License and is fully test-covered.
 
@@ -19,13 +19,12 @@ The manga-collector currently supports the following manga websites (updating):
 
 NOTE: By default github caches images, so it makes sense to turn off browser caching to see actual status
 
-|        **Website**        |                                                                                           **Status**                                                                                           |
-| :-----------------------: | :--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------: |
-|         Manganato         | [![Test scrape manganato](https://github.com/AkioSarkiz/manga-collector/actions/workflows/manganato-test.yml/badge.svg)](https://github.com/AkioSarkiz/manga-collector/actions/workflows/manganato-test.yml) |
-|          Toonily          |    [![Test scrape toonily](https://github.com/AkioSarkiz/manga-collector/actions/workflows/toonily-test.yml/badge.svg)](https://github.com/AkioSarkiz/manga-collector/actions/workflows/toonily-test.yml)    |
-|         Mangadex          |  [![Test scrape mangadex](https://github.com/AkioSarkiz/manga-collector/actions/workflows/mangadex-test.yml/badge.svg)](https://github.com/AkioSarkiz/manga-collector/actions/workflows/mangadex-test.yml)   |
-|         MangaFire          |  Not supported auto-status  |   
-
+| **Website** |                                                                                                  **Status**                                                                                                  |
+| :---------: | :----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------: |
+|  Manganato  | [![Test scrape manganato](https://github.com/AkioSarkiz/manga-collector/actions/workflows/manganato-test.yml/badge.svg)](https://github.com/AkioSarkiz/manga-collector/actions/workflows/manganato-test.yml) |
+|   Toonily   |    [![Test scrape toonily](https://github.com/AkioSarkiz/manga-collector/actions/workflows/toonily-test.yml/badge.svg)](https://github.com/AkioSarkiz/manga-collector/actions/workflows/toonily-test.yml)    |
+|  Mangadex   |  [![Test scrape mangadex](https://github.com/AkioSarkiz/manga-collector/actions/workflows/mangadex-test.yml/badge.svg)](https://github.com/AkioSarkiz/manga-collector/actions/workflows/mangadex-test.yml)   |
+|  MangaFire  |                                                                                          Not supported auto-status                                                                                           |
 
 ### How to install
 

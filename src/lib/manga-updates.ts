@@ -1,8 +1,8 @@
-import { axios } from "./index";
 import { AxiosInstance, AxiosRequestConfig } from "axios";
-import type { SearchedSeriesResponse, SeriesResponse } from "../types";
 import { decode } from "html-entities";
 import { urlJoin } from "../functions";
+import type { SearchedSeriesResponse, SeriesResponse } from "../types";
+import { axios } from "./index";
 
 export class MangaUpdatesClient {
   private readonly baseUrl: string = "https://api.mangaupdates.com/v1";

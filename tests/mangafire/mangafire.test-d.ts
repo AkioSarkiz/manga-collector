@@ -1,10 +1,10 @@
-import { describe, test, expect, expectTypeOf } from "vitest";
+import { describe, expect, expectTypeOf, test } from "vitest";
 import {
-  MangaSource,
   MangaScraperFactory,
+  MangaSource,
+  ScrapedDetailedChapter,
   ScrapedDetailedManga,
   ScrapedListOfManga,
-  ScrapedDetailedChapter,
 } from "../../src/index";
 
 describe("should load latest manga", async () => {
