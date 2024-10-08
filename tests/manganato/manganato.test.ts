@@ -43,6 +43,14 @@ const MANGA_DATA_TO_DETAILED_SCRAPE = [
     // I don't want to have to update the expected data files for every new fake chapter will be released.
     expectedDataPath: path.join(__dirname, "/data/detailed-manga-vz956108.json"),
   },
+  {
+    link: "https://chapmanganato.to/manga-rt969028",
+    expectedDataPath: path.join(__dirname, "/data/detailed-manga-rt969028.json"),
+  },
+  {
+    link: "https://manganato.com/manga-yl958968",
+    expectedDataPath: path.join(__dirname, "/data/detailed-manga-yl958968.json"),
+  },
 ];
 
 const MANGA_SEARCH_QUERIES = ["attack on titan", "one piece", "san"];
