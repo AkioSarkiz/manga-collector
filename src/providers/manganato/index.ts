@@ -12,13 +12,7 @@ import type {
   ScrapedMangaStatus,
   Scraper,
 } from "../../types/index";
-import {
-  convertToNumber,
-  extractChapterIndex,
-  extractNumbersFromStrings,
-  isOnlyNumbers,
-  parseRelativeTime,
-} from "../../utils/index";
+import { convertToNumber, extractNumbersFromStrings, isOnlyNumbers, parseRelativeTime } from "../../utils/index";
 
 interface ParsedTableRow {
   header: cheerio.Cheerio<cheerio.Element>;
@@ -228,8 +222,7 @@ export class ManganatoScraper implements Scraper {
     }
 
     if (chapterContainer) {
-      chapters = $(chapterContainer)
-        .find("li")
+      chapters = $($(chapterContainer).find("li").get().reverse())
         .map((index, value): ScrapedChapter => {
           const lastUpdate = $(value).find(".chapter-time")?.text()?.trim();
           const views = $(value).find(".chapter-view")?.text()?.trim();
@@ -247,7 +240,7 @@ export class ManganatoScraper implements Scraper {
           return {
             url,
             title,
-            index: extractChapterIndex(title),
+            index,
             views: isOnlyNumbers(views) ? Number(views) : convertToNumber(views),
             lastUpdate: dayjs(lastUpdate, "MMM D, YY").isValid()
               ? dayjs(lastUpdate, "MMM D, YY").toDate()
