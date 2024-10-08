@@ -58,7 +58,13 @@ test.each(MANGA_DATA_TO_DETAILED_SCRAPE)("get detailed manga of $link", async ({
   }
 
   expect(new Set(result.alternativeTitles)).toEqual(new Set(expectedData.alternativeTitles));
-  expect(result.imageThumbnail).toEqual(expectedData.imageThumbnail);
+
+  // Popular ongoing mangas often change their cover, that's why we don't compare it.
+  // It doesn't mean we don't test it at all, we test it only for completed titles or frozen titles
+  if (expectedData.imageThumbnail) {
+    expect(result.imageThumbnail).toEqual(expectedData.imageThumbnail);
+  }
+
   expect(new Set(result.genres)).toEqual(new Set(expectedData.genres));
 
   if (expectedData.authors) {
