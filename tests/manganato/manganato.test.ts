@@ -1,4 +1,4 @@
-import path from "path";
+import path from "node:path";
 import { assert, describe, expect, test } from "vitest";
 import { MangaScraperFactory, MangaSource } from "../../src/index";
 

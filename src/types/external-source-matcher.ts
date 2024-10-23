@@ -1,12 +1,13 @@
 import { type ScrapedDetailedManga } from "./scraper";
 
-export interface ExternalSourceMatcher {
+export interface ExternalSourceStrategy {
   /**
    * The name of the external source.
    *
    * @example example of getting the name
    * ``ts
-   * const name = externalSourceMatcher.getSourceName();
+   * const strategy = new MyExternalSourceStrategy(manga);
+   * const name = strategy.getSourceName();
    *
    * console.log(name); // "manga-updates"
    * ```
@@ -19,8 +20,8 @@ export interface ExternalSourceMatcher {
    *
    * @example Basic usage
    * ```ts
-   * const externalSourceMatcher = new MyExternalSourceMatcher(manga);
-   * const matchedManga = await externalSourceMatcher.tryMatchExternalSource();
+   * const strategy = new MyExternalSourceStrategy(manga);
+   * const matchedManga = await strategy.tryMatchExternalSource();
    *
    * console.log(matchedManga.externalSources);
    * ```
