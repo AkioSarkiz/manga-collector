@@ -1,2 +1,3 @@
-export { MangaUpdatesExternalSourceMatcher } from "./manga-updates-external-source-matcher";
-export { MyAnimeListExternalSourceMatcher } from "./my-anime-list-external-source-matcher";
+export { ExternalSourceContext } from "./context";
+export { MangaUpdatesStrategy } from "./strategies/manga-updates";
+export { MyAnimeListStrategy } from "./strategies/my-anime-list";

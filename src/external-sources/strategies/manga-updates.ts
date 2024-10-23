@@ -1,8 +1,8 @@
-import { type ExternalSourceMatcher, type ScrapedDetailedManga } from "../index";
-import { MangaUpdatesClient } from "../lib/index";
-import { compareDiacriticsStrings } from "./functions";
+import { type ExternalSourceStrategy, type ScrapedDetailedManga } from "../../index";
+import { MangaUpdatesClient } from "../../lib/index";
+import { compareDiacriticsStrings } from "../functions";
 
-export class MangaUpdatesExternalSourceMatcher implements ExternalSourceMatcher {
+export class MangaUpdatesStrategy implements ExternalSourceStrategy {
   private readonly mangaUpdatesClient: MangaUpdatesClient;
 
   public constructor(private readonly detailedManga: ScrapedDetailedManga) {

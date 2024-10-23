@@ -1,8 +1,9 @@
 import { Marika } from "@shineiichijo/marika";
-import { type ExternalSourceMatcher, type ScrapedDetailedManga } from "../index";
-import { compareDiacriticsStrings } from "./functions";
+import { type ScrapedDetailedManga } from "../../index";
+import { ExternalSourceStrategy } from "../../types";
+import { compareDiacriticsStrings } from "../functions";
 
-export class MyAnimeListExternalSourceMatcher implements ExternalSourceMatcher {
+export class MyAnimeListStrategy implements ExternalSourceStrategy {
   private readonly marika: Marika;
 
   public constructor(private readonly detailedManga: ScrapedDetailedManga) {
