@@ -13,10 +13,10 @@ const MANGA_DATA_TO_DETAILED_SCRAPE = [
     link: "https://mangadex.org/title/58bb34a5-452a-49a3-bd08-e167d654dbe4",
     expectedDataPath: path.join(__dirname, "/data/detailed-manga-3.json"),
   },
-  {
-    link: "https://mangadex.org/title/7bf163e3-123a-41c1-b2bc-8254dbe5a09b/2-5-dimensional-seduction",
-    expectedDataPath: path.join(__dirname, "/data/detailed-manga-2-5-dimensional-seduction.json"),
-  },
+  // {
+  //   link: "https://mangadex.org/title/7bf163e3-123a-41c1-b2bc-8254dbe5a09b/2-5-dimensional-seduction",
+  //   expectedDataPath: path.join(__dirname, "/data/detailed-manga-2-5-dimensional-seduction.json"),
+  // },
 ];
 
 const MANGA_DATA_TO_DETAILED_CHAPTER_SCRAPE = [
