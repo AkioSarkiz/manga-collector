@@ -1,6 +1,6 @@
 import path from "node:path";
 import { expect, test } from "vitest";
-import { ExternalSourceContext, MyAnimeListExternalStrategy, ScrapedDetailedManga } from "../../src/index";
+import { ExternalSourceContext, MyAnimeListStrategy, ScrapedDetailedManga } from "../../src/index";
 
 const MANGA_LINK_DATA = [
   {
@@ -22,7 +22,7 @@ const MANGA_LINK_DATA = [
 
 test.each(MANGA_LINK_DATA)("should link manga $name", async ({ detailedMangaPath, expectedExternalDataUrl }) => {
   const scrapedDetailedManga: ScrapedDetailedManga = await import(detailedMangaPath);
-  const strategy = new MyAnimeListExternalStrategy(scrapedDetailedManga);
+  const strategy = new MyAnimeListStrategy(scrapedDetailedManga);
   const context = new ExternalSourceContext(strategy);
 
   const matchedManga = await context.tryMatchExternalSource();

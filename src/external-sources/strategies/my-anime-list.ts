@@ -3,7 +3,7 @@ import { type ScrapedDetailedManga } from "../../index";
 import { ExternalSourceStrategy } from "../../types";
 import { compareDiacriticsStrings } from "../functions";
 
-export class MyAnimeListExternalStrategy implements ExternalSourceStrategy {
+export class MyAnimeListStrategy implements ExternalSourceStrategy {
   private readonly marika: Marika;
 
   public constructor(private readonly detailedManga: ScrapedDetailedManga) {
