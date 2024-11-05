@@ -1,22 +1,14 @@
-# Dependencies
 /node_modules
 
-# Production
-/build
+# Ignore test-related files
+/coverage.data
+/coverage/
 
-# Generated files
-.docusaurus
-.cache-loader
+# Build files
+/dist
 
-# Misc
+# macos
 .DS_Store
-.env.local
-.env.development.local
-.env.test.local
-.env.production.local
 
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
-
-.env
+# nextjs
+.next

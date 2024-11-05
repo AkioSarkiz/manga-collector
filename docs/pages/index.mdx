@@ -1,0 +1,72 @@
+# The manga-collector
+
+![banner](https://i.ibb.co/HC4wFkC/manga-collector-banner.jpg)
+
+The manga-collector is a library designed to easily scrape manga content from various websites. This package is licensed under the MIT License and is fully test-covered.
+
+## Features
+
+- Supports Nodejs, Deno, Bun runtimes
+- Scrapes manga chapters, titles, images, and other metadata.
+- Supports multiple popular manga websites.
+- Provides a simple and intuitive API for easy integration.
+
+## How to install
+
+#### Install with Nodejs
+
+The package uses JSR repository and supports Deno, Node, Bun. Installation commands you can find [here](https://jsr.io/@akiosarkiz/manga-collector). You also can find API references there.
+
+```bash
+# with npm
+npx jsr add @akiosarkiz/manga-collector
+
+# with pnpm
+pnpm dlx jsr add @akiosarkiz/manga-collector
+
+# with yarn
+yarn dlx jsr add @akiosarkiz/manga-collector
+```
+
+#### Install with Bun
+
+```bash
+bunx jsr add @akiosarkiz/manga-collector
+```
+
+#### Install with Deno
+
+```bash
+deno add jsr:@akiosarkiz/manga-collector
+```
+
+### How to use
+
+This package contains examples of code that you can use and modify. They are located in `src/examples` folder.
+
+Here is a simple example how you can use that package
+
+```typescript
+import { MangaScraperFactory, MangaSource } from "@akiosarkiz/manga-collector";
+
+const scraper = await MangaScraperFactory.make(MangaSource.MANGANATO);
+
+console.log(await scraper.getDetailedManga("manga url here"));
+
+// Example output
+// {
+//   "url": "https://chapmanganato.to/manga-fy982633",
+//   "title": "Beauty And The Beasts",
+//   "status": "ongoing",
+//   "description": "As soon as she fell into the world of beast men, a leopard forcibly took her back to his home. Indeed, Bai Jingjing is at a complete and utter loss. The males in this world are all handsome beyond compare, while the women are all so horrid that even the gods shudder at their sight. As a first-rate girl from the modern world (she's even a quarter Russian), Bai Jingjing finds herself sitting at the center of a harem filled with beautiful men -- at the very peak of existence.",
+//   "genres": [
+//    ...
+//   ],
+//   "chapters": [
+//     ...
+//   ],
+//   "authors": [
+//     ...
+//   ]
+// }
+```

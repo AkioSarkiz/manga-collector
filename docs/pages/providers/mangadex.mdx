@@ -1,0 +1,107 @@
+Welcome to the API documentation for Manga-collector. Below you'll find detailed information on the available methods, including descriptions and usage examples.
+
+### `getDetailedManga(url: string)`
+
+Fetches detailed information about a specific manga.
+
+#### Usage Example
+
+```typescript
+import { MangaScraperFactory, MangaSource } from "@akiosarkiz/manga-collector";
+
+const main = async () => {
+  const url = "https://mangadex.org/title/6b958848-c885-4735-9201-12ee77abcb3c/spy-family";
+
+  // First we need make a scraper via factory
+  const scraper = await MangaScraperFactory.make(MangaSource.MANGADEX);
+
+  // Second we scrape data from the website
+  const result = await scraper.getDetailedManga(url);
+
+  // Then we can see the result of scraping
+  console.log(result);
+};
+
+main()
+  .then(() => console.log("Done"))
+  .catch(console.error);
+```
+
+### `getDetailedChapter(url: string)`
+
+Fetches detailed information about a specific chapter of a manga.
+
+#### Usage Example
+
+```typescript
+import { MangaScraperFactory, MangaSource } from "@akiosarkiz/manga-collector";
+
+const main = async () => {
+  const url = "https://mangadex.org/chapter/0f7f932b-c426-46c6-9d36-2923ae3f7e13";
+
+  // First we need make a scraper via factory
+  const scraper = await MangaScraperFactory.make(MangaSource.MANGADEX);
+
+  // Second we scrape data from the website
+  const result = await scraper.getDetailedChapter(url);
+
+  // Then we can see the result of scraping
+  console.log(result);
+};
+
+main()
+  .then(() => console.log("Done"))
+  .catch(console.error);
+```
+
+### `getLatestUpdates(page?: number)`
+
+Fetches the latest updates of mangas from various sources.
+
+#### Usage Example
+
+```typescript
+import { MangaScraperFactory, MangaSource } from "@akiosarkiz/manga-collector";
+
+const main = async () => {
+  // First we need make a scraper via factory
+  const scraper = await MangaScraperFactory.make(MangaSource.MANGADEX);
+
+  // Second we scrape data from the website
+  const firstPage = await scraper.getLatestUpdates();
+  const secondPage = await scraper.getLatestUpdates(2);
+
+  // Then we can see the result of scraping
+  console.log(firstPage);
+  console.log(secondPage);
+};
+
+main()
+  .then(() => console.log("Done"))
+  .catch(console.error);
+```
+
+### `search(query: string)`
+
+Finds mangas based on a search query.
+
+#### Usage Example
+
+```typescript
+import { MangaScraperFactory, MangaSource } from "@akiosarkiz/manga-collector";
+
+const main = async () => {
+  // First we need make a scraper via factory
+  const scraper = await MangaScraperFactory.make(MangaSource.MANGADEX);
+
+  // Second we scrape data from the website
+  const list = await scraper.search("san");
+
+  // Then we can see the result of scraping
+  console.log(list);
+};
+
+main()
+  .then(() => console.log("Done"))
+  .catch(console.error);
+```
